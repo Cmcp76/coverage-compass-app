@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FooterDisclaimer } from './Disclaimer.jsx'
 
@@ -17,10 +17,34 @@ export default function Layout({ children }) {
   const location = useLocation()
   const isPreAuth = preAuthPaths.includes(location.pathname)
   const [menuOpen, setMenuOpen] = useState(false)
+  const headerRef = useRef(null)
+
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    function handleClickOutside(e) {
+      if (headerRef.current && !headerRef.current.contains(e.target)) setMenuOpen(false)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [menuOpen])
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 border-b border-compass-line bg-white/90 backdrop-blur print:hidden">
+      <header
+        ref={headerRef}
+        className="sticky top-0 z-20 border-b border-compass-line bg-white/90 backdrop-blur print:hidden"
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
             <CompassMark />
