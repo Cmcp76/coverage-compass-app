@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 
 export default function ResetPassword() {
   const [step, setStep] = useState(1)
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [mismatchError, setMismatchError] = useState(false)
   const navigate = useNavigate()
 
   return (
@@ -50,6 +53,11 @@ export default function ResetPassword() {
           <form
             onSubmit={(e) => {
               e.preventDefault()
+              if (password !== confirmPassword) {
+                setMismatchError(true)
+                return
+              }
+              setMismatchError(false)
               navigate('/login')
             }}
             className="mt-8 space-y-4"
@@ -61,6 +69,8 @@ export default function ResetPassword() {
               <input
                 type="password"
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
               />
             </label>
@@ -71,8 +81,15 @@ export default function ResetPassword() {
               <input
                 type="password"
                 required
-                className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue ${
+                  mismatchError ? 'border-red-400' : 'border-compass-line focus:border-compass-blue'
+                }`}
               />
+              {mismatchError && (
+                <span className="mt-1 block text-xs text-red-600">Passwords don't match.</span>
+              )}
             </label>
             <button type="submit" className="btn-primary w-full">
               Update Password
