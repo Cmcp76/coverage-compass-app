@@ -22,7 +22,13 @@ export default function AIReview() {
         </div>
       </div>
 
-      {!analysis.hasRealText && (
+      {analysis.isDemo && (
+        <div className="mb-4 rounded-lg border border-compass-line bg-compass-paper px-4 py-3 text-xs text-compass-slate">
+          You haven't uploaded a policy yet, so this is sample demo data showing what a
+          review looks like. Upload your policy to get a review of your actual coverage.
+        </div>
+      )}
+      {!analysis.isDemo && !analysis.hasRealText && (
         <div className="mb-4 rounded-lg border border-compass-line bg-compass-paper px-4 py-3 text-xs text-compass-slate">
           No readable text was found in this document (common with photos or scanned
           images), so nothing below could be confirmed, everything is labeled NEEDED

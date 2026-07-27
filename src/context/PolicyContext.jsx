@@ -8,6 +8,7 @@ const defaultAnalysis = {
   fileName: 'sample auto policy (demo data)',
   analyzedAt: samplePolicy.reportGeneratedDate,
   hasRealText: false,
+  isDemo: true,
   detectedPolicyType: 'Personal / Commercial Auto (sample)',
   coverageScore: samplePolicy.coverageScore,
   coverages: samplePolicy.coverages,
