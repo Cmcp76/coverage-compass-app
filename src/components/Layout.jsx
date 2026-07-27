@@ -11,9 +11,11 @@ const navLinks = [
   { to: '/notifications', label: 'Notifications' },
 ]
 
+const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email']
+
 export default function Layout({ children }) {
   const location = useLocation()
-  const isLanding = location.pathname === '/'
+  const isPreAuth = preAuthPaths.includes(location.pathname)
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
@@ -26,7 +28,7 @@ export default function Layout({ children }) {
               Coverage Compass
             </span>
           </Link>
-          {!isLanding && (
+          {!isPreAuth && (
             <nav className="hidden items-center gap-6 lg:flex">
               {navLinks.map((link) => (
                 <Link
@@ -44,7 +46,7 @@ export default function Layout({ children }) {
             </nav>
           )}
           <div className="flex items-center gap-3">
-            {isLanding ? (
+            {isPreAuth ? (
               <>
                 <Link to="/login" className="btn-secondary">
                   Log In
@@ -77,7 +79,7 @@ export default function Layout({ children }) {
           </div>
         </div>
 
-        {!isLanding && menuOpen && (
+        {!isPreAuth && menuOpen && (
           <nav className="flex flex-col border-t border-compass-line bg-white px-6 py-3 lg:hidden">
             {navLinks.map((link) => (
               <Link
