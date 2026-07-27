@@ -1,0 +1,12 @@
+SAMPLE INSURANCE CO - MOTOR CARRIER POLICY DECLARATIONS
+Named Insured: Alvarez Trucking LLC
+USDOT Number: 3456789
+MC Authority: MC-987654
+Effective Date: 04/01/2026
+
+Motor Carrier Liability - Combined Single Limit $1,000,000
+Physical Damage Coverage $85,000 per unit, $2,500 deductible
+Cargo Coverage $100,000
+
+This policy does not include non-trucking liability (bobtail) coverage.
+BOC-3 process agent filing status should be confirmed separately.

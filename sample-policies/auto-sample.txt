@@ -1,0 +1,13 @@
+SAMPLE INSURANCE CO - PERSONAL AUTO POLICY DECLARATIONS
+Named Insured: Maria Alvarez
+Effective Date: 01/01/2026
+
+Coverage Summary:
+Bodily Injury Liability $250,000 / $500,000
+Property Damage Liability $100,000
+Comprehensive $500 deductible
+Collision $500 deductible
+Uninsured Motorist Bodily Injury $250,000/$500,000
+
+This policy does not include rental reimbursement, roadside assistance, or an
+umbrella liability endorsement.

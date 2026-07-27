@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-compass-paper text-compass-ink antialiased;
+}
+
+.disclaimer {
+  @apply text-xs text-compass-slate leading-relaxed;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-compass-blue px-5 py-2.5 text-sm font-medium text-white transition hover:bg-compass-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue focus-visible:ring-offset-2;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-compass-line bg-white px-5 py-2.5 text-sm font-medium text-compass-ink transition hover:border-compass-blue hover:text-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue focus-visible:ring-offset-2;
+}
+
+.card {
+  @apply rounded-2xl border border-compass-line bg-white p-6 shadow-card;
+}
+
+.tag-neutral {
+  @apply inline-flex items-center rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-compass-slate;
+}
+
+.tag-review {
+  @apply inline-flex items-center rounded-md bg-compass-amberlight px-2.5 py-1 text-xs font-medium text-compass-amber;
+}
+
+.tag-good {
+  @apply inline-flex items-center rounded-md bg-compass-mint px-2.5 py-1 text-xs font-medium text-compass-green;
+}

@@ -1,0 +1,13 @@
+SAMPLE INSURANCE CO - HOMEOWNERS POLICY DECLARATIONS
+Named Insured: John and Priya Patel
+Effective Date: 03/15/2026
+
+Coverage A - Dwelling Coverage $450,000
+Coverage B - Other Structures $45,000
+Coverage C - Personal Property $225,000
+Coverage E - Personal Liability $300,000
+Loss of Use $90,000
+Replacement cost settlement applies to Coverage A and B.
+
+Flood coverage is not included. No scheduled personal property rider is
+attached. No umbrella policy referenced.
