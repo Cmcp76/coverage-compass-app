@@ -113,7 +113,7 @@ export default function HomeInventory() {
           )}
         </div>
 
-        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-4">
+        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-5">
           <input
             type="text"
             placeholder="Item name"
@@ -127,6 +127,13 @@ export default function HomeInventory() {
             value={draft.value}
             onChange={(e) => setDraft({ ...draft, value: e.target.value })}
             className="rounded-lg border border-compass-line px-3 py-2 text-sm"
+          />
+          <input
+            type="date"
+            aria-label="Purchase date"
+            value={draft.date}
+            onChange={(e) => setDraft({ ...draft, date: e.target.value })}
+            className="rounded-lg border border-compass-line px-3 py-2 text-sm text-compass-slate"
           />
           <button
             onClick={() => addItem(openRoom)}
