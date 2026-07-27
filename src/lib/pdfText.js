@@ -3,13 +3,18 @@
 // "sample/demo data only, no real backend" guardrail, this just reads the
 // file the person already has open in their own browser tab.
 
+import pdfjsWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+
 let pdfjsLibPromise = null
 
 async function loadPdfjs() {
   if (!pdfjsLibPromise) {
     pdfjsLibPromise = import('pdfjs-dist').then((lib) => {
-      lib.GlobalWorkerOptions.workerSrc =
-        'https://unpkg.com/pdfjs-dist@4.6.82/build/pdf.worker.min.mjs'
+      // Bundled locally rather than fetched from a CDN at runtime, so PDF
+      // upload doesn't depend on an external host being reachable, and the
+      // worker version can never drift from whatever pdfjs-dist version is
+      // actually installed.
+      lib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl
       return lib
     })
   }
