@@ -4,9 +4,17 @@ import { Link, useNavigate } from 'react-router-dom'
 export default function SignUp() {
   const navigate = useNavigate()
   const [agreed, setAgreed] = useState(false)
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [mismatchError, setMismatchError] = useState(false)
 
   function handleSubmit(e) {
     e.preventDefault()
+    if (password !== confirmPassword) {
+      setMismatchError(true)
+      return
+    }
+    setMismatchError(false)
     navigate('/verify-email')
   }
 
@@ -22,8 +30,23 @@ export default function SignUp() {
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         <Field label="Full Name" type="text" placeholder="Maria Alvarez" required />
         <Field label="Email Address" type="email" placeholder="maria@email.com" required />
-        <Field label="Password" type="password" placeholder="••••••••" required />
-        <Field label="Confirm Password" type="password" placeholder="••••••••" required />
+        <Field
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Field
+          label="Confirm Password"
+          type="password"
+          placeholder="••••••••"
+          required
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          error={mismatchError ? "Passwords don't match." : null}
+        />
 
         <label className="flex items-start gap-2 text-sm text-compass-slate">
           <input
@@ -56,14 +79,17 @@ export default function SignUp() {
   )
 }
 
-function Field({ label, ...props }) {
+function Field({ label, error, ...props }) {
   return (
     <label className="block">
       <span className="mb-1 block text-sm font-medium text-compass-ink">{label}</span>
       <input
         {...props}
-        className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
+        className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue ${
+          error ? 'border-red-400' : 'border-compass-line focus:border-compass-blue'
+        }`}
       />
+      {error && <span className="mt-1 block text-xs text-red-600">{error}</span>}
     </label>
   )
 }
