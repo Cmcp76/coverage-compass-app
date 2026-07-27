@@ -10,6 +10,7 @@ import {
   Cell,
 } from 'recharts'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import ScoreGauge from '../components/ScoreGauge.jsx'
 
 const categoryDetails = {
   'Liability Protection':
@@ -40,10 +41,14 @@ export default function CoverageScore() {
       </h1>
 
       <div className="mt-6 rounded-2xl bg-compass-skyblue p-10 text-center">
-        <p className="font-display text-6xl font-semibold text-compass-blue">
-          {analysis.coverageScore}
-          <span className="text-2xl text-compass-slate">/100</span>
-        </p>
+        <div className="flex justify-center">
+          <ScoreGauge score={analysis.coverageScore} size={188} strokeWidth={14}>
+            <p className="font-display text-5xl font-semibold text-compass-blue">
+              {analysis.coverageScore}
+              <span className="text-lg text-compass-slate">/100</span>
+            </p>
+          </ScoreGauge>
+        </div>
         <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-compass-ink">
           Your Coverage Score is an educational snapshot of how your policy compares
           across key protection areas, not a rating of you, and not a guarantee of how

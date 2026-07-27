@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import ScoreGauge from '../components/ScoreGauge.jsx'
 
 export default function Dashboard() {
   const { analysis } = usePolicy()
@@ -24,10 +25,12 @@ export default function Dashboard() {
         {/* Score card */}
         <Link to="/score" className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">
           <p className="text-sm text-compass-slate">Your Coverage Score</p>
-          <p className="mt-2 font-display text-5xl font-semibold text-compass-blue">
-            {analysis.coverageScore}
-            <span className="text-xl text-compass-slate">/100</span>
-          </p>
+          <ScoreGauge score={analysis.coverageScore} size={140} strokeWidth={10}>
+            <p className="font-display text-3xl font-semibold text-compass-blue">
+              {analysis.coverageScore}
+              <span className="text-sm text-compass-slate">/100</span>
+            </p>
+          </ScoreGauge>
           <p className="mt-2 text-xs text-compass-slate">
             Educational snapshot, not a guarantee
           </p>
