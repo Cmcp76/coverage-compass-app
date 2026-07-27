@@ -25,8 +25,9 @@ export default function AIReview() {
       {!analysis.hasRealText && (
         <div className="mb-4 rounded-lg border border-compass-line bg-compass-paper px-4 py-3 text-xs text-compass-slate">
           No readable text was found in this document (common with photos or scanned
-          images), so this reflects sample data. Upload a text-based PDF for a review
-          based on your actual policy.
+          images), so nothing below could be confirmed, everything is labeled NEEDED
+          INFORMATION. Upload a text-based PDF or .txt file for a review based on your
+          actual policy.
         </div>
       )}
 
