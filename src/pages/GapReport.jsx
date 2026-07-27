@@ -22,12 +22,12 @@ export default function GapReport() {
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         {analysis.gaps.map((gap) => (
           <div key={gap.name} className="card">
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-2">
               <p className="text-sm font-medium text-compass-ink">{gap.name}</p>
               <span
-                className={
+                className={`shrink-0 ${
                   gap.status === 'Worth Confirming' ? 'tag-review' : 'tag-neutral'
-                }
+                }`}
               >
                 {gap.status}
               </span>

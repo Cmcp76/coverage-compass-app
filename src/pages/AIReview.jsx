@@ -34,7 +34,7 @@ export default function AIReview() {
         {analysis.coverages.map((cov) => (
           <div
             key={cov.name}
-            className={`flex items-start justify-between rounded-lg border border-compass-line px-4 py-3 ${
+            className={`flex items-start justify-between gap-3 rounded-lg border border-compass-line px-4 py-3 ${
               cov.confidence === 'missing' ? 'bg-compass-paper' : 'bg-white'
             }`}
           >

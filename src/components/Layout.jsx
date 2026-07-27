@@ -18,7 +18,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 border-b border-compass-line bg-white/90 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-compass-line bg-white/90 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
             <CompassMark />
@@ -96,7 +96,7 @@ export default function Layout({ children }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t border-compass-line bg-white">
+      <footer className="border-t border-compass-line bg-white print:hidden">
         <div className="mx-auto max-w-6xl px-6 py-10">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
             <p className="font-display text-sm text-compass-navy">
