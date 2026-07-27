@@ -238,7 +238,9 @@ function buildStrengths(coverages) {
       'We were able to open your document, but couldn\u2019t confidently identify specific coverages. A licensed insurance professional can review the original document with you.',
     ]
   }
-  return found.map(
-    (c) => `Your policy includes ${c.name.toLowerCase()} coverage${c.limit.startsWith('$') ? ` (${c.limit})` : ''}.`,
-  )
+  return found.map((c) => {
+    const label = c.name.toLowerCase()
+    const suffix = /coverage/i.test(label) ? '' : ' coverage'
+    return `Your policy includes ${label}${suffix}${c.limit.startsWith('$') ? ` (${c.limit})` : ''}.`
+  })
 }
