@@ -27,7 +27,7 @@ export default function Layout({ children }) {
             </span>
           </Link>
           {!isLanding && (
-            <nav className="hidden items-center gap-6 md:flex">
+            <nav className="hidden items-center gap-6 lg:flex">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
@@ -65,7 +65,7 @@ export default function Layout({ children }) {
                   Maria Alvarez
                 </Link>
                 <button
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line md:hidden"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line lg:hidden"
                   aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                   aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((v) => !v)}
@@ -78,7 +78,7 @@ export default function Layout({ children }) {
         </div>
 
         {!isLanding && menuOpen && (
-          <nav className="flex flex-col border-t border-compass-line bg-white px-6 py-3 md:hidden">
+          <nav className="flex flex-col border-t border-compass-line bg-white px-6 py-3 lg:hidden">
             {navLinks.map((link) => (
               <Link
                 key={link.to}

@@ -137,6 +137,28 @@ const quizQuestions = [
   },
 ]
 
+const propertySuggestions = {
+  'Own a home': 'Flood Coverage, often excluded from standard homeowners policies by default',
+  Rent: 'Renters Insurance for your personal belongings and liability',
+  'Own a condo': 'Condo (HO-6) Insurance and Loss Assessment Coverage',
+  Landlord: 'Landlord/Dwelling coverage and Loss of Rental Income Coverage',
+}
+
+function buildSuggestions(answers) {
+  const suggestions = []
+  if (propertySuggestions[answers[0]]) suggestions.push(propertySuggestions[answers[0]])
+  if (answers[1] === 'Yes') suggestions.push('Scheduled Personal Property for your high-value items')
+  if (answers[2] === 'Yes') {
+    suggestions.push('Umbrella Insurance, to extend liability protection above your underlying limits')
+  }
+  if (answers[3] === 'Yes') suggestions.push('A Business Use Endorsement or a separate commercial policy')
+  if (answers[4] === 'No') suggestions.push('An annual policy review, since it has been over 12 months')
+  if (suggestions.length === 0) {
+    suggestions.push('Your basics look covered. An annual check-in is still a good habit.')
+  }
+  return suggestions.slice(0, 4)
+}
+
 function RiskQuiz() {
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
@@ -190,11 +212,18 @@ function RiskQuiz() {
 
       {submitted && (
         <div className="mt-5 rounded-lg bg-compass-paper p-4">
-          <p className="text-sm text-compass-ink">
+          <p className="text-sm font-medium text-compass-ink">
             Based on your answers, here are a few coverage areas that may be worth
-            exploring: Umbrella Insurance, Scheduled Personal Property, Business Use
-            Endorsement. These aren't recommendations, they're starting points for a
-            conversation with your insurance professional.
+            exploring:
+          </p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-compass-ink">
+            {buildSuggestions(answers).map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-compass-slate">
+            These aren't recommendations, they're starting points for a conversation
+            with your insurance professional.
           </p>
           <Link to="/upload" className="btn-secondary mt-4 inline-flex">
             Upload Your Policy for a More Specific Review
