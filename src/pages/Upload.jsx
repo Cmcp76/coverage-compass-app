@@ -101,8 +101,8 @@ export default function Upload() {
             <p className="text-sm font-medium text-compass-ink">
               Reading {fileName}...
             </p>
-            <div className="mt-4 h-2 w-56 overflow-hidden rounded-full bg-compass-line">
-              <div className="h-full w-2/3 animate-pulse bg-compass-blue" />
+            <div className="relative mt-4 h-2 w-56 overflow-hidden rounded-full bg-compass-line">
+              <div className="progress-indeterminate" />
             </div>
           </>
         )}

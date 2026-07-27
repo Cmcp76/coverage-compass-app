@@ -33,7 +33,7 @@ export default function Reports() {
           {reports.map((r) => (
             <div
               key={r.id}
-              className="flex items-center justify-between rounded-lg border border-compass-line bg-white px-5 py-4"
+              className="flex items-center justify-between rounded-lg border border-compass-line bg-white px-5 py-4 transition hover:shadow-card"
             >
               <div>
                 <p className="text-sm font-medium text-compass-ink">{r.type}</p>

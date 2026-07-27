@@ -32,11 +32,11 @@ const initialNotifications = [
   },
 ]
 
-const kindIcon = {
-  alert: '🔔',
-  renewal: '📅',
-  education: '📘',
-  report: '✅',
+const kindStyles = {
+  alert: { bg: 'bg-compass-amberlight', fg: 'text-compass-amber', Icon: BellIcon },
+  renewal: { bg: 'bg-compass-skyblue', fg: 'text-compass-blue', Icon: CalendarIcon },
+  education: { bg: 'bg-compass-skyblue', fg: 'text-compass-blue', Icon: BookIcon },
+  report: { bg: 'bg-compass-mint', fg: 'text-compass-green', Icon: CheckCircleIcon },
 }
 
 export default function Notifications() {
@@ -61,31 +61,83 @@ export default function Notifications() {
         </div>
       ) : (
         <div className="mt-6 space-y-3">
-          {items.map((n) => (
-            <div
-              key={n.id}
-              className="flex items-start justify-between gap-4 rounded-lg border border-compass-line bg-white px-4 py-3"
-            >
-              <Link to={n.to} className="flex flex-1 items-start gap-3">
-                <span aria-hidden="true" className="text-lg leading-none">
-                  {kindIcon[n.kind]}
-                </span>
-                <div>
-                  <p className="text-sm font-medium text-compass-ink">{n.title}</p>
-                  <p className="text-xs text-compass-slate">{n.body}</p>
-                </div>
-              </Link>
-              <button
-                onClick={() => dismiss(n.id)}
-                className="text-xs text-compass-slate hover:text-compass-amber"
-                aria-label={`Dismiss: ${n.title}`}
+          {items.map((n) => {
+            const { bg, fg, Icon } = kindStyles[n.kind]
+            return (
+              <div
+                key={n.id}
+                className="flex items-start justify-between gap-4 rounded-lg border border-compass-line bg-white px-4 py-3 transition hover:border-compass-blue hover:shadow-card"
               >
-                Dismiss
-              </button>
-            </div>
-          ))}
+                <Link to={n.to} className="flex flex-1 items-start gap-3">
+                  <span
+                    aria-hidden="true"
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${bg} ${fg}`}
+                  >
+                    <Icon />
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-compass-ink">{n.title}</p>
+                    <p className="text-xs text-compass-slate">{n.body}</p>
+                  </div>
+                </Link>
+                <button
+                  onClick={() => dismiss(n.id)}
+                  className="text-xs text-compass-slate hover:text-compass-amber"
+                  aria-label={`Dismiss: ${n.title}`}
+                >
+                  Dismiss
+                </button>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
+  )
+}
+
+function BellIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M6 10a6 6 0 1 1 12 0c0 3.2 1 4.8 1.5 5.5H4.5C5 14.8 6 13.2 6 10Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M10 18.5a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function CalendarIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M4 9.5h16M8 3v3.5M16 3v3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function BookIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M5 4.5h6a2 2 0 0 1 2 2V20a2 2 0 0 0-2-1.5H5V4.5ZM19 4.5h-6a2 2 0 0 0-2 2V20a2 2 0 0 1 2-1.5h6V4.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function CheckCircleIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8.5 12.2l2.3 2.3 4.2-4.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   )
 }

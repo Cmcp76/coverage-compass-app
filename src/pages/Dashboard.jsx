@@ -63,7 +63,7 @@ export default function Dashboard() {
             {recentActivity.map((item) => (
               <div
                 key={item.title}
-                className="flex items-center justify-between rounded-lg border border-compass-line px-4 py-3"
+                className="flex items-center justify-between rounded-lg border border-compass-line px-4 py-3 transition hover:border-compass-blue/40 hover:bg-compass-paper"
               >
                 <div>
                   <p className="text-sm text-compass-ink">{item.title}</p>
