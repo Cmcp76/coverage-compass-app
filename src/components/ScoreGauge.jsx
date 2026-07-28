@@ -4,7 +4,7 @@ export default function ScoreGauge({ score, size = 176, strokeWidth = 12, childr
   const pct = Math.max(0, Math.min(100, score)) / 100
   const offset = circumference * (1 - pct)
   const good = score >= 80
-  const fill = good ? '#1D9E75' : '#BA7517'
+  const fill = good ? '#177C5B' : '#965E13'
   const track = good ? '#E1F5EE' : '#FAEEDA'
 
   return (

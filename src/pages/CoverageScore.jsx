@@ -82,7 +82,7 @@ export default function CoverageScore() {
               {chartData.map((entry) => (
                 <Cell
                   key={entry.name}
-                  fill={entry.status === 'good' ? '#1D9E75' : '#BA7517'}
+                  fill={entry.status === 'good' ? '#177C5B' : '#965E13'}
                 />
               ))}
             </Bar>
