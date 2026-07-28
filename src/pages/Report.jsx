@@ -1,14 +1,23 @@
 import { samplePolicy } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
+import { generateReportPdf } from '../lib/generateReportPdf.js'
 
 export default function Report() {
   const { analysis } = usePolicy()
 
+  function downloadPdf() {
+    const doc = generateReportPdf(analysis)
+    doc.save('coverage-compass-review.pdf')
+  }
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-12 print:max-w-full">
-      <div className="mb-6 flex justify-end print:hidden">
-        <button onClick={() => window.print()} className="btn-primary">
+      <div className="mb-6 flex justify-end gap-3 print:hidden">
+        <button onClick={() => window.print()} className="btn-secondary">
+          Print
+        </button>
+        <button onClick={downloadPdf} className="btn-primary">
           Download PDF
         </button>
       </div>
