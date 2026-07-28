@@ -97,7 +97,11 @@ function Field({ label, error, ...props }) {
           error ? 'border-red-400' : 'border-compass-line focus:border-compass-blue'
         }`}
       />
-      {error && <span className="mt-1 block text-xs text-red-600">{error}</span>}
+      {error && (
+        <span role="alert" className="mt-1 block text-xs text-red-600">
+          {error}
+        </span>
+      )}
     </label>
   )
 }

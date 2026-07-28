@@ -26,7 +26,7 @@ export default function RequestCallback() {
       </p>
 
       {submitted ? (
-        <div className="mt-4 rounded-lg bg-compass-mint p-4">
+        <div role="status" className="mt-4 rounded-lg bg-compass-mint p-4">
           <p className="text-sm font-medium text-compass-green">Request received</p>
           <p className="mt-1 text-xs text-compass-ink">
             In a live version of Coverage Compass, this would connect you with a

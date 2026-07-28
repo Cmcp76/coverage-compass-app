@@ -88,7 +88,9 @@ export default function ResetPassword() {
                 }`}
               />
               {mismatchError && (
-                <span className="mt-1 block text-xs text-red-600">Passwords don't match.</span>
+                <span role="alert" className="mt-1 block text-xs text-red-600">
+                  Passwords don't match.
+                </span>
               )}
             </label>
             <button type="submit" className="btn-primary w-full">

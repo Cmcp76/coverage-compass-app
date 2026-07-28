@@ -134,7 +134,7 @@ export default function Upload() {
         )}
 
         {state === 'error' && (
-          <>
+          <div role="alert">
             <p className="text-sm font-medium text-compass-ink">
               Something went wrong reading that file
             </p>
@@ -146,7 +146,7 @@ export default function Upload() {
             >
               Try again
             </button>
-          </>
+          </div>
         )}
       </div>
 

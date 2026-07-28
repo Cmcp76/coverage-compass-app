@@ -28,7 +28,7 @@ export default function VerifyEmail() {
         {resent ? 'Verification Email Sent' : 'Resend Verification Email'}
       </button>
       {resent && (
-        <p className="mt-2 text-xs text-compass-green">
+        <p role="status" className="mt-2 text-xs text-compass-green">
           Check your inbox, it can take a minute to arrive.
         </p>
       )}
