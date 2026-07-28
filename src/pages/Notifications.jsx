@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { usePolicy } from '../context/PolicyContext.jsx'
 
-const initialNotifications = [
-  {
-    id: 1,
-    kind: 'alert',
-    title: 'Coverage alert',
-    body: "Your policy doesn't show rental reimbursement, worth asking about.",
-    to: '/gap-report',
-  },
+function buildCoverageAlertBody(analysis) {
+  const topGap = analysis.gaps?.[0]
+  if (!topGap) return "Your policy doesn't show rental reimbursement, worth asking about."
+  return topGap.status === 'Worth Confirming'
+    ? `${topGap.name} is mentioned but worth confirming the details.`
+    : `Your policy doesn't show ${topGap.name.toLowerCase()}, worth asking about.`
+}
+
+const staticNotifications = [
   {
     id: 2,
     kind: 'renewal',
@@ -40,7 +42,17 @@ const kindStyles = {
 }
 
 export default function Notifications() {
-  const [items, setItems] = useState(initialNotifications)
+  const { analysis } = usePolicy()
+  const [items, setItems] = useState(() => [
+    {
+      id: 1,
+      kind: 'alert',
+      title: 'Coverage alert',
+      body: buildCoverageAlertBody(analysis),
+      to: '/gap-report',
+    },
+    ...staticNotifications,
+  ])
 
   function dismiss(id) {
     setItems((prev) => prev.filter((n) => n.id !== id))
