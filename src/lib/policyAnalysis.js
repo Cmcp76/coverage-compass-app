@@ -8,6 +8,30 @@
 // general liability, workers' compensation, or trucking) and applies the
 // matching coverage/gap rule set, instead of always assuming personal auto.
 
+// ---------- Negation-aware keyword matching ----------
+
+// A bare regex.test() treats "does not include rental reimbursement" the
+// same as "includes rental reimbursement" - it only checks the words are
+// present, not whether the sentence is negating them. That's a real
+// accuracy problem for a tool whose whole premise is telling someone what
+// their policy does and doesn't cover, so check a short window before each
+// keyword match for a negation word before counting it as "found."
+const NEGATION_PATTERN = /\b(not|no|without|excludes?|excluding|excluded|except)\b/i
+const NEGATION_WINDOW = 40
+
+function keywordIsPresent(text, keywords) {
+  for (const keyword of keywords) {
+    const flags = keyword.flags.includes('g') ? keyword.flags : keyword.flags + 'g'
+    const globalKeyword = new RegExp(keyword.source, flags)
+    for (const match of text.matchAll(globalKeyword)) {
+      const windowStart = Math.max(0, match.index - NEGATION_WINDOW)
+      const preceding = text.slice(windowStart, match.index)
+      if (!NEGATION_PATTERN.test(preceding)) return true
+    }
+  }
+  return false
+}
+
 // ---------- Policy type detection ----------
 
 const policyTypeSignals = [
@@ -117,9 +141,9 @@ const gapRuleSets = {
     { name: 'Waiver of Subrogation', icon: 'tool', keywords: [/waiver of subrogation/i], what: 'A provision waiving the insurer\u2019s right to recover costs from a third party, often required by contracts.', why: 'General contractors frequently require this before allowing work to begin.' },
   ],
   trucking: [
-    { name: 'Cargo Coverage', icon: 'droplet', keywords: [/cargo (coverage|insurance)/i], what: 'Covers the freight being hauled against covered perils.', why: 'Required by most shippers and brokers before they\u2019ll dispatch a load to you.' },
-    { name: 'Non-Trucking Liability (Bobtail)', icon: 'car', keywords: [/non-?trucking liability/i, /bobtail/i], what: 'Covers liability while driving the tractor without a trailer or dispatched load.', why: 'Standard motor carrier liability often excludes bobtail use, leaving a gap between loads.' },
-    { name: 'Physical Damage Coverage', icon: 'tool', keywords: [/physical damage/i], what: 'Covers damage to your own truck or trailer.', why: 'Motor carrier liability only covers damage to others, not your own equipment.' },
+    { name: 'Reefer/Cargo Refrigeration Breakdown', icon: 'droplet', keywords: [/reefer breakdown/i, /refrigeration breakdown/i, /\breefer\b/i], what: 'Covers spoiled or damaged cargo caused by a mechanical breakdown of refrigeration equipment.', why: 'Standard cargo coverage often excludes spoilage from equipment breakdown, a common gap for refrigerated freight.' },
+    { name: 'Trailer Interchange Coverage', icon: 'car', keywords: [/trailer interchange/i], what: 'Covers a non-owned trailer you\u2019re pulling under an interchange agreement.', why: 'Your own physical damage coverage typically only applies to trailers you own, leaving interchanged trailers unprotected.' },
+    { name: 'General Liability (Off-Truck)', icon: 'shield', keywords: [/general liability/i, /premises liability/i], what: 'Liability coverage for incidents at a drop yard, warehouse, or loading dock, separate from operating the vehicle.', why: 'Motor carrier liability only applies while the vehicle is in use, not for other business-related incidents.' },
     { name: 'BOC-3 / Process Agent Filing', icon: 'shield', keywords: [/boc-?3/i, /process agent/i], what: 'A required filing designating agents to receive legal documents in each state you operate.', why: 'Missing or lapsed BOC-3 filings can suspend your operating authority.' },
   ],
 }
@@ -133,7 +157,7 @@ export function analyzeText(rawText, meta = {}) {
   const gapRules = gapRuleSets[detected.type]
 
   const coverages = coverageRules.map((rule) => {
-    const found = rule.keywords.some((k) => k.test(text))
+    const found = keywordIsPresent(text, rule.keywords)
     const limitMatch = text.match(rule.limitPattern)
     return {
       name: rule.name,
@@ -151,7 +175,7 @@ export function analyzeText(rawText, meta = {}) {
 
   const gaps = gapRules
     .map((rule) => {
-      const found = rule.keywords.some((k) => k.test(text))
+      const found = keywordIsPresent(text, rule.keywords)
       return {
         name: rule.name,
         icon: rule.icon,
