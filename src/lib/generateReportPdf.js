@@ -21,7 +21,9 @@ export function generateReportPdf(analysis) {
     if (y + needed > PAGE_HEIGHT - MARGIN) {
       doc.addPage()
       y = MARGIN
+      return true
     }
+    return false
   }
 
   function setColor(rgb) {
@@ -112,17 +114,22 @@ export function generateReportPdf(analysis) {
   heading('2. Policy Summary')
   const colX = { name: MARGIN, limit: MARGIN + 150, explanation: MARGIN + 240 }
   const colWidth = { explanation: CONTENT_WIDTH - 240 }
+
+  function drawTableHeader() {
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(8)
+    setColor(COLORS.slate)
+    doc.text('COVERAGE', colX.name, y)
+    doc.text('LIMIT', colX.limit, y)
+    doc.text('EXPLANATION', colX.explanation, y)
+    y += 6
+    doc.setDrawColor(...COLORS.line)
+    doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
+    y += 12
+  }
+
   checkPageBreak(16)
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(8)
-  setColor(COLORS.slate)
-  doc.text('COVERAGE', colX.name, y)
-  doc.text('LIMIT', colX.limit, y)
-  doc.text('EXPLANATION', colX.explanation, y)
-  y += 6
-  doc.setDrawColor(...COLORS.line)
-  doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y)
-  y += 12
+  drawTableHeader()
   for (const c of analysis.coverages) {
     // splitTextToSize measures against the document's *current* font/size, so
     // it must be set before each measurement, not just before rendering, or
@@ -139,7 +146,7 @@ export function generateReportPdf(analysis) {
 
     const maxLines = Math.max(nameLines.length, limitLines.length, explanationLines.length)
     const rowHeight = Math.max(14, maxLines * 12)
-    checkPageBreak(rowHeight + 8)
+    if (checkPageBreak(rowHeight + 8)) drawTableHeader()
 
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(9.5)

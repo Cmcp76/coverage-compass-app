@@ -20,6 +20,7 @@ const defaultAnalysis = {
 }
 
 const HISTORY_KEY = 'coverage-compass-report-history'
+const ANALYSIS_KEY = 'coverage-compass-current-analysis'
 const MAX_HISTORY = 10
 
 function loadHistory() {
@@ -40,6 +41,24 @@ function saveHistory(entries) {
   }
 }
 
+function loadAnalysis() {
+  try {
+    const raw = localStorage.getItem(ANALYSIS_KEY)
+    return raw ? JSON.parse(raw) : defaultAnalysis
+  } catch {
+    return defaultAnalysis
+  }
+}
+
+function saveAnalysis(analysis) {
+  try {
+    localStorage.setItem(ANALYSIS_KEY, JSON.stringify(analysis))
+  } catch {
+    // Storage full or unavailable, current analysis just won't survive a
+    // reload, the app still works this session.
+  }
+}
+
 const PolicyContext = createContext({
   analysis: defaultAnalysis,
   setAnalysis: () => {},
@@ -51,11 +70,21 @@ const PolicyContext = createContext({
 })
 
 export function PolicyProvider({ children }) {
-  const [analysis, setAnalysis] = useState(defaultAnalysis)
+  const [analysis, setAnalysisState] = useState(loadAnalysis)
   const [history, setHistory] = useState(loadHistory)
 
+  function setAnalysis(newAnalysis) {
+    setAnalysisState(newAnalysis)
+    saveAnalysis(newAnalysis)
+  }
+
   function reset() {
-    setAnalysis(defaultAnalysis)
+    setAnalysisState(defaultAnalysis)
+    try {
+      localStorage.removeItem(ANALYSIS_KEY)
+    } catch {
+      // Storage unavailable, in-memory state is already reset above.
+    }
   }
 
   function addToHistory(newAnalysis) {

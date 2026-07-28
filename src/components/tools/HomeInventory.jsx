@@ -65,7 +65,7 @@ export default function HomeInventory() {
     Object.entries(items).forEach(([room, roomItems]) => {
       roomItems.forEach((i) => rows.push([room, i.name, i.value, i.date || '']))
     })
-    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(',')).join('\n')
+    const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')

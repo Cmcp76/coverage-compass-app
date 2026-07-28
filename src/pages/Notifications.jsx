@@ -4,7 +4,7 @@ import { usePolicy } from '../context/PolicyContext.jsx'
 
 function buildCoverageAlertBody(analysis) {
   const topGap = analysis.gaps?.[0]
-  if (!topGap) return "Your policy doesn't show rental reimbursement, worth asking about."
+  if (!topGap) return 'No coverage gaps flagged for your latest policy review.'
   return topGap.status === 'Worth Confirming'
     ? `${topGap.name} is mentioned but worth confirming the details.`
     : `Your policy doesn't show ${topGap.name.toLowerCase()}, worth asking about.`
