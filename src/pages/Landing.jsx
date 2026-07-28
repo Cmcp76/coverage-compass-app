@@ -165,11 +165,18 @@ export default function Landing() {
 }
 
 const compassTickAngles = [0, 45, 90, 135, 180, 225, 270, 315]
+const compassMinorTickAngles = [22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5]
+const compassLabels = [
+  { angle: 0, text: 'N' },
+  { angle: 90, text: 'E' },
+  { angle: 180, text: 'S' },
+  { angle: 270, text: 'W' },
+]
 
 function HeroBackdrop() {
   const cx = 600
   const cy = 195
-  const r = 82
+  const r = 104
 
   return (
     <svg
@@ -192,13 +199,109 @@ function HeroBackdrop() {
       />
 
       {/* Compass, centered and given a domed, 3D feel via a grounding
-          shadow, a beveled rim, and a glossy highlight, like an instrument
-          actively navigating rather than a flat emblem. */}
+          shadow, a beveled rim, and a glossy highlight (all fixed, like a
+          housing), with a spinning navigation-rose dial inside it, bearing
+          lines, a 16-point tick graduation, and N/E/S/W labels. The spin
+          respects prefers-reduced-motion via .animate-compass-spin. */}
       <g>
-        <ellipse cx={cx} cy={cy + r + 8} rx={r * 0.55} ry={r * 0.14} className="text-compass-heading" fill="currentColor" opacity="0.08" />
-        <circle cx={cx} cy={cy} r={r + 5} className="text-compass-slate" stroke="currentColor" strokeWidth="4" opacity="0.08" />
-        <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="2" opacity="0.24" />
-        <circle cx={cx} cy={cy} r={r * 0.7} className="text-compass-link" stroke="currentColor" strokeWidth="1" opacity="0.14" />
+        <ellipse cx={cx} cy={cy + r + 10} rx={r * 0.55} ry={r * 0.14} className="text-compass-heading" fill="currentColor" opacity="0.09" />
+        <circle cx={cx} cy={cy} r={r + 6} className="text-compass-slate" stroke="currentColor" strokeWidth="5" opacity="0.1" />
+        <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="3" opacity="0.3" />
+
+        <g className="animate-compass-spin" style={{ transformOrigin: `${cx}px ${cy}px` }}>
+          <circle cx={cx} cy={cy} r={r * 0.7} className="text-compass-link" stroke="currentColor" strokeWidth="1.5" opacity="0.18" />
+
+          {/* Bearing-line star, the classic radiating lines of a nautical
+              chart compass rose. */}
+          {compassTickAngles.map((angle) => (
+            <line
+              key={`ray-${angle}`}
+              x1={cx}
+              y1={cy}
+              x2={cx}
+              y2={cy - r * 0.66}
+              transform={`rotate(${angle} ${cx} ${cy})`}
+              className="text-compass-link"
+              stroke="currentColor"
+              strokeWidth="0.75"
+              opacity="0.1"
+            />
+          ))}
+
+          {/* 16-point graduation. */}
+          {compassMinorTickAngles.map((angle) => (
+            <line
+              key={`minor-${angle}`}
+              x1={cx}
+              y1={cy - r + 3}
+              x2={cx}
+              y2={cy - r - 5}
+              transform={`rotate(${angle} ${cx} ${cy})`}
+              className="text-compass-slate"
+              stroke="currentColor"
+              strokeWidth="0.9"
+              strokeLinecap="round"
+              opacity="0.15"
+            />
+          ))}
+          {compassTickAngles.map((angle) => {
+            const isCardinal = angle % 90 === 0
+            return (
+              <line
+                key={angle}
+                x1={cx}
+                y1={cy - r + 2}
+                x2={cx}
+                y2={cy - r - (isCardinal ? 16 : 8)}
+                transform={`rotate(${angle} ${cx} ${cy})`}
+                className="text-compass-slate"
+                stroke="currentColor"
+                strokeWidth={isCardinal ? 2.6 : 1.6}
+                strokeLinecap="round"
+                opacity="0.3"
+              />
+            )
+          })}
+
+          {compassLabels.map(({ angle, text }) => {
+            const isNorth = text === 'N'
+            const labelR = r + 30
+            const x = cx + labelR * Math.sin((angle * Math.PI) / 180)
+            const y = cy - labelR * Math.cos((angle * Math.PI) / 180)
+            return (
+              <text
+                key={text}
+                x={x}
+                y={y}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                className={isNorth ? 'text-compass-heading' : 'text-compass-slate'}
+                fill="currentColor"
+                fontSize={isNorth ? r * 0.22 : r * 0.17}
+                fontWeight={isNorth ? 800 : 700}
+                opacity={isNorth ? 0.45 : 0.32}
+              >
+                {text}
+              </text>
+            )
+          })}
+
+          <path
+            d={`M${cx} ${cy - r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy - r * 0.1} L${cx - r * 0.16} ${cy} Z`}
+            className="text-compass-green"
+            fill="currentColor"
+            opacity="0.3"
+          />
+          <path
+            d={`M${cx} ${cy + r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy + r * 0.1} L${cx - r * 0.16} ${cy} Z`}
+            className="text-compass-heading"
+            fill="currentColor"
+            opacity="0.22"
+          />
+          <circle cx={cx} cy={cy} r="6" className="text-compass-heading" fill="currentColor" opacity="0.32" />
+          <circle cx={cx - 1.8} cy={cy - 1.8} r="1.8" className="text-compass-surface" fill="currentColor" opacity="0.4" />
+        </g>
+
         <ellipse
           cx={cx - r * 0.32}
           cy={cy - r * 0.38}
@@ -209,38 +312,6 @@ function HeroBackdrop() {
           fill="currentColor"
           opacity="0.16"
         />
-        {compassTickAngles.map((angle) => {
-          const isCardinal = angle % 90 === 0
-          return (
-            <line
-              key={angle}
-              x1={cx}
-              y1={cy - r + 2}
-              x2={cx}
-              y2={cy - r - (isCardinal ? 12 : 6)}
-              transform={`rotate(${angle} ${cx} ${cy})`}
-              className="text-compass-slate"
-              stroke="currentColor"
-              strokeWidth={isCardinal ? 2 : 1.2}
-              strokeLinecap="round"
-              opacity="0.22"
-            />
-          )
-        })}
-        <path
-          d={`M${cx} ${cy - r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy - r * 0.1} L${cx - r * 0.16} ${cy} Z`}
-          className="text-compass-green"
-          fill="currentColor"
-          opacity="0.24"
-        />
-        <path
-          d={`M${cx} ${cy + r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy + r * 0.1} L${cx - r * 0.16} ${cy} Z`}
-          className="text-compass-heading"
-          fill="currentColor"
-          opacity="0.18"
-        />
-        <circle cx={cx} cy={cy} r="5" className="text-compass-heading" fill="currentColor" opacity="0.26" />
-        <circle cx={cx - 1.5} cy={cy - 1.5} r="1.6" className="text-compass-surface" fill="currentColor" opacity="0.35" />
       </g>
 
       {/* Ocean, a layered wave silhouette below the horizon. */}
