@@ -208,7 +208,7 @@ function HeroBackdrop() {
             further back in the scene, a receded, hazier layer behind the
             text rather than something on the same plane as it. */}
         <filter id="heroCompassDepth" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="1" />
+          <feGaussianBlur stdDeviation="0.5" />
         </filter>
       </defs>
 
@@ -232,12 +232,12 @@ function HeroBackdrop() {
           whole thing is blurred and dimmed a touch to push it back in
           depth, behind the text instead of competing on the same plane. */}
       <g filter="url(#heroCompassDepth)">
-        <ellipse cx={cx} cy={cy + r + 10} rx={r * 0.55} ry={r * 0.14} className="text-compass-heading" fill="currentColor" opacity="0.12" />
-        <circle cx={cx} cy={cy} r={r + 6} className="text-compass-slate" stroke="currentColor" strokeWidth="5" opacity="0.15" />
-        <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="3" opacity="0.4" />
+        <ellipse cx={cx} cy={cy + r + 10} rx={r * 0.55} ry={r * 0.14} className="text-compass-heading" fill="currentColor" opacity="0.18" />
+        <circle cx={cx} cy={cy} r={r + 6} className="text-compass-slate" stroke="currentColor" strokeWidth="5" opacity="0.22" />
+        <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="3" opacity="0.6" />
 
         <g className="animate-compass-spin" style={{ transformOrigin: `${cx}px ${cy}px` }}>
-          <circle cx={cx} cy={cy} r={r * 0.7} className="text-compass-link" stroke="currentColor" strokeWidth="1.5" opacity="0.26" />
+          <circle cx={cx} cy={cy} r={r * 0.7} className="text-compass-link" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
 
           {/* Bearing-line star, the classic radiating lines of a nautical
               chart compass rose. */}
@@ -252,7 +252,7 @@ function HeroBackdrop() {
               className="text-compass-link"
               stroke="currentColor"
               strokeWidth="0.75"
-              opacity="0.14"
+              opacity="0.22"
             />
           ))}
 
@@ -269,7 +269,7 @@ function HeroBackdrop() {
               stroke="currentColor"
               strokeWidth="0.9"
               strokeLinecap="round"
-              opacity="0.2"
+              opacity="0.32"
             />
           ))}
           {compassTickAngles.map((angle) => {
@@ -286,7 +286,7 @@ function HeroBackdrop() {
                 stroke="currentColor"
                 strokeWidth={isCardinal ? 2.6 : 1.6}
                 strokeLinecap="round"
-                opacity="0.4"
+                opacity="0.6"
               />
             )
           })}
@@ -307,7 +307,7 @@ function HeroBackdrop() {
                 fill="currentColor"
                 fontSize={isNorth ? r * 0.22 : r * 0.17}
                 fontWeight={isNorth ? 800 : 700}
-                opacity={isNorth ? 0.55 : 0.4}
+                opacity={isNorth ? 0.8 : 0.62}
               >
                 {text}
               </text>
@@ -318,16 +318,16 @@ function HeroBackdrop() {
             d={`M${cx} ${cy - r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy - r * 0.1} L${cx - r * 0.16} ${cy} Z`}
             className="text-compass-green"
             fill="currentColor"
-            opacity="0.4"
+            opacity="0.6"
           />
           <path
             d={`M${cx} ${cy + r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy + r * 0.1} L${cx - r * 0.16} ${cy} Z`}
             className="text-compass-heading"
             fill="currentColor"
-            opacity="0.3"
+            opacity="0.46"
           />
-          <circle cx={cx} cy={cy} r="6" className="text-compass-heading" fill="currentColor" opacity="0.42" />
-          <circle cx={cx - 1.8} cy={cy - 1.8} r="1.8" className="text-compass-surface" fill="currentColor" opacity="0.5" />
+          <circle cx={cx} cy={cy} r="6" className="text-compass-heading" fill="currentColor" opacity="0.62" />
+          <circle cx={cx - 1.8} cy={cy - 1.8} r="1.8" className="text-compass-surface" fill="currentColor" opacity="0.7" />
         </g>
 
         <ellipse
@@ -338,7 +338,7 @@ function HeroBackdrop() {
           transform={`rotate(-24 ${cx - r * 0.32} ${cy - r * 0.38})`}
           className="text-compass-surface"
           fill="currentColor"
-          opacity="0.2"
+          opacity="0.28"
         />
       </g>
 
