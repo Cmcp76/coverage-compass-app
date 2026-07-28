@@ -32,6 +32,7 @@ export default function Tools() {
           <button
             key={t.id}
             onClick={() => setActive(t.id)}
+            aria-pressed={active === t.id}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
               active === t.id
                 ? 'bg-compass-blue text-white'
@@ -195,6 +196,7 @@ function RiskQuiz() {
                 <button
                   key={opt}
                   onClick={() => select(i, opt)}
+                  aria-pressed={answers[i] === opt}
                   className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
                     answers[i] === opt
                       ? 'bg-compass-blue text-white'

@@ -35,6 +35,7 @@ export default function AnnualCheckup() {
                 <button
                   key={opt}
                   onClick={() => setAnswers((prev) => ({ ...prev, [i]: opt }))}
+                  aria-pressed={answers[i] === opt}
                   className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
                     answers[i] === opt
                       ? 'bg-compass-blue text-white'

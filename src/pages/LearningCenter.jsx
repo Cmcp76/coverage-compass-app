@@ -38,6 +38,7 @@ export default function LearningCenter() {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
+            aria-pressed={activeCategory === cat}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
               activeCategory === cat
                 ? 'bg-compass-blue text-white'

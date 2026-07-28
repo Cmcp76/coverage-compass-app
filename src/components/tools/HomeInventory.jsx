@@ -90,6 +90,7 @@ export default function HomeInventory() {
           <button
             key={room}
             onClick={() => setOpenRoom(room)}
+            aria-pressed={openRoom === room}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
               openRoom === room
                 ? 'bg-compass-blue text-white'
