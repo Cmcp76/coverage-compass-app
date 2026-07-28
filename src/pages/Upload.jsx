@@ -63,9 +63,10 @@ export default function Upload() {
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
         Drop in a declarations page, ACORD form, or full policy, auto, homeowners,
-        general liability, workers' compensation, or a trucking/motor carrier policy.
-        The reviewer detects which line of business it's looking at and adjusts the
-        review accordingly. PDF or text file works best in this prototype.
+        renters, general liability, workers' compensation, or a trucking/motor
+        carrier policy. The reviewer detects which line of business it's looking at
+        and adjusts the review accordingly. PDF or text file works best in this
+        prototype.
       </p>
 
       <div

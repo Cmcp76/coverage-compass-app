@@ -76,8 +76,8 @@ This is the most "real" part of the prototype. Upload a file and it:
 1. Extracts actual text from the PDF (via `pdfjs-dist`, entirely in your
    browser, nothing is sent to a server) or reads a `.txt` file directly
 2. Detects which **line of business** the document is — personal/commercial
-   auto, homeowners, commercial general liability, workers' compensation, or
-   trucking/motor carrier — based on keyword signals
+   auto, homeowners, renters, commercial general liability, workers'
+   compensation, or trucking/motor carrier — based on keyword signals
 3. Applies a rule set specific to that line of business to identify
    coverages present, coverages missing (`NEEDED INFORMATION`), and common
    gaps worth a second look
@@ -85,9 +85,10 @@ This is the most "real" part of the prototype. Upload a file and it:
    Report, and Dashboard — all live off the same shared analysis, not
    independent static copies
 
-**Try it**: five sample `.txt` policies are in `sample-policies/` — one each
-for auto, homeowners, general liability, workers' comp, and trucking. Upload
-each one and watch the coverages, gaps, and score change to match.
+**Try it**: six sample `.txt` policies are in `sample-policies/` — one each
+for auto, homeowners, renters, general liability, workers' comp, and
+trucking. Upload each one and watch the coverages, gaps, and score change to
+match.
 
 **Be clear-eyed about what this is**: it's keyword matching, not real AI
 document understanding. It'll miss nuance, get fooled by unfamiliar phrasing,
@@ -100,11 +101,11 @@ and disclaimers were not paraphrased.
 
 ## Testing (`src/lib/policyAnalysis.test.js`, Vitest)
 
-`npm test` runs 34 automated tests against the analysis engine. It also runs
+`npm test` runs 38 automated tests against the analysis engine. It also runs
 in this repo's GitHub Actions deploy workflow before every deploy, so a
 regression can't ship to the live preview. Covers:
 
-- Policy type detection and named insured extraction for all 5 sample
+- Policy type detection and named insured extraction for all 6 sample
   policies
 - Negation handling ("does not include X" / "X is not included" / "X is
   excluded"), including the sentence-boundary-clipping regression this
@@ -134,7 +135,7 @@ Before you upload anything, every screen shows one consistent fictional demo
 auto policy (`src/data/mockData.js`, clearly labeled as demo data) — Coverage
 Score 87/100, sample carrier "Sample Insurance Co," and the gaps: no rental
 reimbursement, no umbrella policy referenced, roadside assistance not
-listed. Upload a real file (or one of the 5 samples in `sample-policies/`)
+listed. Upload a real file (or one of the 6 samples in `sample-policies/`)
 and every screen switches to reflect that document's actual analysis
 instead, saved to your Reports history.
 

@@ -34,6 +34,11 @@ const samples = {
     label: "Workers' Compensation",
     namedInsured: 'Alvarez Construction Inc.',
   },
+  renters: {
+    file: 'renters-sample.txt',
+    label: 'Renters',
+    namedInsured: 'Jordan Ellis',
+  },
 }
 
 describe('detectPolicyType', () => {
@@ -148,14 +153,29 @@ describe('scoreCategories omits inapplicable checks per line of business', () =>
     expect(names).not.toContain('Deductibles')
   })
 
-  it('still scores Property Protection and Deductibles for auto, homeowners, and trucking', () => {
-    for (const key of ['auto', 'homeowners', 'trucking']) {
+  it('still scores Property Protection and Deductibles for auto, homeowners, trucking, and renters', () => {
+    for (const key of ['auto', 'homeowners', 'trucking', 'renters']) {
       const { file } = samples[key]
       const result = analyzeText(loadSample(file), { fileName: file })
       const names = result.scoreCategories.map((c) => c.name)
       expect(names).toContain('Property Protection')
       expect(names).toContain('Deductibles')
     }
+  })
+})
+
+describe('limit extraction does not swallow a trailing comma', () => {
+  it('stops at the amount when followed directly by a comma clause', () => {
+    // Regression: [\d,]+ happily consumed a comma with no digit after it,
+    // e.g. "$40,000, $500 deductible" extracted as "$40,000," instead of
+    // "$40,000". Found via the renters sample, but the flaw was latent in
+    // every limitPattern in the file.
+    const result = analyzeText(
+      'This tenant renters policy: Coverage C - Personal Property $40,000, $500 deductible',
+      { fileName: 'test.txt' },
+    )
+    const personalProperty = result.coverages.find((c) => c.name === 'Personal Property')
+    expect(personalProperty.limit).toBe('$40,000')
   })
 })
 

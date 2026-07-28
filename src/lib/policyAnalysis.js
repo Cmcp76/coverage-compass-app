@@ -72,6 +72,14 @@ const policyTypeSignals = [
     keywords: [/dwelling coverage/i, /loss of use/i, /other structures/i, /homeowners? policy/i, /replacement cost/i, /actual cash value/i],
   },
   {
+    type: 'renters',
+    label: 'Renters',
+    // A renters (HO-4) policy shares vocabulary with homeowners (loss of
+    // use, actual cash value), so these lean on what's actually distinct:
+    // no dwelling of your own to insure, someone else's building instead.
+    keywords: [/renters?\s*insurance/i, /renters?\s*policy/i, /\bho-?4\b/i, /\btenant\b/i, /landlord'?s (policy|building|dwelling)/i],
+  },
+  {
     type: 'auto',
     label: 'Personal / Commercial Auto',
     keywords: [/bodily injury/i, /collision coverage/i, /comprehensive coverage/i, /uninsured motorist/i, /liability limits?/i],
@@ -93,38 +101,48 @@ export function detectPolicyType(text) {
 
 export const coverageRuleSets = {
   auto: [
-    { name: 'Bodily Injury Liability', keywords: [/bodily injury/i], explanation: "Helps protect you if you're legally responsible for injuries to others.", limitPattern: /bodily injury[^$]{0,40}(\$[\d,]+(?:\s*\/\s*\$[\d,]+)?)/i },
-    { name: 'Property Damage Liability', keywords: [/property damage/i], explanation: "Helps cover damage you cause to someone else's property.", limitPattern: /property damage[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Comprehensive', keywords: [/comprehensive/i], explanation: 'Covers non-collision damage like theft, weather, or vandalism.', limitPattern: /comprehensive[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Collision', keywords: [/collision/i], explanation: 'Covers damage to your vehicle from a collision, regardless of fault.', limitPattern: /collision[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Rental Reimbursement', keywords: [/rental reimbursement/i, /rental car coverage/i], explanation: 'Pays for a rental car while your vehicle is being repaired after a covered claim.', limitPattern: /rental[^$]{0,40}(\$[\d,]+)/i },
+    { name: 'Bodily Injury Liability', keywords: [/bodily injury/i], explanation: "Helps protect you if you're legally responsible for injuries to others.", limitPattern: /bodily injury[^$]{0,40}(\$[\d,]*\d(?:\s*\/\s*\$[\d,]*\d)?)/i },
+    { name: 'Property Damage Liability', keywords: [/property damage/i], explanation: "Helps cover damage you cause to someone else's property.", limitPattern: /property damage[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Comprehensive', keywords: [/comprehensive/i], explanation: 'Covers non-collision damage like theft, weather, or vandalism.', limitPattern: /comprehensive[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Collision', keywords: [/collision/i], explanation: 'Covers damage to your vehicle from a collision, regardless of fault.', limitPattern: /collision[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Rental Reimbursement', keywords: [/rental reimbursement/i, /rental car coverage/i], explanation: 'Pays for a rental car while your vehicle is being repaired after a covered claim.', limitPattern: /rental[^$]{0,40}(\$[\d,]*\d)/i },
   ],
   homeowners: [
-    { name: 'Dwelling Coverage', keywords: [/dwelling coverage/i, /coverage a/i], explanation: 'Covers the physical structure of your home against covered perils.', limitPattern: /dwelling[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Other Structures', keywords: [/other structures/i, /coverage b/i], explanation: 'Covers detached structures like fences, sheds, or a detached garage.', limitPattern: /other structures[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Personal Property', keywords: [/personal property/i, /coverage c/i], explanation: 'Covers your belongings inside the home against covered perils.', limitPattern: /personal property[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Loss of Use', keywords: [/loss of use/i, /additional living expenses/i], explanation: 'Helps cover temporary living costs if your home becomes uninhabitable after a covered loss.', limitPattern: /loss of use[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Liability Coverage', keywords: [/personal liability/i, /coverage e/i], explanation: "Helps protect you if you're found legally responsible for injury or damage to others.", limitPattern: /liability[^$]{0,40}(\$[\d,]+)/i },
+    { name: 'Dwelling Coverage', keywords: [/dwelling coverage/i, /coverage a/i], explanation: 'Covers the physical structure of your home against covered perils.', limitPattern: /dwelling[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Other Structures', keywords: [/other structures/i, /coverage b/i], explanation: 'Covers detached structures like fences, sheds, or a detached garage.', limitPattern: /other structures[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Personal Property', keywords: [/personal property/i, /coverage c/i], explanation: 'Covers your belongings inside the home against covered perils.', limitPattern: /personal property[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Loss of Use', keywords: [/loss of use/i, /additional living expenses/i], explanation: 'Helps cover temporary living costs if your home becomes uninhabitable after a covered loss.', limitPattern: /loss of use[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Liability Coverage', keywords: [/personal liability/i, /coverage e/i], explanation: "Helps protect you if you're found legally responsible for injury or damage to others.", limitPattern: /liability[^$]{0,40}(\$[\d,]*\d)/i },
+  ],
+  // Renters (HO-4) genuinely only has 4 core coverages, not 5 - unlike a
+  // homeowners policy, there's no dwelling/structure to insure since the
+  // building belongs to the landlord. Padding to match the other rule
+  // sets' count would mean inventing a coverage that doesn't exist.
+  renters: [
+    { name: 'Personal Property', keywords: [/personal property/i, /coverage c/i], explanation: 'Covers your belongings against covered perils like theft, fire, or water damage.', limitPattern: /personal property[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Loss of Use', keywords: [/loss of use/i, /additional living expenses/i, /coverage d/i], explanation: 'Helps cover temporary living costs if your rental becomes uninhabitable after a covered loss.', limitPattern: /loss of use[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Personal Liability', keywords: [/personal liability/i, /coverage e/i], explanation: "Helps protect you if you're found legally responsible for injury or damage to others.", limitPattern: /personal liability[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Medical Payments to Others', keywords: [/medical payments to others/i, /coverage f/i], explanation: 'Covers no-fault medical costs if a guest is injured in your rental, regardless of who is at fault.', limitPattern: /medical payments to others[^$]{0,40}(\$[\d,]*\d)/i },
   ],
   general_liability: [
-    { name: 'Premises / Operations Liability', keywords: [/premises/i, /operations liability/i], explanation: 'Covers third-party bodily injury or property damage arising from your business location or operations.', limitPattern: /premises[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Products / Completed Operations', keywords: [/products liability/i, /completed operations/i], explanation: 'Covers claims arising from products you sold or work you completed after the job is done.', limitPattern: /completed operations[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Personal & Advertising Injury', keywords: [/advertising injury/i, /personal injury liability/i], explanation: 'Covers claims like libel, slander, or copyright infringement in advertising.', limitPattern: /advertising injury[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Additional Insured Endorsement', keywords: [/additional insured/i], explanation: 'Extends some of your coverage to another party, often required by landlords or contracts.', limitPattern: /additional insured[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'General Aggregate Limit', keywords: [/general aggregate/i], explanation: 'The maximum your policy will pay in total for covered claims during the policy period.', limitPattern: /general aggregate[^$]{0,40}(\$[\d,]+)/i },
+    { name: 'Premises / Operations Liability', keywords: [/premises/i, /operations liability/i], explanation: 'Covers third-party bodily injury or property damage arising from your business location or operations.', limitPattern: /premises[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Products / Completed Operations', keywords: [/products liability/i, /completed operations/i], explanation: 'Covers claims arising from products you sold or work you completed after the job is done.', limitPattern: /completed operations[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Personal & Advertising Injury', keywords: [/advertising injury/i, /personal injury liability/i], explanation: 'Covers claims like libel, slander, or copyright infringement in advertising.', limitPattern: /advertising injury[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Additional Insured Endorsement', keywords: [/additional insured/i], explanation: 'Extends some of your coverage to another party, often required by landlords or contracts.', limitPattern: /additional insured[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'General Aggregate Limit', keywords: [/general aggregate/i], explanation: 'The maximum your policy will pay in total for covered claims during the policy period.', limitPattern: /general aggregate[^$]{0,40}(\$[\d,]*\d)/i },
   ],
   workers_comp: [
-    { name: "Workers' Compensation (Coverage A)", keywords: [/coverage a/i, /statutory limits/i, /workers'?\s*compensation/i], explanation: 'Pays statutory medical and wage-replacement benefits for employees injured on the job.', limitPattern: /workers'?\s*compensation[^$]{0,40}(\$[\d,]+)/i },
-    { name: "Employer's Liability (Coverage B)", keywords: [/employer'?s liability/i, /coverage b/i], explanation: 'Covers claims from employees or their families that fall outside statutory workers\u2019 comp benefits.', limitPattern: /employer'?s liability[^$]{0,40}(\$[\d,]+)/i },
+    { name: "Workers' Compensation (Coverage A)", keywords: [/coverage a/i, /statutory limits/i, /workers'?\s*compensation/i], explanation: 'Pays statutory medical and wage-replacement benefits for employees injured on the job.', limitPattern: /workers'?\s*compensation[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: "Employer's Liability (Coverage B)", keywords: [/employer'?s liability/i, /coverage b/i], explanation: 'Covers claims from employees or their families that fall outside statutory workers\u2019 comp benefits.', limitPattern: /employer'?s liability[^$]{0,40}(\$[\d,]*\d)/i },
     { name: 'Experience Modifier', keywords: [/experience mod(ifier)?\b/i], explanation: 'A factor based on claims history relative to industry peers, which affects premium.', limitPattern: /experience mod(?:ifier)?[^\d]{0,20}([\d.]+)/i },
     { name: 'Class Codes', keywords: [/class code/i], explanation: 'Codes describing the type of work performed, used to calculate premium and confirm proper classification.', limitPattern: /class code[^\d]{0,20}(\d{3,4})/i },
-    { name: 'Payroll Exposure', keywords: [/payroll exposure/i, /estimated annual payroll/i], explanation: 'The payroll basis used to calculate your premium, worth confirming it matches your actual payroll.', limitPattern: /payroll[^$]{0,40}(\$[\d,]+)/i },
+    { name: 'Payroll Exposure', keywords: [/payroll exposure/i, /estimated annual payroll/i], explanation: 'The payroll basis used to calculate your premium, worth confirming it matches your actual payroll.', limitPattern: /payroll[^$]{0,40}(\$[\d,]*\d)/i },
   ],
   trucking: [
-    { name: 'Motor Carrier Liability', keywords: [/motor carrier liability/i, /combined single limit/i], explanation: 'Covers bodily injury and property damage liability while operating under your motor carrier authority.', limitPattern: /(?:motor carrier liability|combined single limit)[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Cargo Coverage', keywords: [/cargo (coverage|insurance)/i], explanation: 'Covers the freight you\u2019re hauling against covered perils like theft, collision, or fire.', limitPattern: /cargo[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Physical Damage', keywords: [/physical damage/i], explanation: 'Covers damage to your truck or trailer from a covered event.', limitPattern: /physical damage[^$]{0,40}(\$[\d,]+)/i },
-    { name: 'Non-Trucking Liability (Bobtail)', keywords: [/non-?trucking liability/i, /bobtail/i], explanation: 'Covers liability while operating the tractor without a trailer or dispatched load, outside of trucking use.', limitPattern: /(?:non-?trucking liability|bobtail)[^$]{0,40}(\$[\d,]+)/i },
+    { name: 'Motor Carrier Liability', keywords: [/motor carrier liability/i, /combined single limit/i], explanation: 'Covers bodily injury and property damage liability while operating under your motor carrier authority.', limitPattern: /(?:motor carrier liability|combined single limit)[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Cargo Coverage', keywords: [/cargo (coverage|insurance)/i], explanation: 'Covers the freight you\u2019re hauling against covered perils like theft, collision, or fire.', limitPattern: /cargo[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Physical Damage', keywords: [/physical damage/i], explanation: 'Covers damage to your truck or trailer from a covered event.', limitPattern: /physical damage[^$]{0,40}(\$[\d,]*\d)/i },
+    { name: 'Non-Trucking Liability (Bobtail)', keywords: [/non-?trucking liability/i, /bobtail/i], explanation: 'Covers liability while operating the tractor without a trailer or dispatched load, outside of trucking use.', limitPattern: /(?:non-?trucking liability|bobtail)[^$]{0,40}(\$[\d,]*\d)/i },
     { name: 'MC Authority / USDOT Status', keywords: [/\bmc\s*(number|authority)\b/i, /usdot/i], explanation: 'Confirms your motor carrier authority and USDOT number are current and matched to your operating radius.', limitPattern: /(?:mc\s*(?:number|authority)|usdot)[^\d]{0,20}(\d{5,9})/i },
   ],
 }
@@ -143,6 +161,12 @@ export const gapRuleSets = {
     { name: 'Flood Coverage', icon: 'droplet', keywords: [/flood/i], what: 'Coverage for water damage from external flooding, typically excluded from standard homeowners policies.', why: "Standard home policies generally don't cover flood damage, even outside a designated flood zone." },
     { name: 'Scheduled Personal Property', icon: 'shield', keywords: [/scheduled personal property/i, /jewelry rider/i], what: 'Extra coverage for high-value items like jewelry, art, or collectibles above standard limits.', why: 'Standard policies often cap categories like jewelry far below replacement value.' },
     { name: 'Equipment Breakdown', icon: 'tool', keywords: [/equipment breakdown/i, /mechanical breakdown/i], what: 'Coverage for mechanical or electrical breakdown of home systems and appliances.', why: 'Standard property policies typically exclude mechanical breakdown, which this coverage can fill.' },
+  ],
+  renters: [
+    { name: 'Replacement Cost Coverage', icon: 'shield', keywords: [/replacement cost/i], what: 'Pays to replace belongings at today’s prices, instead of depreciated actual cash value.', why: 'Many renters policies default to actual cash value, which can pay far less than a replacement actually costs.' },
+    { name: 'Scheduled Personal Property', icon: 'shield', keywords: [/scheduled personal property/i, /jewelry rider/i], what: 'Extra coverage for high-value items like jewelry, art, or electronics above standard limits.', why: 'Standard renters policies often cap categories like jewelry or electronics far below replacement value.' },
+    { name: 'Identity Theft Coverage', icon: 'tool', keywords: [/identity theft/i, /identity fraud/i], what: 'Covers expenses to resolve identity theft, like lost wages or legal fees.', why: 'Not automatically included on most renters policies, usually a low-cost add-on.' },
+    { name: 'Water Backup Coverage', icon: 'droplet', keywords: [/water backup/i, /sewer backup/i, /sump pump/i], what: 'Covers damage from water backing up through drains or sewers, a common exclusion.', why: 'Standard policies typically exclude backup or overflow from drains or sump pumps without this endorsement.' },
   ],
   general_liability: [
     { name: 'Umbrella / Excess Liability', icon: 'umbrella', keywords: [/umbrella/i, /excess liability/i], what: 'Extra liability protection above your CGL policy limits.', why: 'A significant claim or lawsuit can exceed standard GL limits quickly.' },

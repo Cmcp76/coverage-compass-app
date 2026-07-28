@@ -39,7 +39,7 @@ export default function Landing() {
           <StepCard
             step="1"
             title="Upload Your Policy"
-            body="Drop in your declarations page, ACORD form, or full policy, auto, homeowners, general liability, workers' compensation, or trucking/motor carrier. PDF or text file works best."
+            body="Drop in your declarations page, ACORD form, or full policy, auto, homeowners, renters, general liability, workers' compensation, or trucking/motor carrier. PDF or text file works best."
             delay={0}
           />
           <StepCard
@@ -80,7 +80,7 @@ export default function Landing() {
             />
             <FeatureCard
               title="Built for real coverage"
-              body="Auto, homeowners, general liability, workers' compensation, and trucking policies, each reviewed against the details that actually matter for that line of business."
+              body="Auto, homeowners, renters, general liability, workers' compensation, and trucking policies, each reviewed against the details that actually matter for that line of business."
             />
           </div>
         </div>
