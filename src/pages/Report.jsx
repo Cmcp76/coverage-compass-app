@@ -1,4 +1,3 @@
-import { samplePolicy } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import { generateReportPdf } from '../lib/generateReportPdf.js'
@@ -28,9 +27,11 @@ export default function Report() {
           <p className="font-display text-lg font-semibold text-compass-navy">
             Coverage Compass Review
           </p>
-          <p className="mt-3 text-sm text-compass-slate">
-            Prepared for: <strong>{samplePolicy.customerFullName}</strong>
-          </p>
+          {analysis.namedInsured && (
+            <p className="mt-3 text-sm text-compass-slate">
+              Prepared for: <strong>{analysis.namedInsured}</strong>
+            </p>
+          )}
           <p className="text-sm text-compass-slate">
             Document reviewed: {analysis.fileName}
           </p>

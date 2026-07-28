@@ -1,5 +1,4 @@
 import { jsPDF } from 'jspdf'
-import { samplePolicy } from '../data/mockData.js'
 
 const COLORS = {
   navy: [12, 35, 64],
@@ -85,7 +84,7 @@ export function generateReportPdf(analysis) {
   doc.setFontSize(10)
   setColor(COLORS.slate)
   const coverLines = [
-    `Prepared for: ${samplePolicy.customerFullName}`,
+    ...(analysis.namedInsured ? [`Prepared for: ${analysis.namedInsured}`] : []),
     `Document reviewed: ${analysis.fileName}`,
     `Report Generated: ${analysis.analyzedAt}`,
   ]

@@ -9,6 +9,7 @@ const defaultAnalysis = {
   analyzedAt: samplePolicy.reportGeneratedDate,
   hasRealText: false,
   isDemo: true,
+  namedInsured: samplePolicy.customerFullName,
   detectedPolicyType: 'Personal / Commercial Auto (sample)',
   coverageScore: samplePolicy.coverageScore,
   coverages: samplePolicy.coverages,

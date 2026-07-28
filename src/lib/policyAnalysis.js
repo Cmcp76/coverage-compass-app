@@ -166,6 +166,16 @@ const gapRuleSets = {
 
 // ---------- Main entry point ----------
 
+// Declarations pages almost always label this field explicitly, so a
+// direct "Named Insured:" match is far more reliable than trying to guess
+// a person/business name out of free text.
+const NAMED_INSURED_PATTERN = /named insured:?\s*([^\n]+)/i
+
+function extractNamedInsured(text) {
+  const match = text.match(NAMED_INSURED_PATTERN)
+  return match ? match[1].trim().replace(/\s{2,}/g, ' ') : null
+}
+
 export function analyzeText(rawText, meta = {}) {
   const text = rawText || ''
   const detected = detectPolicyType(text)
@@ -251,6 +261,7 @@ export function analyzeText(rawText, meta = {}) {
       day: 'numeric',
     }),
     hasRealText: text.trim().length > 40,
+    namedInsured: extractNamedInsured(text),
     detectedPolicyType: detected.label,
     coverageScore: Math.max(20, Math.min(98, coverageScore)),
     coverages,
