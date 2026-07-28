@@ -24,7 +24,7 @@ const NEGATION_PATTERN = /\b(not|no|without|excludes?|excluding|excluded|except)
 // sentence, not tight enough to avoid bleeding into the next one.
 const NEGATION_WINDOW = 80
 
-function keywordIsPresent(text, keywords) {
+export function keywordIsPresent(text, keywords) {
   for (const keyword of keywords) {
     const flags = keyword.flags.includes('g') ? keyword.flags : keyword.flags + 'g'
     const globalKeyword = new RegExp(keyword.source, flags)
@@ -78,7 +78,7 @@ const policyTypeSignals = [
   },
 ]
 
-function detectPolicyType(text) {
+export function detectPolicyType(text) {
   let best = { type: 'auto', label: 'Personal / Commercial Auto', score: 0 }
   for (const signal of policyTypeSignals) {
     const matches = signal.keywords.filter((k) => k.test(text)).length
@@ -171,7 +171,7 @@ const gapRuleSets = {
 // a person/business name out of free text.
 const NAMED_INSURED_PATTERN = /named insured:?\s*([^\n]+)/i
 
-function extractNamedInsured(text) {
+export function extractNamedInsured(text) {
   const match = text.match(NAMED_INSURED_PATTERN)
   return match ? match[1].trim().replace(/\s{2,}/g, ' ') : null
 }
