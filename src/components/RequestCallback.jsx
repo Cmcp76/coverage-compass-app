@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const timeOptions = ['Morning', 'Afternoon', 'Evening']
 
-export default function RequestCallback() {
+export default function RequestCallback({ ctaLabel = 'Request a Callback', ctaVariant = 'secondary' }) {
   const [open, setOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [name, setName] = useState('')
@@ -84,8 +84,11 @@ export default function RequestCallback() {
           </div>
         </form>
       ) : (
-        <button className="btn-secondary mt-4" onClick={() => setOpen(true)}>
-          Request a Callback
+        <button
+          className={`${ctaVariant === 'primary' ? 'btn-primary' : 'btn-secondary'} mt-4`}
+          onClick={() => setOpen(true)}
+        >
+          {ctaLabel}
         </button>
       )}
 

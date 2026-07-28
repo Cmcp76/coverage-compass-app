@@ -58,6 +58,23 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Coverage Compass Challenge */}
+      <section className="mx-auto max-w-5xl px-6 pb-16">
+        <div className="rounded-2xl border border-compass-line bg-compass-paper px-6 py-10 text-center sm:px-12">
+          <span className="tag-neutral">5-minute challenge</span>
+          <h2 className="mt-4 font-display text-2xl font-semibold text-compass-heading">
+            Not ready to upload a policy yet? Take the Coverage Compass Challenge.
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-compass-slate">
+            Answer 10 quick questions about auto, home, and everyday coverage and get an
+            educational Coverage Compass Score, no policy upload required.
+          </p>
+          <Link to="/challenge" className="btn-primary mt-6 inline-flex px-6 py-3 text-base">
+            Start the Challenge
+          </Link>
+        </div>
+      </section>
+
       {/* Why Coverage Compass */}
       <section className="bg-compass-surface py-16">
         <div className="mx-auto max-w-5xl px-6">

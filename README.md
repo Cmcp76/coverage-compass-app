@@ -63,6 +63,13 @@ https://cmcp76.github.io/coverage-compass-app/
   Risk Assessment Quiz, Home Inventory Checklist (with CSV export and
   localStorage persistence), Coverage Comparison Tool, Annual Insurance
   Checkup, and a full searchable Glossary
+- **Coverage Compass Challenge** (`/challenge`) — a standalone 10-question
+  quiz entry point, no policy upload required. Explanations shown after
+  every answer regardless of right/wrong, an educational `X / 10` score
+  (never framed as a grade or verdict), and 2–3 "worth discussing" topics
+  generated from which specific questions were missed, capped and never
+  padded to a generic list. Reuses the same lead-gen "Request a Callback"
+  flow and neutral tag styling as the Gap Report
 - **Dark mode** — toggle in the header, persisted to `localStorage`, defaults
   to system preference on first visit. Colors are driven by CSS custom
   properties (`src/index.css`) rather than `dark:` classes scattered through
@@ -99,11 +106,13 @@ product.
 All copy is pulled verbatim from the approved copy deck — headlines, CTAs,
 and disclaimers were not paraphrased.
 
-## Testing (`src/lib/policyAnalysis.test.js`, Vitest)
+## Testing (Vitest)
 
-`npm test` runs 38 automated tests against the analysis engine. It also runs
-in this repo's GitHub Actions deploy workflow before every deploy, so a
-regression can't ship to the live preview. Covers:
+`npm test` runs 53 automated tests across two files. It also runs in this
+repo's GitHub Actions deploy workflow before every deploy, so a regression
+can't ship to the live preview.
+
+`src/lib/policyAnalysis.test.js` covers the analysis engine:
 
 - Policy type detection and named insured extraction for all 6 sample
   policies
@@ -115,6 +124,13 @@ regression can't ship to the live preview. Covers:
   rule set, which double-reports the same real-world concept
 - Full-pipeline sanity checks (score bounds, non-empty results) against
   every sample policy
+
+`src/lib/challengeScoring.test.js` covers the Coverage Compass Challenge's
+"topics worth discussing" mapping — the one piece of real logic in that
+module: missed questions map to their topic in question order, unanswered
+or correctly-answered questions never do, the result is capped at 3 and
+never padded, and a specific missed-question pattern is pinned against the
+real quiz data to match the build brief's example bullets exactly.
 
 ## What's intentionally NOT built yet
 

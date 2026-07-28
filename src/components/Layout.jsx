@@ -13,7 +13,7 @@ const navLinks = [
   { to: '/notifications', label: 'Notifications' },
 ]
 
-const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email']
+const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email', '/challenge']
 
 export default function Layout({ children }) {
   const location = useLocation()
