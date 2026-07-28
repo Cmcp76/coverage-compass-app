@@ -91,7 +91,7 @@ export function detectPolicyType(text) {
 
 // ---------- Coverage rule sets, per line of business ----------
 
-const coverageRuleSets = {
+export const coverageRuleSets = {
   auto: [
     { name: 'Bodily Injury Liability', keywords: [/bodily injury/i], explanation: "Helps protect you if you're legally responsible for injuries to others.", limitPattern: /bodily injury[^$]{0,40}(\$[\d,]+(?:\s*\/\s*\$[\d,]+)?)/i },
     { name: 'Property Damage Liability', keywords: [/property damage/i], explanation: "Helps cover damage you cause to someone else's property.", limitPattern: /property damage[^$]{0,40}(\$[\d,]+)/i },
@@ -131,10 +131,10 @@ const coverageRuleSets = {
 
 // ---------- Gap rule sets, per line of business ----------
 
-const gapRuleSets = {
+export const gapRuleSets = {
   auto: [
     { name: 'Umbrella Insurance', icon: 'umbrella', keywords: [/umbrella/i], what: 'Extra liability protection above your auto policy limits.', why: 'If a claim exceeds your underlying limits, an umbrella policy can help cover the difference.' },
-    { name: 'Rental Car Coverage', icon: 'car', keywords: [/rental car/i, /rental reimbursement/i], what: 'Pays for a rental car while your vehicle is repaired after a covered claim.', why: 'Without it, you may pay rental costs out of pocket during repairs.' },
+    { name: 'Gap Insurance (Loan/Lease Payoff)', icon: 'car', keywords: [/gap insurance/i, /loan\/?lease payoff/i], what: 'Covers the difference between what you owe on a loan or lease and your vehicle’s actual cash value after a total loss.', why: 'A new vehicle can depreciate faster than a loan balance drops, leaving you owing money on a car you no longer have.' },
     { name: 'Roadside Assistance', icon: 'tool', keywords: [/roadside/i], what: 'Coverage for towing, jump-starts, lockouts, and flat tires.', why: 'A low-cost add-on some drivers assume is automatically included.' },
     { name: 'Uninsured/Underinsured Motorist', icon: 'shield', keywords: [/uninsured motorist/i, /underinsured motorist/i], what: 'Protects you if the at-fault driver has little or no insurance.', why: 'Roughly 1 in 8 drivers nationally carry no insurance at all, worth confirming this is included.' },
   ],
@@ -148,11 +148,11 @@ const gapRuleSets = {
     { name: 'Umbrella / Excess Liability', icon: 'umbrella', keywords: [/umbrella/i, /excess liability/i], what: 'Extra liability protection above your CGL policy limits.', why: 'A significant claim or lawsuit can exceed standard GL limits quickly.' },
     { name: "Employment Practices Liability (EPLI)", icon: 'shield', keywords: [/employment practices liability/i, /\bEPLI\b/i], what: 'Covers claims like wrongful termination, discrimination, or harassment.', why: 'Standard GL policies typically exclude employment-related claims entirely.' },
     { name: 'Cyber Liability', icon: 'shield', keywords: [/cyber liability/i, /data breach/i], what: 'Covers costs from data breaches, ransomware, or other cyber incidents.', why: 'Most GL policies exclude cyber-related losses, this typically requires a separate policy.' },
-    { name: 'Certificate of Insurance / Additional Insured Language', icon: 'tool', keywords: [/additional insured/i, /certificate of insurance/i], what: 'Confirms whether contracts, landlords, or vendors requiring additional insured status are properly documented.', why: 'Missing additional insured language is a common reason certificates get rejected by third parties.' },
+    { name: 'Hired & Non-Owned Auto Liability (HNOA)', icon: 'car', keywords: [/hired.{0,3}(and|&)?.{0,3}non-?owned auto/i, /\bHNOA\b/i], what: 'Covers liability when an employee drives a rented or personal vehicle for business purposes.', why: 'A standard GL policy typically excludes auto exposure entirely, this is a common gap for businesses that assume company errands are covered.' },
   ],
   workers_comp: [
-    { name: 'Employer\u2019s Liability Limits', icon: 'shield', keywords: [/employer'?s liability/i], what: 'Coverage B limits that apply to claims outside standard statutory workers\u2019 comp benefits.', why: 'Low Coverage B limits can leave a gap in significant injury claims.' },
-    { name: 'Class Code Accuracy', icon: 'tool', keywords: [/class code/i], what: 'Whether the job classifications on the policy match actual duties performed.', why: 'Misclassified employees can lead to premium audits, surcharges, or coverage disputes after a claim.' },
+    { name: 'Voluntary Compensation Coverage', icon: 'shield', keywords: [/voluntary compensation/i], what: 'Extends benefits to employees who might not be automatically covered under statutory workers\u2019 comp, such as out-of-state or occasional workers.', why: 'Without it, certain employees could fall entirely outside your statutory coverage after an injury.' },
+    { name: 'Additional Named Insureds (Subsidiaries/DBAs)', icon: 'tool', keywords: [/additional named insured/i, /subsidiar(y|ies)/i, /\bDBA\b/i], what: 'Whether related entities, subsidiaries, or DBAs are properly added to the policy as named insureds.', why: 'A claim involving an entity not listed on the policy may not be covered at all.' },
     { name: 'Owner/Officer Exclusion Status', icon: 'shield', keywords: [/officer exclusion/i, /owner exclusion/i, /sole proprietor/i], what: 'Whether owners or officers are included in or excluded from coverage.', why: 'State rules vary, and an incorrect exclusion election can leave an owner personally uninsured.' },
     { name: 'Waiver of Subrogation', icon: 'tool', keywords: [/waiver of subrogation/i], what: 'A provision waiving the insurer\u2019s right to recover costs from a third party, often required by contracts.', why: 'General contractors frequently require this before allowing work to begin.' },
   ],

@@ -1,7 +1,14 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { analyzeText, detectPolicyType, extractNamedInsured, keywordIsPresent } from './policyAnalysis.js'
+import {
+  analyzeText,
+  coverageRuleSets,
+  detectPolicyType,
+  extractNamedInsured,
+  gapRuleSets,
+  keywordIsPresent,
+} from './policyAnalysis.js'
 
 const samplesDir = fileURLToPath(new URL('../../sample-policies/', import.meta.url))
 
@@ -80,6 +87,26 @@ describe('keywordIsPresent negation handling', () => {
   it('still finds a plain affirmative match with no negation nearby', () => {
     expect(keywordIsPresent('Comprehensive $500 deductible', [/comprehensive/i])).toBe(true)
   })
+})
+
+describe('coverage/gap rule sets stay conceptually distinct', () => {
+  // Regression guard: this session found and fixed four cases (trucking,
+  // then auto, general liability, and workers' comp) where a "gap" entry
+  // used the exact same keyword as an existing "coverage" entry in the same
+  // rule set, so the same real-world concept got reported twice, once as a
+  // confirmed coverage and again as a gap worth confirming. An identical
+  // regex .source shared between a rule set's coverages and gaps is the
+  // precise signature of that bug, so fail loudly if it reappears.
+  for (const type of Object.keys(coverageRuleSets)) {
+    it(`${type}: no gap keyword duplicates a coverage keyword`, () => {
+      const coverageSources = new Set(
+        coverageRuleSets[type].flatMap((rule) => rule.keywords.map((k) => k.source)),
+      )
+      const gapSources = gapRuleSets[type].flatMap((rule) => rule.keywords.map((k) => k.source))
+      const overlap = gapSources.filter((s) => coverageSources.has(s))
+      expect(overlap).toEqual([])
+    })
+  }
 })
 
 describe('analyzeText, full pipeline against real sample policies', () => {
