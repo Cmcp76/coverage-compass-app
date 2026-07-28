@@ -18,21 +18,69 @@ const defaultAnalysis = {
   strengths: samplePolicy.strengths,
 }
 
+const HISTORY_KEY = 'coverage-compass-report-history'
+const MAX_HISTORY = 10
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
+
+function saveHistory(entries) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(entries))
+  } catch {
+    // Storage full or unavailable (e.g. private browsing), history just
+    // won't persist across reloads, the app still works this session.
+  }
+}
+
 const PolicyContext = createContext({
   analysis: defaultAnalysis,
   setAnalysis: () => {},
   reset: () => {},
+  history: [],
+  addToHistory: () => {},
+  loadFromHistory: () => {},
 })
 
 export function PolicyProvider({ children }) {
   const [analysis, setAnalysis] = useState(defaultAnalysis)
+  const [history, setHistory] = useState(loadHistory)
 
   function reset() {
     setAnalysis(defaultAnalysis)
   }
 
+  function addToHistory(newAnalysis) {
+    const entry = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      fileName: newAnalysis.fileName,
+      detectedPolicyType: newAnalysis.detectedPolicyType,
+      analyzedAt: newAnalysis.analyzedAt,
+      coverageScore: newAnalysis.coverageScore,
+      analysis: newAnalysis,
+    }
+    setHistory((prev) => {
+      const next = [entry, ...prev].slice(0, MAX_HISTORY)
+      saveHistory(next)
+      return next
+    })
+  }
+
+  function loadFromHistory(id) {
+    const entry = history.find((h) => h.id === id)
+    if (entry) setAnalysis(entry.analysis)
+  }
+
   return (
-    <PolicyContext.Provider value={{ analysis, setAnalysis, reset }}>
+    <PolicyContext.Provider
+      value={{ analysis, setAnalysis, reset, history, addToHistory, loadFromHistory }}
+    >
       {children}
     </PolicyContext.Provider>
   )

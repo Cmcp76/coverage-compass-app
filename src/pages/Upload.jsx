@@ -10,7 +10,7 @@ export default function Upload() {
   const [errorMsg, setErrorMsg] = useState('')
   const inputRef = useRef(null)
   const navigate = useNavigate()
-  const { setAnalysis } = usePolicy()
+  const { setAnalysis, addToHistory } = usePolicy()
 
   async function handleFile(file) {
     if (!file) return
@@ -39,6 +39,7 @@ export default function Upload() {
 
       const analysis = analyzeText(text, { fileName: file.name })
       setAnalysis(analysis)
+      addToHistory(analysis)
       setState('done')
     } catch (err) {
       console.error(err)
