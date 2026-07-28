@@ -29,6 +29,7 @@ export default function Reports() {
   // each bar labeled with policy type + date since these are separate
   // uploads, not repeated snapshots of the same policy.
   const chartData = [...history].reverse().map((r) => ({
+    id: r.id,
     name: r.detectedPolicyType.replace(' / ', '/').replace(' (sample)', ''),
     date: r.analyzedAt,
     score: r.coverageScore,
@@ -75,7 +76,7 @@ export default function Reports() {
                 <Bar dataKey="score" radius={[0, 6, 6, 0]} barSize={16} isAnimationActive={!reduceMotion}>
                   {chartData.map((entry) => (
                     <Cell
-                      key={entry.name + entry.date}
+                      key={entry.id}
                       fill={entry.score >= 80 ? chartColors.good : chartColors.review}
                     />
                   ))}

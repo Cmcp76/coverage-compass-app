@@ -18,11 +18,11 @@ const categoryDetails = {
   'Liability Protection':
     'Looks at whether your liability limits fall within commonly recommended ranges for your situation.',
   'Property Protection':
-    'Looks at whether your dwelling, structures, or business property coverage aligns with what is typically needed.',
+    'Looks at whether the property or physical damage coverage typical for this kind of policy is present.',
   Deductibles:
     'Looks at whether your deductible levels are clearly stated and reasonable relative to your coverage.',
   'Optional Coverages':
-    'Looks at whether commonly valuable add-ons (umbrella, rental reimbursement, roadside) are present.',
+    'Looks at whether commonly valuable optional coverages for this kind of policy are present.',
   'Risk Areas':
     'Flags missing information, unclear exclusions, or areas the document did not provide enough detail to evaluate.',
 }

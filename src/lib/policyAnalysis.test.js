@@ -179,6 +179,26 @@ describe('limit extraction does not swallow a trailing comma', () => {
   })
 })
 
+describe('scoreCategories Deductibles check is negation-aware', () => {
+  it('does not score Deductibles as "good" when the policy says it has none', () => {
+    // Regression: this check used a bare /deductible/i.test(text) instead of
+    // routing through keywordIsPresent(), so "does not include a deductible"
+    // scored the same as an affirmative mention.
+    const result = analyzeText(
+      'Collision Coverage $25,000. This policy does not include a deductible.',
+      { fileName: 'test.txt' },
+    )
+    const deductibles = result.scoreCategories.find((c) => c.name === 'Deductibles')
+    expect(deductibles.status).toBe('review')
+  })
+
+  it('still scores Deductibles as "good" for a plain affirmative mention', () => {
+    const result = analyzeText(loadSample(samples.auto.file), { fileName: samples.auto.file })
+    const deductibles = result.scoreCategories.find((c) => c.name === 'Deductibles')
+    expect(deductibles.status).toBe('good')
+  })
+})
+
 describe('analyzeText, full pipeline against real sample policies', () => {
   for (const [key, { file, label, namedInsured }] of Object.entries(samples)) {
     it(`produces a sane, internally consistent analysis for the ${key} sample`, () => {

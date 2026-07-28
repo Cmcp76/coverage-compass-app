@@ -282,7 +282,7 @@ export function analyzeText(rawText, meta = {}) {
         ]
       : []),
     ...(hasTypicalDeductible
-      ? [{ name: 'Deductibles', status: /deductible/i.test(text) ? 'good' : 'review' }]
+      ? [{ name: 'Deductibles', status: keywordIsPresent(text, [/deductible/i]) ? 'good' : 'review' }]
       : []),
     {
       name: 'Optional Coverages',
@@ -339,6 +339,6 @@ function buildStrengths(coverages) {
   return found.map((c) => {
     const label = c.name.toLowerCase()
     const suffix = /coverage/i.test(label) || NOT_COVERAGE.test(label) ? '' : ' coverage'
-    return `Your policy includes ${label}${suffix}${c.limit.startsWith('$') ? ` (${c.limit})` : ''}.`
+    return `Your policy includes ${label}${suffix}${c.confidence === 'high' ? ` (${c.limit})` : ''}.`
   })
 }
