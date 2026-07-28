@@ -285,12 +285,17 @@ function CompassMark() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
       <circle cx="14" cy="14" r="12.5" className="text-compass-link" stroke="currentColor" strokeWidth="1.5" />
-      {/* Two-tone needle, split along the same NE/SW line as before, plus a
-          center pivot, for more depth than the original flat single-color
-          silhouette. */}
-      <path d="M18 10L14.5 14.5L13.5 13.5Z" className="text-compass-green" fill="currentColor" />
-      <path d="M10 18L14.5 14.5L13.5 13.5Z" className="text-compass-slate" fill="currentColor" />
-      <circle cx="14.1" cy="14.1" r="1.3" className="text-compass-heading" fill="currentColor" />
+      {/* Cardinal tick marks on the dial rim. */}
+      <g className="text-compass-slate" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+        <path d="M14 1.8v2.5" />
+        <path d="M14 23.7v2.5" />
+        <path d="M26.2 14h-2.5" />
+        <path d="M1.8 14h2.5" />
+      </g>
+      {/* North/South needle, the standard compass silhouette. */}
+      <path d="M14 6L16.3 14L14 12.7L11.7 14Z" className="text-compass-green" fill="currentColor" />
+      <path d="M14 22L16.3 14L14 15.3L11.7 14Z" className="text-compass-heading" fill="currentColor" />
+      <circle cx="14" cy="14" r="1.4" className="text-compass-heading" fill="currentColor" />
     </svg>
   )
 }
