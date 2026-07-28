@@ -43,10 +43,12 @@ export default function CoverageScore() {
       <div className="mt-6 rounded-2xl bg-compass-skyblue p-10 text-center">
         <div className="flex justify-center">
           <ScoreGauge score={analysis.coverageScore} size={188} strokeWidth={14}>
-            <p className="font-display text-5xl font-semibold text-compass-blue">
-              {analysis.coverageScore}
-              <span className="text-lg text-compass-slate">/100</span>
-            </p>
+            {(animated) => (
+              <p className="font-display text-5xl font-semibold text-compass-blue">
+                {animated}
+                <span className="text-lg text-compass-slate">/100</span>
+              </p>
+            )}
           </ScoreGauge>
         </div>
         <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-compass-ink">

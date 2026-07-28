@@ -46,10 +46,12 @@ export default function Dashboard() {
         <Link to="/score" className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">
           <p className="text-sm text-compass-slate">Your Coverage Score</p>
           <ScoreGauge score={analysis.coverageScore} size={140} strokeWidth={10}>
-            <p className="font-display text-3xl font-semibold text-compass-blue">
-              {analysis.coverageScore}
-              <span className="text-sm text-compass-slate">/100</span>
-            </p>
+            {(animated) => (
+              <p className="font-display text-3xl font-semibold text-compass-blue">
+                {animated}
+                <span className="text-sm text-compass-slate">/100</span>
+              </p>
+            )}
           </ScoreGauge>
           <p className="mt-2 text-xs text-compass-slate">
             Educational snapshot, not a guarantee

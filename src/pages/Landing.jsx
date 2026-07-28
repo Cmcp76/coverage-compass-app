@@ -7,15 +7,15 @@ export default function Landing() {
       {/* Hero */}
       <section className="bg-compass-skyblue">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center">
-          <h1 className="font-display text-4xl font-semibold leading-tight text-compass-navy sm:text-5xl">
+          <h1 className="animate-fade-up font-display text-4xl font-semibold leading-tight text-compass-navy sm:text-5xl">
             Understand Your Coverage. Protect What Matters.
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-lg text-compass-slate">
+          <p className="animate-fade-up animate-fade-up-delay-1 mx-auto mt-5 max-w-2xl text-lg text-compass-slate">
             Coverage Compass turns your insurance policy into plain language, so you
             know what you have, what might be missing, and what to ask before you're
             ever filing a claim.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="animate-fade-up animate-fade-up-delay-2 mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link to="/upload" className="btn-primary px-6 py-3 text-base">
               Upload Your Policy
             </Link>
@@ -23,7 +23,7 @@ export default function Landing() {
               Learn About Insurance
             </Link>
           </div>
-          <p className="mt-4 text-xs text-compass-slate">
+          <p className="animate-fade-up animate-fade-up-delay-3 mt-4 text-xs text-compass-slate">
             Free educational review. Your documents are never sold or shared. Not
             affiliated with any single carrier.
           </p>
@@ -40,16 +40,19 @@ export default function Landing() {
             step="1"
             title="Upload Your Policy"
             body="Drop in your declarations page, ACORD form, or full policy, auto, homeowners, general liability, workers' compensation, or trucking/motor carrier. PDF or text file works best."
+            delay={0}
           />
           <StepCard
             step="2"
             title="Get a Plain-Language Review"
             body="Our AI reads through the document and translates the jargon into a summary anyone can understand: what's covered, your limits, and where there might be gaps worth a second look."
+            delay={1}
           />
           <StepCard
             step="3"
             title="Walk Into Your Next Conversation Prepared"
             body="Download a clean report with your coverage summary and smart questions to ask a licensed insurance professional."
+            delay={2}
           />
         </div>
       </section>
@@ -160,9 +163,9 @@ export default function Landing() {
   )
 }
 
-function StepCard({ step, title, body }) {
+function StepCard({ step, title, body, delay = 0 }) {
   return (
-    <div className="card">
+    <div className={`card animate-fade-up ${delay ? `animate-fade-up-delay-${delay}` : ''}`}>
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-compass-skyblue text-sm font-semibold text-compass-blue">
         {step}
       </div>
