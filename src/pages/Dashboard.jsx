@@ -1,10 +1,28 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import ScoreGauge from '../components/ScoreGauge.jsx'
 
 export default function Dashboard() {
-  const { analysis } = usePolicy()
+  const { analysis, history, loadFromHistory } = usePolicy()
+  const navigate = useNavigate()
+
+  const latestReview = history[0]
+    ? {
+        title: `${history[0].detectedPolicyType} reviewed`,
+        date: history[0].analyzedAt,
+        onView: () => {
+          loadFromHistory(history[0].id)
+          navigate('/gap-report')
+        },
+      }
+    : {
+        title: 'Sample auto policy reviewed (demo data)',
+        date: 'Upload your own to replace this',
+        onView: () => navigate('/gap-report'),
+      }
+  const activityFeed = [latestReview, ...recentActivity.slice(1)]
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
@@ -63,7 +81,7 @@ export default function Dashboard() {
         <div className="card lg:col-span-2">
           <p className="mb-4 text-sm font-medium text-compass-ink">Recent activity</p>
           <div className="space-y-3">
-            {recentActivity.map((item) => (
+            {activityFeed.map((item) => (
               <div
                 key={item.title}
                 className="flex items-center justify-between rounded-lg border border-compass-line px-4 py-3 transition hover:border-compass-blue/40 hover:bg-compass-paper"
@@ -72,10 +90,10 @@ export default function Dashboard() {
                   <p className="text-sm text-compass-ink">{item.title}</p>
                   <p className="text-xs text-compass-slate">{item.date}</p>
                 </div>
-                {item.type === 'review' && (
-                  <Link to="/gap-report" className="btn-secondary px-3 py-1.5 text-xs">
+                {item.onView && (
+                  <button onClick={item.onView} className="btn-secondary px-3 py-1.5 text-xs">
                     View Report
-                  </Link>
+                  </button>
                 )}
               </div>
             ))}
