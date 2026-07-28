@@ -124,6 +124,32 @@ describe('buildStrengths phrasing', () => {
   })
 })
 
+describe('scoreCategories omits inapplicable checks per line of business', () => {
+  it('does not score Property Protection or Deductibles for general liability', () => {
+    const result = analyzeText(loadSample(samples.generalLiability.file), { fileName: 'gl.txt' })
+    const names = result.scoreCategories.map((c) => c.name)
+    expect(names).not.toContain('Property Protection')
+    expect(names).not.toContain('Deductibles')
+  })
+
+  it('does not score Property Protection or Deductibles for workers comp', () => {
+    const result = analyzeText(loadSample(samples.workersComp.file), { fileName: 'wc.txt' })
+    const names = result.scoreCategories.map((c) => c.name)
+    expect(names).not.toContain('Property Protection')
+    expect(names).not.toContain('Deductibles')
+  })
+
+  it('still scores Property Protection and Deductibles for auto, homeowners, and trucking', () => {
+    for (const key of ['auto', 'homeowners', 'trucking']) {
+      const { file } = samples[key]
+      const result = analyzeText(loadSample(file), { fileName: file })
+      const names = result.scoreCategories.map((c) => c.name)
+      expect(names).toContain('Property Protection')
+      expect(names).toContain('Deductibles')
+    }
+  })
+})
+
 describe('analyzeText, full pipeline against real sample policies', () => {
   for (const [key, { file, label, namedInsured }] of Object.entries(samples)) {
     it(`produces a sane, internally consistent analysis for the ${key} sample`, () => {

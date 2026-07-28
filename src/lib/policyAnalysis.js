@@ -222,6 +222,15 @@ export function analyzeText(rawText, meta = {}) {
       (foundGapProtections / gapRules.length) * 25,
   )
 
+  // Property Protection and Deductibles are meaningful checks for lines of
+  // business that actually have a property component or a typical per-claim
+  // deductible (auto, homeowners, trucking). General liability and workers'
+  // comp are purely liability/statutory-benefit lines with neither, so
+  // scoring them here would always read "Worth a look" on a perfectly
+  // complete policy, a false flag rather than a real gap.
+  const hasPropertyComponent = detected.type !== 'general_liability' && detected.type !== 'workers_comp'
+  const hasTypicalDeductible = detected.type !== 'general_liability' && detected.type !== 'workers_comp'
+
   const scoreCategories = [
     {
       name: 'Liability Protection',
@@ -231,18 +240,21 @@ export function analyzeText(rawText, meta = {}) {
         ? 'good'
         : 'review',
     },
-    {
-      name: 'Property Protection',
-      status: coverages.some(
-        (c) => /(comprehensive|dwelling|physical damage|property)/i.test(c.name) && c.confidence !== 'missing',
-      )
-        ? 'good'
-        : 'review',
-    },
-    {
-      name: 'Deductibles',
-      status: /deductible/i.test(text) ? 'good' : 'review',
-    },
+    ...(hasPropertyComponent
+      ? [
+          {
+            name: 'Property Protection',
+            status: coverages.some(
+              (c) => /(comprehensive|dwelling|physical damage|property)/i.test(c.name) && c.confidence !== 'missing',
+            )
+              ? 'good'
+              : 'review',
+          },
+        ]
+      : []),
+    ...(hasTypicalDeductible
+      ? [{ name: 'Deductibles', status: /deductible/i.test(text) ? 'good' : 'review' }]
+      : []),
     {
       name: 'Optional Coverages',
       status: foundGapProtections >= gapRules.length / 2 ? 'good' : 'review',
