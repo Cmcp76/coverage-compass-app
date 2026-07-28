@@ -14,19 +14,35 @@
 // same as "includes rental reimbursement" - it only checks the words are
 // present, not whether the sentence is negating them. That's a real
 // accuracy problem for a tool whose whole premise is telling someone what
-// their policy does and doesn't cover, so check a short window before each
-// keyword match for a negation word before counting it as "found."
+// their policy does and doesn't cover. Negation shows up on either side of
+// the keyword in natural phrasing ("does not include X" vs "X is not
+// included" / "X is excluded"), so check a short window on both sides of
+// each match before counting it as "found."
 const NEGATION_PATTERN = /\b(not|no|without|excludes?|excluding|excluded|except)\b/i
-const NEGATION_WINDOW = 40
+// Generous on purpose: each window is already clipped to the current
+// sentence below, so this only needs to be wide enough to span a full
+// sentence, not tight enough to avoid bleeding into the next one.
+const NEGATION_WINDOW = 80
 
 function keywordIsPresent(text, keywords) {
   for (const keyword of keywords) {
     const flags = keyword.flags.includes('g') ? keyword.flags : keyword.flags + 'g'
     const globalKeyword = new RegExp(keyword.source, flags)
     for (const match of text.matchAll(globalKeyword)) {
-      const windowStart = Math.max(0, match.index - NEGATION_WINDOW)
-      const preceding = text.slice(windowStart, match.index)
-      if (!NEGATION_PATTERN.test(preceding)) return true
+      // Clip each window to the current sentence, a raw character count
+      // bleeds into the *next* sentence for short lines ("Cargo Coverage
+      // $100,000\n\nThis policy does not include...") and wrongly blames an
+      // unrelated negation on this match.
+      let before = text.slice(Math.max(0, match.index - NEGATION_WINDOW), match.index)
+      const sentenceStart = Math.max(before.lastIndexOf('.'), before.lastIndexOf('\n'))
+      if (sentenceStart !== -1) before = before.slice(sentenceStart + 1)
+
+      const matchEnd = match.index + match[0].length
+      let after = text.slice(matchEnd, matchEnd + NEGATION_WINDOW)
+      const sentenceEnd = after.search(/[.\n]/)
+      if (sentenceEnd !== -1) after = after.slice(0, sentenceEnd)
+
+      if (!NEGATION_PATTERN.test(before) && !NEGATION_PATTERN.test(after)) return true
     }
   }
   return false
