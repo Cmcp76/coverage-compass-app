@@ -19,6 +19,7 @@ const Reports = lazy(() => import('./pages/Reports.jsx'))
 const Notifications = lazy(() => import('./pages/Notifications.jsx'))
 const LearningCenter = lazy(() => import('./pages/LearningCenter.jsx'))
 const Tools = lazy(() => import('./pages/Tools.jsx'))
+const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 function RouteFallback() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/learning-center" element={<LearningCenter />} />
             <Route path="/tools" element={<Tools />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </Layout>
