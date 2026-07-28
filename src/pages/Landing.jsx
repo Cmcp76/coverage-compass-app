@@ -237,6 +237,9 @@ function HeroBackdrop() {
         <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="3" opacity="0.6" />
 
         <g className="animate-compass-spin" style={{ transformOrigin: `${cx}px ${cy}px` }}>
+          {/* A filled card face, so the dial reads as a solid instrument
+              rather than only outlined line art. */}
+          <circle cx={cx} cy={cy} r={r * 0.94} className="text-compass-surface" fill="currentColor" opacity="0.4" />
           <circle cx={cx} cy={cy} r={r * 0.7} className="text-compass-link" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
 
           {/* Bearing-line star, the classic radiating lines of a nautical
@@ -355,6 +358,16 @@ function HeroBackdrop() {
         fill="currentColor"
         opacity="0.12"
       />
+      {/* Foam crest along the front wave's leading edge. */}
+      <path
+        d="M0,352 C120,336 240,368 360,352 C480,336 600,368 720,352 C840,336 960,368 1080,352 C1140,344 1200,356 1200,352"
+        className="text-compass-surface"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.35"
+      />
 
       {/* A small vessel afloat in the water, sailing on the heading the
           compass above it points to. Kept low and compact so the mast
@@ -366,6 +379,7 @@ function HeroBackdrop() {
           fill="currentColor"
         />
         <line x1="600" y1="395" x2="600" y2="365" className="text-compass-slate" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M600,365 L611,368.5 L600,372 Z" className="text-compass-green" fill="currentColor" />
         <path d="M601,367 L601,394 L621,394 Z" className="text-compass-surface" fill="currentColor" stroke="currentColor" strokeWidth="1" />
         <path
           d="M552,404 C564,409 580,409 592,405 M608,405 C620,409 636,409 648,404"
