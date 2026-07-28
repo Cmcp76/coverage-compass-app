@@ -176,7 +176,7 @@ const compassLabels = [
 function HeroBackdrop() {
   const cx = 600
   const cy = 190
-  const r = 88
+  const r = 74
 
   return (
     <svg
