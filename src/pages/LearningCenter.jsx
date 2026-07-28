@@ -26,6 +26,7 @@ export default function LearningCenter() {
 
       <input
         type="text"
+        aria-label="Search Learning Center topics"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder='Search topics (e.g., "umbrella policy," "actual cash value")'

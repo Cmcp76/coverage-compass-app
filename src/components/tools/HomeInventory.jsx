@@ -134,6 +134,7 @@ export default function HomeInventory() {
         <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-5">
           <input
             type="text"
+            aria-label="Item name"
             placeholder="Item name"
             value={draft.name}
             onChange={(e) => setDraft({ ...draft, name: e.target.value })}
@@ -141,6 +142,7 @@ export default function HomeInventory() {
           />
           <input
             type="number"
+            aria-label="Estimated value"
             placeholder="Estimated value"
             value={draft.value}
             onChange={(e) => setDraft({ ...draft, value: e.target.value })}

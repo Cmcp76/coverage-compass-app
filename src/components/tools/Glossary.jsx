@@ -44,6 +44,7 @@ export default function Glossary() {
 
       <input
         type="text"
+        aria-label="Search the glossary"
         placeholder="Search a term..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
