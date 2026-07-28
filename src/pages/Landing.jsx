@@ -5,8 +5,9 @@ export default function Landing() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-compass-skyblue">
-        <div className="mx-auto max-w-4xl px-6 py-20 text-center">
+      <section className="relative overflow-hidden bg-compass-skyblue">
+        <HeroBackdrop />
+        <div className="relative mx-auto max-w-4xl px-6 py-20 text-center">
           <h1 className="animate-fade-up font-display text-4xl font-semibold leading-tight text-compass-heading sm:text-5xl">
             Understand Your Coverage. Protect What Matters.
           </h1>
@@ -160,6 +161,88 @@ export default function Landing() {
         </div>
       </section>
     </div>
+  )
+}
+
+const compassTickAngles = [0, 45, 90, 135, 180, 225, 270, 315]
+
+function HeroBackdrop() {
+  const cx = 600
+  const cy = 165
+  const r = 130
+
+  return (
+    <svg
+      className="absolute inset-0 -z-0 h-full w-full"
+      viewBox="0 0 1200 420"
+      preserveAspectRatio="xMidYMid slice"
+      fill="none"
+      aria-hidden="true"
+    >
+      {/* Horizon */}
+      <line
+        x1="0"
+        y1="300"
+        x2="1200"
+        y2="300"
+        className="text-compass-slate"
+        stroke="currentColor"
+        strokeWidth="1"
+        opacity="0.15"
+      />
+
+      {/* Compass rose, watermark-style, sitting above the horizon like a
+          navigation chart overlay. */}
+      <g>
+        <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="1.5" opacity="0.18" />
+        <circle cx={cx} cy={cy} r={r * 0.68} className="text-compass-link" stroke="currentColor" strokeWidth="1" opacity="0.12" />
+        {compassTickAngles.map((angle) => {
+          const isCardinal = angle % 90 === 0
+          return (
+            <line
+              key={angle}
+              x1={cx}
+              y1={cy - r + 2}
+              x2={cx}
+              y2={cy - r - (isCardinal ? 18 : 9)}
+              transform={`rotate(${angle} ${cx} ${cy})`}
+              className="text-compass-slate"
+              stroke="currentColor"
+              strokeWidth={isCardinal ? 2 : 1.2}
+              strokeLinecap="round"
+              opacity="0.2"
+            />
+          )
+        })}
+        <path
+          d={`M${cx} ${cy - r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy - r * 0.1} L${cx - r * 0.16} ${cy} Z`}
+          className="text-compass-green"
+          fill="currentColor"
+          opacity="0.2"
+        />
+        <path
+          d={`M${cx} ${cy + r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy + r * 0.1} L${cx - r * 0.16} ${cy} Z`}
+          className="text-compass-heading"
+          fill="currentColor"
+          opacity="0.16"
+        />
+        <circle cx={cx} cy={cy} r="5" className="text-compass-heading" fill="currentColor" opacity="0.22" />
+      </g>
+
+      {/* Ocean, a simple layered wave silhouette below the horizon. */}
+      <path
+        d="M0,320 C100,300 200,340 300,320 C400,300 500,340 600,320 C700,300 800,340 900,320 C1000,300 1100,340 1200,320 L1200,420 L0,420 Z"
+        className="text-compass-link"
+        fill="currentColor"
+        opacity="0.08"
+      />
+      <path
+        d="M0,352 C120,336 240,368 360,352 C480,336 600,368 720,352 C840,336 960,368 1080,352 C1140,344 1200,356 1200,352 L1200,420 L0,420 Z"
+        className="text-compass-blue"
+        fill="currentColor"
+        opacity="0.12"
+      />
+    </svg>
   )
 }
 
