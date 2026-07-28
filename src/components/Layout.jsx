@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FooterDisclaimer } from './Disclaimer.jsx'
+import { usePolicy } from '../context/PolicyContext.jsx'
 
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -15,21 +16,31 @@ const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-emai
 
 export default function Layout({ children }) {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { reset } = usePolicy()
   const isPreAuth = preAuthPaths.includes(location.pathname)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const headerRef = useRef(null)
 
   useEffect(() => {
     setMenuOpen(false)
+    setAccountMenuOpen(false)
   }, [location.pathname])
 
   useEffect(() => {
-    if (!menuOpen) return
+    if (!menuOpen && !accountMenuOpen) return
     function handleKeyDown(e) {
-      if (e.key === 'Escape') setMenuOpen(false)
+      if (e.key === 'Escape') {
+        setMenuOpen(false)
+        setAccountMenuOpen(false)
+      }
     }
     function handleClickOutside(e) {
-      if (headerRef.current && !headerRef.current.contains(e.target)) setMenuOpen(false)
+      if (headerRef.current && !headerRef.current.contains(e.target)) {
+        setMenuOpen(false)
+        setAccountMenuOpen(false)
+      }
     }
     document.addEventListener('keydown', handleKeyDown)
     document.addEventListener('mousedown', handleClickOutside)
@@ -37,7 +48,14 @@ export default function Layout({ children }) {
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [menuOpen])
+  }, [menuOpen, accountMenuOpen])
+
+  function handleLogOut() {
+    reset()
+    setMenuOpen(false)
+    setAccountMenuOpen(false)
+    navigate('/')
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -81,15 +99,41 @@ export default function Layout({ children }) {
               </>
             ) : (
               <>
-                <Link
-                  to="/dashboard"
-                  className="hidden items-center gap-2 text-sm font-medium text-compass-slate sm:flex"
-                >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
-                    MA
-                  </span>
-                  Maria Alvarez
-                </Link>
+                <div className="relative hidden sm:block">
+                  <button
+                    className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-compass-slate transition hover:bg-compass-paper"
+                    aria-haspopup="menu"
+                    aria-expanded={accountMenuOpen}
+                    onClick={() => setAccountMenuOpen((v) => !v)}
+                  >
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
+                      MA
+                    </span>
+                    Maria Alvarez
+                  </button>
+                  {accountMenuOpen && (
+                    <div
+                      role="menu"
+                      className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-white py-1 shadow-card"
+                    >
+                      <Link
+                        to="/dashboard"
+                        role="menuitem"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-compass-ink hover:bg-compass-paper"
+                      >
+                        Dashboard
+                      </Link>
+                      <button
+                        role="menuitem"
+                        onClick={handleLogOut}
+                        className="block w-full px-4 py-2 text-left text-sm text-compass-ink hover:bg-compass-paper"
+                      >
+                        Log Out
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <button
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line lg:hidden"
                   aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -119,6 +163,17 @@ export default function Layout({ children }) {
                 {link.label}
               </Link>
             ))}
+            <div className="mt-2 flex items-center justify-between border-t border-compass-line pt-3 sm:hidden">
+              <span className="flex items-center gap-2 text-sm text-compass-slate">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
+                  MA
+                </span>
+                Maria Alvarez
+              </span>
+              <button onClick={handleLogOut} className="text-sm font-medium text-compass-blue">
+                Log Out
+              </button>
+            </div>
           </nav>
         )}
       </header>
