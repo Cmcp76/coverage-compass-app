@@ -54,6 +54,15 @@ describe('extractNamedInsured', () => {
   it('returns null when no "Named Insured:" line is present', () => {
     expect(extractNamedInsured('This document has no such field.')).toBeNull()
   })
+
+  it('handles a space before the colon without leaving a stray ":"', () => {
+    // Common in text extracted from PDF tables/columns, e.g. "Label : Value".
+    expect(extractNamedInsured('Named Insured : John Doe')).toBe('John Doe')
+  })
+
+  it('handles no colon at all', () => {
+    expect(extractNamedInsured('Named Insured John Doe')).toBe('John Doe')
+  })
 })
 
 describe('keywordIsPresent negation handling', () => {

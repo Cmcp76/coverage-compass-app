@@ -169,7 +169,12 @@ export const gapRuleSets = {
 // Declarations pages almost always label this field explicitly, so a
 // direct "Named Insured:" match is far more reliable than trying to guess
 // a person/business name out of free text.
-const NAMED_INSURED_PATTERN = /named insured:?\s*([^\n]+)/i
+// PDF text extraction frequently leaves a space before the colon in
+// "Label : Value" layouts (columnar/table-derived text), which the previous
+// pattern didn't account for, it left a stray leading ":" in the captured
+// name. Consuming whitespace on both sides of the optional colon fixes it
+// without breaking the no-colon-at-all case.
+const NAMED_INSURED_PATTERN = /named insured\s*:?\s*([^\n]+)/i
 
 export function extractNamedInsured(text) {
   const match = text.match(NAMED_INSURED_PATTERN)
