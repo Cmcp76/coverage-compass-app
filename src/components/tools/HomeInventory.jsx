@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const defaultRooms = [
   'Living Room',
@@ -8,16 +8,34 @@ const defaultRooms = [
   'Home Office',
 ]
 
-let idCounter = 0
+const STORAGE_KEY = 'coverage-compass-home-inventory'
+
+function loadItems() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : {}
+  } catch {
+    return {}
+  }
+}
+
 function nextId() {
-  idCounter += 1
-  return `item-${idCounter}`
+  return `item-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
 
 export default function HomeInventory() {
   const [openRoom, setOpenRoom] = useState(defaultRooms[0])
-  const [items, setItems] = useState({})
+  const [items, setItems] = useState(loadItems)
   const [draft, setDraft] = useState({ name: '', value: '', date: '' })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+    } catch {
+      // Storage full or unavailable, the inventory still works for this
+      // session, it just won't survive a reload.
+    }
+  }, [items])
 
   function addItem(room) {
     if (!draft.name.trim()) return
