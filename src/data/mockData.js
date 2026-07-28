@@ -141,6 +141,13 @@ export const articles = [
     readTime: '4 min read',
   },
   {
+    category: 'Commercial',
+    title: 'General Liability vs. Professional Liability: Which One Do You Need?',
+    summary:
+      'GL covers third-party injury and property damage. It doesn’t cover a claim that your advice or work itself caused a client to lose money.',
+    readTime: '4 min read',
+  },
+  {
     category: 'Trucking',
     title: 'USDOT Number vs. MC Authority: What\u2019s the Difference?',
     summary:

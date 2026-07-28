@@ -15,6 +15,7 @@ const fullGlossary = [
   { term: 'MC Authority', definition: 'Operating authority granted by the FMCSA allowing a motor carrier to transport goods for compensation.' },
   { term: 'Named Insured', definition: 'The person or entity specifically identified on the declarations page as covered under the policy.' },
   { term: 'Pro-Rata', definition: 'A method of calculating a refund or charge proportional to the time remaining or used in a policy period.' },
+  { term: 'Professional Liability (Errors & Omissions / E&O)', definition: 'Coverage for claims that your professional advice, service, or work caused a client financial harm, typically excluded from general liability.' },
   { term: 'Subrogation', definition: 'The process by which your insurance company seeks reimbursement from an at-fault party\u2019s insurer after paying your claim.' },
   { term: 'Umbrella Policy', definition: 'Extra liability protection that applies above the limits of your underlying auto or home policy.' },
   { term: 'USDOT Number', definition: 'A unique identifier the FMCSA assigns to companies operating commercial vehicles.' },
