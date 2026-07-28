@@ -46,6 +46,7 @@ const PolicyContext = createContext({
   history: [],
   addToHistory: () => {},
   loadFromHistory: () => {},
+  removeFromHistory: () => {},
 })
 
 export function PolicyProvider({ children }) {
@@ -77,9 +78,25 @@ export function PolicyProvider({ children }) {
     if (entry) setAnalysis(entry.analysis)
   }
 
+  function removeFromHistory(id) {
+    setHistory((prev) => {
+      const next = prev.filter((h) => h.id !== id)
+      saveHistory(next)
+      return next
+    })
+  }
+
   return (
     <PolicyContext.Provider
-      value={{ analysis, setAnalysis, reset, history, addToHistory, loadFromHistory }}
+      value={{
+        analysis,
+        setAnalysis,
+        reset,
+        history,
+        addToHistory,
+        loadFromHistory,
+        removeFromHistory,
+      }}
     >
       {children}
     </PolicyContext.Provider>

@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
 
 export default function Reports() {
-  const { history, loadFromHistory } = usePolicy()
+  const { history, loadFromHistory, removeFromHistory } = usePolicy()
   const navigate = useNavigate()
 
   function openReport(id, path) {
@@ -44,7 +44,7 @@ export default function Reports() {
                   {r.fileName} &middot; {r.analyzedAt} &middot; Score {r.coverageScore}/100
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => openReport(r.id, '/gap-report')}
                   className="btn-secondary px-3 py-1.5 text-xs"
@@ -56,6 +56,13 @@ export default function Reports() {
                   className="btn-primary px-3 py-1.5 text-xs"
                 >
                   Download
+                </button>
+                <button
+                  onClick={() => removeFromHistory(r.id)}
+                  className="px-2 py-1.5 text-xs text-compass-slate hover:text-compass-amber"
+                  aria-label={`Remove ${r.detectedPolicyType} report`}
+                >
+                  Remove
                 </button>
               </div>
             </div>
