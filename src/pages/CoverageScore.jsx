@@ -27,6 +27,7 @@ const categoryDetails = {
 
 export default function CoverageScore() {
   const { analysis } = usePolicy()
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   const chartData = analysis.scoreCategories.map((cat) => ({
     name: cat.name.replace(' Protection', '').replace(' Coverages', ''),
@@ -80,7 +81,7 @@ export default function CoverageScore() {
               ]}
               contentStyle={{ fontSize: 12, borderRadius: 8, borderColor: '#E3E8EF' }}
             />
-            <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={16}>
+            <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={16} isAnimationActive={!reduceMotion}>
               {chartData.map((entry) => (
                 <Cell
                   key={entry.name}

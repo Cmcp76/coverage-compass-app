@@ -14,6 +14,7 @@ import { usePolicy } from '../context/PolicyContext.jsx'
 export default function Reports() {
   const { history, loadFromHistory, removeFromHistory } = usePolicy()
   const navigate = useNavigate()
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   function openReport(id, path) {
     loadFromHistory(id)
@@ -61,7 +62,7 @@ export default function Reports() {
                   formatter={(value, _name, item) => [`${value}/100`, item.payload.date]}
                   contentStyle={{ fontSize: 12, borderRadius: 8, borderColor: '#E3E8EF' }}
                 />
-                <Bar dataKey="score" radius={[0, 6, 6, 0]} barSize={16}>
+                <Bar dataKey="score" radius={[0, 6, 6, 0]} barSize={16} isAnimationActive={!reduceMotion}>
                   {chartData.map((entry) => (
                     <Cell
                       key={entry.name + entry.date}
