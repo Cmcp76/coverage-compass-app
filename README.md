@@ -63,6 +63,11 @@ https://cmcp76.github.io/coverage-compass-app/
   Risk Assessment Quiz, Home Inventory Checklist (with CSV export and
   localStorage persistence), Coverage Comparison Tool, Annual Insurance
   Checkup, and a full searchable Glossary
+- **Dark mode** — toggle in the header, persisted to `localStorage`, defaults
+  to system preference on first visit. Colors are driven by CSS custom
+  properties (`src/index.css`) rather than `dark:` classes scattered through
+  components, and every color pair is WCAG AA contrast-checked. The
+  printable Report always renders light regardless of the on-screen theme.
 
 ## The analysis engine (`src/lib/policyAnalysis.js`)
 
