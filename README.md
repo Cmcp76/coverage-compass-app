@@ -23,6 +23,15 @@ npm run build
 npm run preview
 ```
 
+To run the test suite:
+
+```bash
+npm test
+```
+
+Live preview (auto-deployed from this branch via GitHub Actions):
+https://cmcp76.github.io/coverage-compass-app/
+
 ## What's included
 
 - **Landing page** — hero, three-step explainer, "Why Coverage Compass,"
@@ -37,15 +46,23 @@ npm run preview
   and a `NEEDED INFORMATION` label for missing fields
 - **Coverage Score** — large score display, expandable category breakdown
 - **Coverage Gap Report** — gap cards with neutral/"worth confirming"
-  status tags (not red/alert styling) and generated questions
-- **Professional Report** — printable page (`window.print()`) matching the
-  cover → score → summary → strengths → gaps → questions → next steps →
-  disclaimer structure
+  status tags (not red/alert styling), generated questions, and a mocked
+  "Request a Callback" lead-gen form (clearly labeled as a prototype, no
+  request is actually sent anywhere)
+- **Professional Report** — cover → score → summary → strengths → gaps →
+  questions → next steps → disclaimer structure, both printable
+  (`window.print()`) and downloadable as a real PDF (`jspdf`)
+- **Reports** — history of every policy you've reviewed this session
+  (persisted to `localStorage`, last 10), with a score-over-time chart once
+  you have 2+
+- **Notifications** — a feed that reflects your actual latest analysis, not
+  just static copy
 - **Insurance Learning Center** — searchable/filterable articles + glossary
   preview
 - **Interactive Tools** — all six tools are functional: Deductible Calculator,
-  Risk Assessment Quiz, Home Inventory Checklist (with CSV export), Coverage
-  Comparison Tool, Annual Insurance Checkup, and a full searchable Glossary
+  Risk Assessment Quiz, Home Inventory Checklist (with CSV export and
+  localStorage persistence), Coverage Comparison Tool, Annual Insurance
+  Checkup, and a full searchable Glossary
 
 ## The analysis engine (`src/lib/policyAnalysis.js`)
 
@@ -76,23 +93,45 @@ product.
 All copy is pulled verbatim from the approved copy deck — headlines, CTAs,
 and disclaimers were not paraphrased.
 
+## Testing (`src/lib/policyAnalysis.test.js`, Vitest)
+
+`npm test` runs 34 automated tests against the analysis engine. It also runs
+in this repo's GitHub Actions deploy workflow before every deploy, so a
+regression can't ship to the live preview. Covers:
+
+- Policy type detection and named insured extraction for all 5 sample
+  policies
+- Negation handling ("does not include X" / "X is not included" / "X is
+  excluded"), including the sentence-boundary-clipping regression this
+  logic went through during development
+- A structural guard against a specific bug class found during development:
+  a "gap" rule sharing an exact keyword with a "coverage" rule in the same
+  rule set, which double-reports the same real-world concept
+- Full-pipeline sanity checks (score bounds, non-empty results) against
+  every sample policy
+
 ## What's intentionally NOT built yet
 
 Per the build brief's guardrails:
 
 - Real document extraction/OCR (the "AI scanning" step is a timed mock)
-- Real user accounts/database/auth (routes just navigate forward)
+- Real user accounts/database/auth — Sign Up/Login/Log Out are all real,
+  working UI flows (Log Out resets the session back to demo state), but
+  there's no real backend behind them; any email/password combination logs
+  in
 - Payments or subscriptions
 - Carrier marketplace or quoting
 - Mobile app (this is responsive web, not native)
 
 ## Sample data
 
-All screens use one consistent fictional auto policy
-(`src/data/mockData.js`) — Coverage Score 87/100, sample carrier "Sample
-Insurance Co," and the gaps: no rental reimbursement, no umbrella policy
-referenced, roadside assistance not listed. Edit that file to test different
-scenarios.
+Before you upload anything, every screen shows one consistent fictional demo
+auto policy (`src/data/mockData.js`, clearly labeled as demo data) — Coverage
+Score 87/100, sample carrier "Sample Insurance Co," and the gaps: no rental
+reimbursement, no umbrella policy referenced, roadside assistance not
+listed. Upload a real file (or one of the 5 samples in `sample-policies/`)
+and every screen switches to reflect that document's actual analysis
+instead, saved to your Reports history.
 
 ## Before this goes anywhere near real users
 
