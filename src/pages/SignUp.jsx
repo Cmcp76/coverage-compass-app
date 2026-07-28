@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 export default function SignUp() {
   const navigate = useNavigate()
   const [agreed, setAgreed] = useState(false)
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [mismatchError, setMismatchError] = useState(false)
@@ -15,7 +16,7 @@ export default function SignUp() {
       return
     }
     setMismatchError(false)
-    navigate('/verify-email')
+    navigate('/verify-email', { state: { email } })
   }
 
   return (
@@ -29,7 +30,14 @@ export default function SignUp() {
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         <Field label="Full Name" type="text" placeholder="Maria Alvarez" required />
-        <Field label="Email Address" type="email" placeholder="maria@email.com" required />
+        <Field
+          label="Email Address"
+          type="email"
+          placeholder="maria@email.com"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
         <Field
           label="Password"
           type="password"
