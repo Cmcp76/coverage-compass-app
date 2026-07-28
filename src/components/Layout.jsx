@@ -283,9 +283,14 @@ function ThemeIcon({ dark }) {
 
 function CompassMark() {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" className="text-compass-link">
-      <circle cx="14" cy="14" r="12.5" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M18 10L14.5 14.5L10 18L13.5 13.5L18 10Z" fill="#1D9E75" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <circle cx="14" cy="14" r="12.5" className="text-compass-link" stroke="currentColor" strokeWidth="1.5" />
+      {/* Two-tone needle, split along the same NE/SW line as before, plus a
+          center pivot, for more depth than the original flat single-color
+          silhouette. */}
+      <path d="M18 10L14.5 14.5L13.5 13.5Z" className="text-compass-green" fill="currentColor" />
+      <path d="M10 18L14.5 14.5L13.5 13.5Z" className="text-compass-slate" fill="currentColor" />
+      <circle cx="14.1" cy="14.1" r="1.3" className="text-compass-heading" fill="currentColor" />
     </svg>
   )
 }
