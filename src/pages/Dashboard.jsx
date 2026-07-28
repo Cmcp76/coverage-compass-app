@@ -23,6 +23,8 @@ export default function Dashboard() {
       }
   const activityFeed = [latestReview, ...recentActivity.slice(1)]
 
+  const topGaps = analysis.gaps.filter((g) => !g.found).slice(0, 2)
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
@@ -106,16 +108,13 @@ export default function Dashboard() {
             Educational recommendations
           </p>
           <ul className="space-y-3 text-sm text-compass-slate">
-            <li>
-              <Link to="/learning-center" className="text-compass-blue hover:underline">
-                Do You Need an Umbrella Policy?
-              </Link>
-            </li>
-            <li>
-              <Link to="/learning-center" className="text-compass-blue hover:underline">
-                Renters Insurance 101
-              </Link>
-            </li>
+            {topGaps.map((gap) => (
+              <li key={gap.name}>
+                <Link to="/gap-report" className="text-compass-blue hover:underline">
+                  Would {gap.name.toLowerCase()} make sense for you?
+                </Link>
+              </li>
+            ))}
             <li>
               <Link to="/tools" className="text-compass-blue hover:underline">
                 Try the Deductible Calculator

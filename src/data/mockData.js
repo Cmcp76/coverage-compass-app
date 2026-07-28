@@ -72,10 +72,10 @@ export const samplePolicy = {
       icon: 'droplet',
     },
     {
-      name: 'Rental Car Coverage',
-      what: 'Coverage that pays for a rental car while your vehicle is being repaired after a covered claim.',
-      why: 'Without it, you may be responsible for rental costs out of pocket during repairs.',
-      status: 'Worth Confirming',
+      name: 'Gap Insurance (Loan/Lease Payoff)',
+      what: 'Covers the difference between what you owe on a loan or lease and your vehicle’s actual cash value after a total loss.',
+      why: 'A new vehicle can depreciate faster than a loan balance drops, leaving you owing money on a car you no longer have.',
+      status: 'Not Found in Policy',
       icon: 'car',
     },
     {
