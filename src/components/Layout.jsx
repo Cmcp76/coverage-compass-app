@@ -24,6 +24,12 @@ export default function Layout({ children }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const headerRef = useRef(null)
+  const accountButtonRef = useRef(null)
+  const accountMenuRef = useRef(null)
+  const menuButtonRef = useRef(null)
+  const mobileNavRef = useRef(null)
+  const wasAccountMenuOpen = useRef(false)
+  const wasMenuOpen = useRef(false)
 
   useEffect(() => {
     setMenuOpen(false)
@@ -51,6 +57,39 @@ export default function Layout({ children }) {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [menuOpen, accountMenuOpen])
+
+  useEffect(() => {
+    if (accountMenuOpen) {
+      accountMenuRef.current?.querySelector('[role="menuitem"]')?.focus()
+    } else if (wasAccountMenuOpen.current) {
+      accountButtonRef.current?.focus()
+    }
+    wasAccountMenuOpen.current = accountMenuOpen
+  }, [accountMenuOpen])
+
+  useEffect(() => {
+    if (menuOpen) {
+      mobileNavRef.current?.querySelector('a, button')?.focus()
+    } else if (wasMenuOpen.current) {
+      menuButtonRef.current?.focus()
+    }
+    wasMenuOpen.current = menuOpen
+  }, [menuOpen])
+
+  function trapTabKey(e, containerRef) {
+    if (e.key !== 'Tab') return
+    const focusables = containerRef.current?.querySelectorAll('a, button')
+    if (!focusables || focusables.length === 0) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
 
   function handleLogOut() {
     reset()
@@ -110,6 +149,7 @@ export default function Layout({ children }) {
               <>
                 <div className="relative hidden sm:block">
                   <button
+                    ref={accountButtonRef}
                     className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-compass-slate transition hover:bg-compass-paper"
                     aria-haspopup="menu"
                     aria-expanded={accountMenuOpen}
@@ -123,7 +163,9 @@ export default function Layout({ children }) {
                   </button>
                   {accountMenuOpen && (
                     <div
+                      ref={accountMenuRef}
                       role="menu"
+                      onKeyDown={(e) => trapTabKey(e, accountMenuRef)}
                       className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-compass-surface py-1 shadow-card"
                     >
                       <Link
@@ -145,6 +187,7 @@ export default function Layout({ children }) {
                   )}
                 </div>
                 <button
+                  ref={menuButtonRef}
                   className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line lg:hidden"
                   aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                   aria-expanded={menuOpen}
@@ -158,7 +201,10 @@ export default function Layout({ children }) {
         </div>
 
         {!isPreAuth && menuOpen && (
-          <nav className="flex flex-col border-t border-compass-line bg-compass-surface px-6 py-3 lg:hidden">
+          <nav
+            ref={mobileNavRef}
+            className="flex flex-col border-t border-compass-line bg-compass-surface px-6 py-3 lg:hidden"
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -197,13 +243,13 @@ export default function Layout({ children }) {
               Helping people understand insurance before they need it.
             </p>
             <div className="flex gap-5 text-sm text-compass-slate">
-              <Link to="/" className="hover:text-compass-link">
+              <Link to="/about" className="hover:text-compass-link">
                 About
               </Link>
-              <Link to="/" className="hover:text-compass-link">
+              <Link to="/privacy" className="hover:text-compass-link">
                 Privacy Policy
               </Link>
-              <Link to="/" className="hover:text-compass-link">
+              <Link to="/terms" className="hover:text-compass-link">
                 Terms of Service
               </Link>
               <Link to="/learning-center" className="hover:text-compass-link">

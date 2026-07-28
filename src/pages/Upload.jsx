@@ -29,6 +29,12 @@ export default function Upload() {
         // No OCR in this prototype, fall through to the mocked scanning step
         // with a note rather than fabricating extracted text.
         text = ''
+      } else {
+        setErrorMsg(
+          "That file type isn't supported in this prototype. Try a text-based PDF, a plain .txt file, or a JPG/PNG image.",
+        )
+        setState('error')
+        return
       }
 
       setState('scanning')
