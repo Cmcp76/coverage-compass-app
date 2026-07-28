@@ -58,7 +58,7 @@ export default function AnnualCheckup() {
       </button>
 
       {submitted && (
-        <div className="mt-5 rounded-lg bg-compass-paper p-4">
+        <div role="status" className="mt-5 rounded-lg bg-compass-paper p-4">
           <p className="text-sm text-compass-ink">
             {yesCount > 0
               ? `Based on your answers, it looks like you've had ${yesCount} change${yesCount > 1 ? 's' : ''} worth reviewing. These are common reasons policies fall out of date. Consider reaching out to your insurance professional to confirm your coverage still fits.`

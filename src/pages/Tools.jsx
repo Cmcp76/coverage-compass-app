@@ -218,7 +218,7 @@ function RiskQuiz() {
       </button>
 
       {submitted && (
-        <div className="mt-5 rounded-lg bg-compass-paper p-4">
+        <div role="status" className="mt-5 rounded-lg bg-compass-paper p-4">
           <p className="text-sm font-medium text-compass-ink">
             Based on your answers, here are a few coverage areas that may be worth
             exploring:
