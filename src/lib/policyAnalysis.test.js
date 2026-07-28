@@ -109,6 +109,21 @@ describe('coverage/gap rule sets stay conceptually distinct', () => {
   }
 })
 
+describe('buildStrengths phrasing', () => {
+  it('does not falsely call rating factors and filings "coverage"', () => {
+    const result = analyzeText(loadSample(samples.workersComp.file), { fileName: 'wc.txt' })
+    expect(result.strengths).not.toContain('Your policy includes experience modifier coverage.')
+    expect(result.strengths).not.toContain('Your policy includes class codes coverage.')
+    expect(result.strengths.some((s) => s.includes('experience modifier'))).toBe(true)
+    expect(result.strengths.some((s) => s.includes('class codes'))).toBe(true)
+  })
+
+  it('still calls genuine coverages "coverage" when the name lacks the word', () => {
+    const result = analyzeText(loadSample(samples.auto.file), { fileName: 'auto.txt' })
+    expect(result.strengths.some((s) => s.includes('bodily injury liability coverage'))).toBe(true)
+  })
+})
+
 describe('analyzeText, full pipeline against real sample policies', () => {
   for (const [key, { file, label, namedInsured }] of Object.entries(samples)) {
     it(`produces a sane, internally consistent analysis for the ${key} sample`, () => {

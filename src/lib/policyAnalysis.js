@@ -289,9 +289,15 @@ function buildStrengths(coverages) {
       'We were able to open your document, but couldn\u2019t confidently identify specific coverages. A licensed insurance professional can review the original document with you.',
     ]
   }
+  // A handful of rule entries (rating factors, filings, credential status)
+  // aren't actually "coverage" in the insurance sense, e.g. Experience
+  // Modifier or Class Codes, so blindly appending "coverage" to any name
+  // that lacks the word produces false claims like "your policy includes
+  // experience modifier coverage." Skip the suffix for those too.
+  const NOT_COVERAGE = /\b(limit|modifier|codes?|status|exposure|authority)\b/i
   return found.map((c) => {
     const label = c.name.toLowerCase()
-    const suffix = /coverage/i.test(label) ? '' : ' coverage'
+    const suffix = /coverage/i.test(label) || NOT_COVERAGE.test(label) ? '' : ' coverage'
     return `Your policy includes ${label}${suffix}${c.limit.startsWith('$') ? ` (${c.limit})` : ''}.`
   })
 }
