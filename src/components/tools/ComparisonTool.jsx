@@ -11,7 +11,7 @@ export default function ComparisonTool() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Coverage Comparison Tool
       </h2>
       <p className="mt-1 text-sm text-compass-slate">

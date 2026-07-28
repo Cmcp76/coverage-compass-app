@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 export default function Welcome() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col justify-center px-6 py-16 text-center">
-      <h1 className="font-display text-3xl font-semibold text-compass-navy">
+      <h1 className="font-display text-3xl font-semibold text-compass-heading">
         You're All Set, Maria
       </h1>
       <p className="mt-3 text-compass-slate">
@@ -20,7 +20,7 @@ export default function Welcome() {
         <Link to="/upload" className="btn-primary px-6 py-3">
           Upload Your First Policy
         </Link>
-        <Link to="/learning-center" className="text-sm font-medium text-compass-blue">
+        <Link to="/learning-center" className="text-sm font-medium text-compass-link">
           Explore the Learning Center first
         </Link>
       </div>

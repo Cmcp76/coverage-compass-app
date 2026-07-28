@@ -18,7 +18,7 @@ export default function AnnualCheckup() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Annual Insurance Checkup
       </h2>
       <p className="mt-1 text-sm text-compass-slate">

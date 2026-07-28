@@ -12,7 +12,7 @@ export default function ResetPassword() {
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-16">
       {step === 1 ? (
         <>
-          <h1 className="font-display text-2xl font-semibold text-compass-navy">
+          <h1 className="font-display text-2xl font-semibold text-compass-heading">
             Reset Your Password
           </h1>
           <p className="mt-2 text-sm text-compass-slate">
@@ -43,7 +43,7 @@ export default function ResetPassword() {
         </>
       ) : (
         <>
-          <h1 className="font-display text-2xl font-semibold text-compass-navy">
+          <h1 className="font-display text-2xl font-semibold text-compass-heading">
             Choose a New Password
           </h1>
           <p className="mt-2 text-sm text-compass-slate">
@@ -88,7 +88,7 @@ export default function ResetPassword() {
                 }`}
               />
               {mismatchError && (
-                <span role="alert" className="mt-1 block text-xs text-red-600">
+                <span role="alert" className="mt-1 block text-xs text-red-600 dark:text-red-400">
                   Passwords don't match.
                 </span>
               )}

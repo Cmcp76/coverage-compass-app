@@ -36,8 +36,8 @@ const staticNotifications = [
 
 const kindStyles = {
   alert: { bg: 'bg-compass-amberlight', fg: 'text-compass-amber', Icon: BellIcon },
-  renewal: { bg: 'bg-compass-skyblue', fg: 'text-compass-blue', Icon: CalendarIcon },
-  education: { bg: 'bg-compass-skyblue', fg: 'text-compass-blue', Icon: BookIcon },
+  renewal: { bg: 'bg-compass-skyblue', fg: 'text-compass-link', Icon: CalendarIcon },
+  education: { bg: 'bg-compass-skyblue', fg: 'text-compass-link', Icon: BookIcon },
   report: { bg: 'bg-compass-mint', fg: 'text-compass-green', Icon: CheckCircleIcon },
 }
 
@@ -60,7 +60,7 @@ export default function Notifications() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Notifications
       </h1>
 
@@ -78,7 +78,7 @@ export default function Notifications() {
             return (
               <div
                 key={n.id}
-                className="flex items-start justify-between gap-4 rounded-lg border border-compass-line bg-white px-4 py-3 transition hover:border-compass-blue hover:shadow-card"
+                className="flex items-start justify-between gap-4 rounded-lg border border-compass-line bg-compass-surface px-4 py-3 transition hover:border-compass-blue hover:shadow-card"
               >
                 <Link to={n.to} className="flex flex-1 items-start gap-3">
                   <span

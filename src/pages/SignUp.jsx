@@ -21,7 +21,7 @@ export default function SignUp() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-16">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Create Your Free Account
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
@@ -73,7 +73,7 @@ export default function SignUp() {
 
         <p className="text-center text-sm text-compass-slate">
           Already have an account?{' '}
-          <Link to="/login" className="font-medium text-compass-blue">
+          <Link to="/login" className="font-medium text-compass-link">
             Log In
           </Link>
         </p>
@@ -98,7 +98,7 @@ function Field({ label, error, ...props }) {
         }`}
       />
       {error && (
-        <span role="alert" className="mt-1 block text-xs text-red-600">
+        <span role="alert" className="mt-1 block text-xs text-red-600 dark:text-red-400">
           {error}
         </span>
       )}

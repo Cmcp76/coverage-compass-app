@@ -58,7 +58,7 @@ export default function Upload() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Upload Your Policy
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
@@ -161,7 +161,7 @@ export default function Upload() {
 
 function UploadIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-compass-blue">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-compass-link">
       <path
         d="M12 16V4m0 0L7 9m5-5l5 5M5 20h14"
         stroke="currentColor"
@@ -175,7 +175,7 @@ function UploadIcon() {
 
 function ScanIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="animate-pulse text-compass-blue">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="animate-pulse text-compass-link">
       <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" strokeWidth="1.6" />
       <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>

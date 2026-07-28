@@ -10,10 +10,14 @@ import {
   Cell,
 } from 'recharts'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { useTheme } from '../context/ThemeContext.jsx'
+import { getChartColors } from '../lib/chartTheme.js'
 
 export default function Reports() {
   const { history, loadFromHistory, removeFromHistory } = usePolicy()
   const navigate = useNavigate()
+  const { theme } = useTheme()
+  const chartColors = getChartColors(theme)
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   function openReport(id, path) {
@@ -32,7 +36,7 @@ export default function Reports() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Your Reports
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
@@ -43,30 +47,36 @@ export default function Reports() {
         <div className="mt-6">
           <p className="text-sm font-medium text-compass-ink">Score history</p>
           <div
-            className="mt-3 rounded-lg border border-compass-line bg-white p-3"
+            className="mt-3 rounded-lg border border-compass-line bg-compass-surface p-3"
             style={{ height: Math.max(120, chartData.length * 44) }}
           >
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 24 }}>
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E3E8EF" />
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={chartColors.grid} />
                 <XAxis type="number" domain={[0, 100]} hide />
                 <YAxis
                   type="category"
                   dataKey="name"
                   width={140}
-                  tick={{ fontSize: 12, fill: '#5B6675' }}
+                  tick={{ fontSize: 12, fill: chartColors.tick }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <Tooltip
                   formatter={(value, _name, item) => [`${value}/100`, item.payload.date]}
-                  contentStyle={{ fontSize: 12, borderRadius: 8, borderColor: '#E3E8EF' }}
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 8,
+                    backgroundColor: chartColors.tooltipBg,
+                    borderColor: chartColors.tooltipBorder,
+                    color: chartColors.tooltipText,
+                  }}
                 />
                 <Bar dataKey="score" radius={[0, 6, 6, 0]} barSize={16} isAnimationActive={!reduceMotion}>
                   {chartData.map((entry) => (
                     <Cell
                       key={entry.name + entry.date}
-                      fill={entry.score >= 80 ? '#177C5B' : '#965E13'}
+                      fill={entry.score >= 80 ? chartColors.good : chartColors.review}
                     />
                   ))}
                 </Bar>
@@ -91,7 +101,7 @@ export default function Reports() {
           {history.map((r) => (
             <div
               key={r.id}
-              className="flex items-center justify-between rounded-lg border border-compass-line bg-white px-5 py-4 transition hover:shadow-card"
+              className="flex items-center justify-between rounded-lg border border-compass-line bg-compass-surface px-5 py-4 transition hover:shadow-card"
             >
               <div>
                 <p className="text-sm font-medium text-compass-ink">

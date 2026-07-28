@@ -77,7 +77,7 @@ export default function HomeInventory() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Home Inventory Checklist
       </h2>
       <p className="mt-1 text-sm text-compass-slate">

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 export default function NotFound() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col items-center justify-center px-6 py-16 text-center">
-      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-compass-skyblue text-compass-blue">
+      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-compass-skyblue text-compass-link">
         <CompassIcon />
       </span>
-      <h1 className="mt-6 font-display text-3xl font-semibold text-compass-navy">
+      <h1 className="mt-6 font-display text-3xl font-semibold text-compass-heading">
         Page Not Found
       </h1>
       <p className="mt-3 text-sm text-compass-slate">
@@ -17,7 +17,7 @@ export default function NotFound() {
         <Link to="/dashboard" className="btn-primary px-6 py-3">
           Go to Dashboard
         </Link>
-        <Link to="/" className="text-sm font-medium text-compass-blue">
+        <Link to="/" className="text-sm font-medium text-compass-link">
           Back to Home
         </Link>
       </div>

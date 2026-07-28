@@ -51,6 +51,22 @@
         }
       })(window.location)
     </script>
+    <script type="text/javascript">
+      // Set the theme class before React mounts (and before first paint),
+      // so dark-mode users don't see a flash of the light theme. Mirrors
+      // ThemeContext's own resolution order: saved preference, then system.
+      ;(function () {
+        try {
+          var saved = localStorage.getItem('coverage-compass-theme')
+          var isDark =
+            saved === 'dark' ||
+            (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (isDark) document.documentElement.classList.add('dark')
+        } catch (e) {
+          // localStorage/matchMedia unavailable, default to light.
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

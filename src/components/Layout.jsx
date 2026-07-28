@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FooterDisclaimer } from './Disclaimer.jsx'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { useTheme } from '../context/ThemeContext.jsx'
 
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -18,6 +19,7 @@ export default function Layout({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { reset } = usePolicy()
+  const { theme, toggleTheme } = useTheme()
   const isPreAuth = preAuthPaths.includes(location.pathname)
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
@@ -61,12 +63,12 @@ export default function Layout({ children }) {
     <div className="flex min-h-screen flex-col">
       <header
         ref={headerRef}
-        className="sticky top-0 z-20 border-b border-compass-line bg-white/90 backdrop-blur print:hidden"
+        className="sticky top-0 z-20 border-b border-compass-line bg-compass-surface/90 backdrop-blur print:hidden"
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
             <CompassMark />
-            <span className="font-display text-lg font-semibold text-compass-navy">
+            <span className="font-display text-lg font-semibold text-compass-heading">
               Coverage Compass
             </span>
           </Link>
@@ -78,7 +80,7 @@ export default function Layout({ children }) {
                   to={link.to}
                   className={`text-sm font-medium transition ${
                     location.pathname === link.to
-                      ? 'text-compass-blue'
+                      ? 'text-compass-link'
                       : 'text-compass-slate hover:text-compass-ink'
                   }`}
                 >
@@ -88,6 +90,13 @@ export default function Layout({ children }) {
             </nav>
           )}
           <div className="flex items-center gap-3">
+            <button
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line text-compass-slate transition hover:text-compass-ink"
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              onClick={toggleTheme}
+            >
+              <ThemeIcon dark={theme === 'dark'} />
+            </button>
             {isPreAuth ? (
               <>
                 <Link to="/login" className="btn-secondary">
@@ -115,7 +124,7 @@ export default function Layout({ children }) {
                   {accountMenuOpen && (
                     <div
                       role="menu"
-                      className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-white py-1 shadow-card"
+                      className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-compass-surface py-1 shadow-card"
                     >
                       <Link
                         to="/dashboard"
@@ -149,7 +158,7 @@ export default function Layout({ children }) {
         </div>
 
         {!isPreAuth && menuOpen && (
-          <nav className="flex flex-col border-t border-compass-line bg-white px-6 py-3 lg:hidden">
+          <nav className="flex flex-col border-t border-compass-line bg-compass-surface px-6 py-3 lg:hidden">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -157,7 +166,7 @@ export default function Layout({ children }) {
                 onClick={() => setMenuOpen(false)}
                 className={`py-2 text-sm font-medium ${
                   location.pathname === link.to
-                    ? 'text-compass-blue'
+                    ? 'text-compass-link'
                     : 'text-compass-slate'
                 }`}
               >
@@ -171,7 +180,7 @@ export default function Layout({ children }) {
                 </span>
                 Maria Alvarez
               </span>
-              <button onClick={handleLogOut} className="text-sm font-medium text-compass-blue">
+              <button onClick={handleLogOut} className="text-sm font-medium text-compass-link">
                 Log Out
               </button>
             </div>
@@ -181,23 +190,23 @@ export default function Layout({ children }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t border-compass-line bg-white print:hidden">
+      <footer className="border-t border-compass-line bg-compass-surface print:hidden">
         <div className="mx-auto max-w-6xl px-6 py-10">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-            <p className="font-display text-sm text-compass-navy">
+            <p className="font-display text-sm text-compass-heading">
               Helping people understand insurance before they need it.
             </p>
             <div className="flex gap-5 text-sm text-compass-slate">
-              <Link to="/" className="hover:text-compass-blue">
+              <Link to="/" className="hover:text-compass-link">
                 About
               </Link>
-              <Link to="/" className="hover:text-compass-blue">
+              <Link to="/" className="hover:text-compass-link">
                 Privacy Policy
               </Link>
-              <Link to="/" className="hover:text-compass-blue">
+              <Link to="/" className="hover:text-compass-link">
                 Terms of Service
               </Link>
-              <Link to="/learning-center" className="hover:text-compass-blue">
+              <Link to="/learning-center" className="hover:text-compass-link">
                 Learning Center
               </Link>
             </div>
@@ -226,18 +235,18 @@ function ChevronIcon({ open }) {
 
 function MenuIcon({ open }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-compass-ink">
       {open ? (
         <path
           d="M6 6l12 12M18 6L6 18"
-          stroke="#1A2433"
+          stroke="currentColor"
           strokeWidth="1.8"
           strokeLinecap="round"
         />
       ) : (
         <path
           d="M4 7h16M4 12h16M4 17h16"
-          stroke="#1A2433"
+          stroke="currentColor"
           strokeWidth="1.8"
           strokeLinecap="round"
         />
@@ -246,10 +255,36 @@ function MenuIcon({ open }) {
   )
 }
 
+function ThemeIcon({ dark }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      {dark ? (
+        <path
+          d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ) : (
+        <>
+          <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.7" />
+          <path
+            d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+          />
+        </>
+      )}
+    </svg>
+  )
+}
+
 function CompassMark() {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-      <circle cx="14" cy="14" r="12.5" stroke="#1D5FA6" strokeWidth="1.5" />
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" className="text-compass-link">
+      <circle cx="14" cy="14" r="12.5" stroke="currentColor" strokeWidth="1.5" />
       <path d="M18 10L14.5 14.5L10 18L13.5 13.5L18 10Z" fill="#1D9E75" />
     </svg>
   )

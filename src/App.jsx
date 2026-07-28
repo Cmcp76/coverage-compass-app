@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import { PolicyProvider } from './context/PolicyContext.jsx'
+import { ThemeProvider } from './context/ThemeContext.jsx'
 
 const Landing = lazy(() => import('./pages/Landing.jsx'))
 const SignUp = lazy(() => import('./pages/SignUp.jsx'))
@@ -31,30 +32,32 @@ function RouteFallback() {
 
 export default function App() {
   return (
-    <PolicyProvider>
-      <Layout>
-        <Suspense fallback={<RouteFallback />}>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/welcome" element={<Welcome />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/ai-review" element={<AIReview />} />
-            <Route path="/score" element={<CoverageScore />} />
-            <Route path="/gap-report" element={<GapReport />} />
-            <Route path="/report" element={<Report />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/learning-center" element={<LearningCenter />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </Layout>
-    </PolicyProvider>
+    <ThemeProvider>
+      <PolicyProvider>
+        <Layout>
+          <Suspense fallback={<RouteFallback />}>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/welcome" element={<Welcome />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/upload" element={<Upload />} />
+              <Route path="/ai-review" element={<AIReview />} />
+              <Route path="/score" element={<CoverageScore />} />
+              <Route path="/gap-report" element={<GapReport />} />
+              <Route path="/report" element={<Report />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/learning-center" element={<LearningCenter />} />
+              <Route path="/tools" element={<Tools />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </Layout>
+      </PolicyProvider>
+    </ThemeProvider>
   )
 }

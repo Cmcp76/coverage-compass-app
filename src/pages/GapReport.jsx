@@ -7,7 +7,7 @@ export default function GapReport() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Areas Worth a Second Look
       </h1>
       <p className="mt-2 text-sm text-compass-slate">

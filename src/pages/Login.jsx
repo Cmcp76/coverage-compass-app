@@ -10,7 +10,7 @@ export default function Login() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-16">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Welcome Back
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
@@ -45,7 +45,7 @@ export default function Login() {
           <label className="flex items-center gap-2 text-compass-slate">
             <input type="checkbox" /> Remember Me
           </label>
-          <Link to="/reset-password" className="font-medium text-compass-blue">
+          <Link to="/reset-password" className="font-medium text-compass-link">
             Forgot Password?
           </Link>
         </div>
@@ -56,7 +56,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-compass-slate">
           Don't have an account?{' '}
-          <Link to="/signup" className="font-medium text-compass-blue">
+          <Link to="/signup" className="font-medium text-compass-link">
             Sign Up
           </Link>
         </p>

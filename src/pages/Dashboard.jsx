@@ -29,7 +29,7 @@ export default function Dashboard() {
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-compass-navy">
+          <h1 className="font-display text-2xl font-semibold text-compass-heading">
             Hi, Maria
           </h1>
           <p className="mt-1 text-sm text-compass-slate">
@@ -47,7 +47,7 @@ export default function Dashboard() {
           <p className="text-sm text-compass-slate">Your Coverage Score</p>
           <ScoreGauge score={analysis.coverageScore} size={140} strokeWidth={10}>
             {(animated) => (
-              <p className="font-display text-3xl font-semibold text-compass-blue">
+              <p className="font-display text-3xl font-semibold text-compass-link">
                 {animated}
                 <span className="text-sm text-compass-slate">/100</span>
               </p>
@@ -112,13 +112,13 @@ export default function Dashboard() {
           <ul className="space-y-3 text-sm text-compass-slate">
             {topGaps.map((gap) => (
               <li key={gap.name}>
-                <Link to="/gap-report" className="text-compass-blue hover:underline">
+                <Link to="/gap-report" className="text-compass-link hover:underline">
                   Would {gap.name.toLowerCase()} make sense for you?
                 </Link>
               </li>
             ))}
             <li>
-              <Link to="/tools" className="text-compass-blue hover:underline">
+              <Link to="/tools" className="text-compass-link hover:underline">
                 Try the Deductible Calculator
               </Link>
             </li>

@@ -36,7 +36,7 @@ export default function Glossary() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Insurance Glossary
       </h2>
       <p className="mt-1 text-sm text-compass-slate">
@@ -57,7 +57,7 @@ export default function Glossary() {
           .sort()
           .map((letter) => (
             <div key={letter}>
-              <p className="text-xs font-semibold uppercase tracking-wide text-compass-blue">
+              <p className="text-xs font-semibold uppercase tracking-wide text-compass-link">
                 {letter}
               </p>
               <div className="mt-2 space-y-3">

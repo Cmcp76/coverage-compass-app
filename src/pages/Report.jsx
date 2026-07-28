@@ -21,10 +21,10 @@ export default function Report() {
         </button>
       </div>
 
-      <div className="rounded-2xl border border-compass-line bg-white p-10 print:border-none print:p-0">
+      <div className="rounded-2xl border border-compass-line bg-compass-surface p-10 print:border-none print:p-0">
         {/* Cover */}
         <div className="border-b border-compass-line pb-6 text-center">
-          <p className="font-display text-lg font-semibold text-compass-navy">
+          <p className="font-display text-lg font-semibold text-compass-heading">
             Coverage Compass Review
           </p>
           {analysis.namedInsured && (
@@ -42,7 +42,7 @@ export default function Report() {
 
         {/* Section 1: Score */}
         <Section title="1. Overall Coverage Score">
-          <p className="font-display text-3xl font-semibold text-compass-blue">
+          <p className="font-display text-3xl font-semibold text-compass-link">
             {analysis.coverageScore}/100
           </p>
           <p className="mt-2 text-sm text-compass-slate">
@@ -126,7 +126,7 @@ export default function Report() {
 function Section({ title, children, last }) {
   return (
     <div className={`py-6 ${last ? '' : 'border-b border-compass-line'}`}>
-      <p className="mb-3 text-sm font-semibold text-compass-navy">{title}</p>
+      <p className="mb-3 text-sm font-semibold text-compass-heading">{title}</p>
       {children}
     </div>
   )

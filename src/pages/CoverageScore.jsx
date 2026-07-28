@@ -10,7 +10,9 @@ import {
   Cell,
 } from 'recharts'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { useTheme } from '../context/ThemeContext.jsx'
 import ScoreGauge from '../components/ScoreGauge.jsx'
+import { getChartColors } from '../lib/chartTheme.js'
 
 const categoryDetails = {
   'Liability Protection':
@@ -27,6 +29,8 @@ const categoryDetails = {
 
 export default function CoverageScore() {
   const { analysis } = usePolicy()
+  const { theme } = useTheme()
+  const chartColors = getChartColors(theme)
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   const chartData = analysis.scoreCategories.map((cat) => ({
@@ -37,7 +41,7 @@ export default function CoverageScore() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-center font-display text-xl font-semibold text-compass-navy">
+      <h1 className="text-center font-display text-xl font-semibold text-compass-heading">
         Your Coverage Score
       </h1>
 
@@ -45,7 +49,7 @@ export default function CoverageScore() {
         <div className="flex justify-center">
           <ScoreGauge score={analysis.coverageScore} size={188} strokeWidth={14}>
             {(animated) => (
-              <p className="font-display text-5xl font-semibold text-compass-blue">
+              <p className="font-display text-5xl font-semibold text-compass-link">
                 {animated}
                 <span className="text-lg text-compass-slate">/100</span>
               </p>
@@ -61,16 +65,16 @@ export default function CoverageScore() {
 
       <p className="mt-8 text-sm font-medium text-compass-ink">How your score breaks down</p>
 
-      <div className="mt-3 h-52 rounded-lg border border-compass-line bg-white p-3">
+      <div className="mt-3 h-52 rounded-lg border border-compass-line bg-compass-surface p-3">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E3E8EF" />
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={chartColors.grid} />
             <XAxis type="number" domain={[0, 100]} hide />
             <YAxis
               type="category"
               dataKey="name"
               width={110}
-              tick={{ fontSize: 12, fill: '#5B6675' }}
+              tick={{ fontSize: 12, fill: chartColors.tick }}
               axisLine={false}
               tickLine={false}
             />
@@ -79,13 +83,19 @@ export default function CoverageScore() {
                 item.payload.status === 'good' ? 'Good' : 'Worth a look',
                 'Status',
               ]}
-              contentStyle={{ fontSize: 12, borderRadius: 8, borderColor: '#E3E8EF' }}
+              contentStyle={{
+                fontSize: 12,
+                borderRadius: 8,
+                backgroundColor: chartColors.tooltipBg,
+                borderColor: chartColors.tooltipBorder,
+                color: chartColors.tooltipText,
+              }}
             />
             <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={16} isAnimationActive={!reduceMotion}>
               {chartData.map((entry) => (
                 <Cell
                   key={entry.name}
-                  fill={entry.status === 'good' ? '#177C5B' : '#965E13'}
+                  fill={entry.status === 'good' ? chartColors.good : chartColors.review}
                 />
               ))}
             </Bar>
@@ -99,7 +109,7 @@ export default function CoverageScore() {
 
       <div className="mt-4 space-y-3">
         {analysis.scoreCategories.map((cat) => (
-          <details key={cat.name} className="rounded-lg border border-compass-line bg-white p-4">
+          <details key={cat.name} className="rounded-lg border border-compass-line bg-compass-surface p-4">
             <summary className="flex cursor-pointer list-none items-center justify-between marker:content-none">
               <span className="text-sm text-compass-ink">{cat.name}</span>
               <span className={cat.status === 'good' ? 'tag-good' : 'tag-review'}>

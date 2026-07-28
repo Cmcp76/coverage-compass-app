@@ -9,10 +9,10 @@ export default function AIReview() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <div className="mb-6 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-compass-skyblue">
-          <span className="text-compass-blue">✓</span>
+          <span className="text-compass-link">✓</span>
         </div>
         <div>
-          <h1 className="font-display text-xl font-semibold text-compass-navy">
+          <h1 className="font-display text-xl font-semibold text-compass-heading">
             Policy Summary
           </h1>
           <p className="text-sm text-compass-slate">
@@ -42,7 +42,7 @@ export default function AIReview() {
           <div
             key={cov.name}
             className={`flex items-start justify-between gap-3 rounded-lg border border-compass-line px-4 py-3 ${
-              cov.confidence === 'missing' ? 'bg-compass-paper' : 'bg-white'
+              cov.confidence === 'missing' ? 'bg-compass-paper' : 'bg-compass-surface'
             }`}
           >
             <div>

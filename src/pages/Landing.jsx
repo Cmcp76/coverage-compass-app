@@ -7,7 +7,7 @@ export default function Landing() {
       {/* Hero */}
       <section className="bg-compass-skyblue">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center">
-          <h1 className="animate-fade-up font-display text-4xl font-semibold leading-tight text-compass-navy sm:text-5xl">
+          <h1 className="animate-fade-up font-display text-4xl font-semibold leading-tight text-compass-heading sm:text-5xl">
             Understand Your Coverage. Protect What Matters.
           </h1>
           <p className="animate-fade-up animate-fade-up-delay-1 mx-auto mt-5 max-w-2xl text-lg text-compass-slate">
@@ -32,7 +32,7 @@ export default function Landing() {
 
       {/* How it works */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-center font-display text-2xl font-semibold text-compass-navy">
+        <h2 className="text-center font-display text-2xl font-semibold text-compass-heading">
           How it works
         </h2>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -58,9 +58,9 @@ export default function Landing() {
       </section>
 
       {/* Why Coverage Compass */}
-      <section className="bg-white py-16">
+      <section className="bg-compass-surface py-16">
         <div className="mx-auto max-w-5xl px-6">
-          <h2 className="text-center font-display text-2xl font-semibold text-compass-navy">
+          <h2 className="text-center font-display text-2xl font-semibold text-compass-heading">
             Insurance shouldn't feel like a foreign language.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-compass-slate">
@@ -88,7 +88,7 @@ export default function Landing() {
 
       {/* Testimonials */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="text-center font-display text-2xl font-semibold text-compass-navy">
+        <h2 className="text-center font-display text-2xl font-semibold text-compass-heading">
           What people are saying
         </h2>
         <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -112,9 +112,9 @@ export default function Landing() {
       </section>
 
       {/* Featured articles */}
-      <section className="bg-white py-16">
+      <section className="bg-compass-surface py-16">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="font-display text-2xl font-semibold text-compass-navy">
+          <h2 className="font-display text-2xl font-semibold text-compass-heading">
             Featured education articles
           </h2>
           <div className="mt-8 grid gap-5 md:grid-cols-4">
@@ -137,7 +137,7 @@ export default function Landing() {
 
       {/* FAQ */}
       <section className="mx-auto max-w-3xl px-6 py-16">
-        <h2 className="text-center font-display text-2xl font-semibold text-compass-navy">
+        <h2 className="text-center font-display text-2xl font-semibold text-compass-heading">
           Frequently asked questions
         </h2>
         <div className="mt-8 space-y-4">
@@ -166,10 +166,10 @@ export default function Landing() {
 function StepCard({ step, title, body, delay = 0 }) {
   return (
     <div className={`card animate-fade-up ${delay ? `animate-fade-up-delay-${delay}` : ''}`}>
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-compass-skyblue text-sm font-semibold text-compass-blue">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-compass-skyblue text-sm font-semibold text-compass-link">
         {step}
       </div>
-      <h3 className="mt-4 font-display text-lg font-semibold text-compass-navy">
+      <h3 className="mt-4 font-display text-lg font-semibold text-compass-heading">
         {title}
       </h3>
       <p className="mt-2 text-sm leading-relaxed text-compass-slate">{body}</p>
@@ -201,11 +201,11 @@ function Testimonial({ quote, attribution }) {
 
 function FaqItem({ q, a }) {
   return (
-    <details className="group rounded-lg border border-compass-line bg-white p-5">
+    <details className="group rounded-lg border border-compass-line bg-compass-surface p-5">
       <summary className="cursor-pointer list-none font-medium text-compass-ink marker:content-none">
         <span className="flex items-center justify-between">
           {q}
-          <span className="text-compass-blue transition group-open:rotate-45">+</span>
+          <span className="text-compass-link transition group-open:rotate-45">+</span>
         </span>
       </summary>
       <p className="mt-3 text-sm leading-relaxed text-compass-slate">{a}</p>

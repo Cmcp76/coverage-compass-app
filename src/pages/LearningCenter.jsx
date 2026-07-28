@@ -16,7 +16,7 @@ export default function LearningCenter() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         The Insurance Learning Center
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
@@ -60,10 +60,10 @@ export default function LearningCenter() {
               <p className="mt-2 text-xs text-compass-slate">{a.summary}</p>
               <div className="mt-3 flex items-center justify-between">
                 <span className="text-xs text-compass-slate">{a.readTime}</span>
-                <span className="text-xs font-medium text-compass-blue group-open:hidden">
+                <span className="text-xs font-medium text-compass-link group-open:hidden">
                   Read Article →
                 </span>
-                <span className="hidden text-xs font-medium text-compass-blue group-open:inline">
+                <span className="hidden text-xs font-medium text-compass-link group-open:inline">
                   Close ↑
                 </span>
               </div>
@@ -100,7 +100,7 @@ export default function LearningCenter() {
       </div>
 
       <div className="mt-10 text-center">
-        <p className="font-display text-lg font-semibold text-compass-navy">
+        <p className="font-display text-lg font-semibold text-compass-heading">
           Ready to See Your Own Policy in Plain Language?
         </p>
         <Link to="/upload" className="btn-primary mt-4 inline-flex">

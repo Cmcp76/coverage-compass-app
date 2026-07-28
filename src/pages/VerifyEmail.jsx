@@ -9,7 +9,7 @@ export default function VerifyEmail() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-16 text-center">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Check Your Inbox
       </h1>
       <p className="mt-3 text-sm leading-relaxed text-compass-slate">

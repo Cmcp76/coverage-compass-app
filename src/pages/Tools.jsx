@@ -19,7 +19,7 @@ export default function Tools() {
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Insurance Tools to Help You Think It Through
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
@@ -66,7 +66,7 @@ function DeductibleCalculator() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Deductible Calculator
       </h2>
       <p className="mt-1 text-sm text-compass-slate">
@@ -178,7 +178,7 @@ function RiskQuiz() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Risk Assessment Quiz
       </h2>
       <p className="mt-1 text-sm text-compass-slate">
