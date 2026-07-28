@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import RequestCallback from '../components/RequestCallback.jsx'
 
 export default function GapReport() {
   const { analysis } = usePolicy()
@@ -42,6 +43,10 @@ export default function GapReport() {
             </p>
           </div>
         ))}
+      </div>
+
+      <div className="mt-8">
+        <RequestCallback />
       </div>
 
       <div className="mt-8 rounded-xl bg-compass-paper p-6">
