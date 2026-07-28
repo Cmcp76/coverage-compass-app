@@ -134,6 +134,13 @@ export const articles = [
     readTime: '3 min read',
   },
   {
+    category: 'Commercial',
+    title: 'Does Your Business Need Cyber Liability Insurance?',
+    summary:
+      'If you store customer data, take online payments, or rely on computer systems, your general liability policy probably isn’t covering a cyber incident.',
+    readTime: '4 min read',
+  },
+  {
     category: 'Trucking',
     title: 'USDOT Number vs. MC Authority: What\u2019s the Difference?',
     summary:

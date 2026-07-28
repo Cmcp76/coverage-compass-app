@@ -132,6 +132,10 @@ const quizQuestions = [
     options: ['Yes', 'No', 'Not sure'],
   },
   {
+    q: 'Does your business store customer data, take online payments, or rely on computer systems to operate?',
+    options: ['Yes', 'No', 'Not sure'],
+  },
+  {
     q: 'Have you reviewed your policy in the last 12 months?',
     options: ['Yes', 'No'],
   },
@@ -152,11 +156,14 @@ function buildSuggestions(answers) {
     suggestions.push('Umbrella Insurance, to extend liability protection above your underlying limits')
   }
   if (answers[3] === 'Yes') suggestions.push('A Business Use Endorsement or a separate commercial policy')
-  if (answers[4] === 'No') suggestions.push('An annual policy review, since it has been over 12 months')
+  if (answers[4] === 'Yes') {
+    suggestions.push('Cyber Liability Insurance, to cover costs from data breaches, ransomware, or other cyber incidents')
+  }
+  if (answers[5] === 'No') suggestions.push('An annual policy review, since it has been over 12 months')
   if (suggestions.length === 0) {
     suggestions.push('Your basics look covered. An annual check-in is still a good habit.')
   }
-  return suggestions.slice(0, 4)
+  return suggestions.slice(0, 5)
 }
 
 function RiskQuiz() {

@@ -147,7 +147,7 @@ export const gapRuleSets = {
   general_liability: [
     { name: 'Umbrella / Excess Liability', icon: 'umbrella', keywords: [/umbrella/i, /excess liability/i], what: 'Extra liability protection above your CGL policy limits.', why: 'A significant claim or lawsuit can exceed standard GL limits quickly.' },
     { name: "Employment Practices Liability (EPLI)", icon: 'shield', keywords: [/employment practices liability/i, /\bEPLI\b/i], what: 'Covers claims like wrongful termination, discrimination, or harassment.', why: 'Standard GL policies typically exclude employment-related claims entirely.' },
-    { name: 'Cyber Liability', icon: 'shield', keywords: [/cyber liability/i, /data breach/i], what: 'Covers costs from data breaches, ransomware, or other cyber incidents.', why: 'Most GL policies exclude cyber-related losses, this typically requires a separate policy.' },
+    { name: 'Cyber Liability Insurance', icon: 'shield', keywords: [/cyber liability/i, /cyber\s*(security)?\s*insurance/i, /data breach/i, /ransomware/i], what: 'Covers costs from data breaches, ransomware, or other cyber incidents.', why: 'Most GL policies exclude cyber-related losses, this typically requires a separate policy.' },
     { name: 'Hired & Non-Owned Auto Liability (HNOA)', icon: 'car', keywords: [/hired.{0,3}(and|&)?.{0,3}non-?owned auto/i, /\bHNOA\b/i], what: 'Covers liability when an employee drives a rented or personal vehicle for business purposes.', why: 'A standard GL policy typically excludes auto exposure entirely, this is a common gap for businesses that assume company errands are covered.' },
   ],
   workers_comp: [

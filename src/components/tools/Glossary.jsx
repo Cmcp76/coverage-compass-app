@@ -5,6 +5,7 @@ const fullGlossary = [
   { term: 'Additional Insured', definition: 'A person or business added to someone else\u2019s policy to receive some of the same protections.' },
   { term: 'BOC-3 Filing', definition: 'A designation of process agents required for motor carriers operating under FMCSA authority.' },
   { term: 'Certificate of Insurance (COI)', definition: 'A document summarizing a policy\u2019s coverage, often requested by landlords or contractors.' },
+  { term: 'Cyber Liability Insurance', definition: 'Coverage for costs from data breaches, ransomware, and other cyber incidents, typically excluded from standard general liability policies.' },
   { term: 'Declarations Page', definition: 'The summary page of your policy, usually the first page, showing who\u2019s insured, what\u2019s covered, your limits, deductibles, and effective dates.' },
   { term: 'Deductible', definition: 'The amount you pay out of pocket before your insurance coverage begins to pay.' },
   { term: 'Endorsement', definition: 'A change or addition to your policy that adjusts, adds, or removes coverage from the base policy.' },
