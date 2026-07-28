@@ -168,8 +168,8 @@ const compassTickAngles = [0, 45, 90, 135, 180, 225, 270, 315]
 
 function HeroBackdrop() {
   const cx = 600
-  const cy = 165
-  const r = 130
+  const cy = 195
+  const r = 82
 
   return (
     <svg
@@ -191,11 +191,24 @@ function HeroBackdrop() {
         opacity="0.15"
       />
 
-      {/* Compass rose, watermark-style, sitting above the horizon like a
-          navigation chart overlay. */}
+      {/* Compass, centered and given a domed, 3D feel via a grounding
+          shadow, a beveled rim, and a glossy highlight, like an instrument
+          actively navigating rather than a flat emblem. */}
       <g>
-        <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="1.5" opacity="0.18" />
-        <circle cx={cx} cy={cy} r={r * 0.68} className="text-compass-link" stroke="currentColor" strokeWidth="1" opacity="0.12" />
+        <ellipse cx={cx} cy={cy + r + 8} rx={r * 0.55} ry={r * 0.14} className="text-compass-heading" fill="currentColor" opacity="0.08" />
+        <circle cx={cx} cy={cy} r={r + 5} className="text-compass-slate" stroke="currentColor" strokeWidth="4" opacity="0.08" />
+        <circle cx={cx} cy={cy} r={r} className="text-compass-link" stroke="currentColor" strokeWidth="2" opacity="0.24" />
+        <circle cx={cx} cy={cy} r={r * 0.7} className="text-compass-link" stroke="currentColor" strokeWidth="1" opacity="0.14" />
+        <ellipse
+          cx={cx - r * 0.32}
+          cy={cy - r * 0.38}
+          rx={r * 0.4}
+          ry={r * 0.24}
+          transform={`rotate(-24 ${cx - r * 0.32} ${cy - r * 0.38})`}
+          className="text-compass-surface"
+          fill="currentColor"
+          opacity="0.16"
+        />
         {compassTickAngles.map((angle) => {
           const isCardinal = angle % 90 === 0
           return (
@@ -204,13 +217,13 @@ function HeroBackdrop() {
               x1={cx}
               y1={cy - r + 2}
               x2={cx}
-              y2={cy - r - (isCardinal ? 18 : 9)}
+              y2={cy - r - (isCardinal ? 12 : 6)}
               transform={`rotate(${angle} ${cx} ${cy})`}
               className="text-compass-slate"
               stroke="currentColor"
               strokeWidth={isCardinal ? 2 : 1.2}
               strokeLinecap="round"
-              opacity="0.2"
+              opacity="0.22"
             />
           )
         })}
@@ -218,18 +231,19 @@ function HeroBackdrop() {
           d={`M${cx} ${cy - r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy - r * 0.1} L${cx - r * 0.16} ${cy} Z`}
           className="text-compass-green"
           fill="currentColor"
-          opacity="0.2"
+          opacity="0.24"
         />
         <path
           d={`M${cx} ${cy + r * 0.55} L${cx + r * 0.16} ${cy} L${cx} ${cy + r * 0.1} L${cx - r * 0.16} ${cy} Z`}
           className="text-compass-heading"
           fill="currentColor"
-          opacity="0.16"
+          opacity="0.18"
         />
-        <circle cx={cx} cy={cy} r="5" className="text-compass-heading" fill="currentColor" opacity="0.22" />
+        <circle cx={cx} cy={cy} r="5" className="text-compass-heading" fill="currentColor" opacity="0.26" />
+        <circle cx={cx - 1.5} cy={cy - 1.5} r="1.6" className="text-compass-surface" fill="currentColor" opacity="0.35" />
       </g>
 
-      {/* Ocean, a simple layered wave silhouette below the horizon. */}
+      {/* Ocean, a layered wave silhouette below the horizon. */}
       <path
         d="M0,320 C100,300 200,340 300,320 C400,300 500,340 600,320 C700,300 800,340 900,320 C1000,300 1100,340 1200,320 L1200,420 L0,420 Z"
         className="text-compass-link"
@@ -242,6 +256,28 @@ function HeroBackdrop() {
         fill="currentColor"
         opacity="0.12"
       />
+
+      {/* A small vessel afloat in the water, sailing on the heading the
+          compass above it points to. Kept low and compact so the mast
+          stays clear of the CTAs and disclaimer text above it. */}
+      <g opacity="0.32">
+        <path
+          d="M574,406 C580,398 588,395 600,395 C612,395 620,398 626,406 C612,410 588,410 574,406 Z"
+          className="text-compass-heading"
+          fill="currentColor"
+        />
+        <line x1="600" y1="395" x2="600" y2="365" className="text-compass-slate" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M601,367 L601,394 L621,394 Z" className="text-compass-surface" fill="currentColor" stroke="currentColor" strokeWidth="1" />
+        <path
+          d="M552,404 C564,409 580,409 592,405 M608,405 C620,409 636,409 648,404"
+          className="text-compass-link"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.6"
+        />
+      </g>
     </svg>
   )
 }
