@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
-import { InlineEducationalNote } from '../components/Disclaimer.jsx'
 
 export default function AIReview() {
   const { analysis } = usePolicy()
@@ -69,11 +68,19 @@ export default function AIReview() {
         ))}
       </div>
 
-      <div className="mt-6">
-        <InlineEducationalNote>
-          {analysis.strengths[0]} Some sections of the uploaded document may be
-          unclear or missing, these are labeled above as NEEDED INFORMATION.
-        </InlineEducationalNote>
+      <div className="mt-6 rounded-lg border border-compass-line bg-compass-skyblue/40 px-4 py-3">
+        <p className="text-sm font-medium text-compass-ink">What looks solid</p>
+        <ul className="mt-2 space-y-1">
+          {analysis.strengths.map((strength) => (
+            <li key={strength} className="text-sm text-compass-ink">
+              {strength}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-sm text-compass-ink">
+          Some sections of the uploaded document may be unclear or missing, these are
+          labeled above as NEEDED INFORMATION.
+        </p>
       </div>
 
       <Link to="/score" className="btn-primary mt-8 flex w-full justify-center">

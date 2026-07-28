@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   challengeIntro,
@@ -88,6 +88,11 @@ function QuizScreen({ currentIndex, answer, onSelect, onNext }) {
   const answered = answer !== undefined
   const isLast = currentIndex === total - 1
   const progressPct = Math.round(((currentIndex + (answered ? 1 : 0)) / total) * 100)
+  const questionRef = useRef(null)
+
+  useEffect(() => {
+    questionRef.current?.focus()
+  }, [currentIndex])
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
@@ -105,12 +110,18 @@ function QuizScreen({ currentIndex, answer, onSelect, onNext }) {
       </div>
 
       <div className="card mt-6">
-        <p className="text-sm font-medium leading-relaxed text-compass-ink">{question.question}</p>
+        <h2
+          ref={questionRef}
+          tabIndex={-1}
+          className="text-sm font-medium leading-relaxed text-compass-ink focus:outline-none"
+        >
+          {question.question}
+        </h2>
 
         <div className="mt-5 space-y-2">
           {question.options.map((option, i) => (
             <AnswerOption
-              key={option}
+              key={i}
               option={option}
               index={i}
               answered={answered}
@@ -123,7 +134,14 @@ function QuizScreen({ currentIndex, answer, onSelect, onNext }) {
 
         {answered && (
           <div role="status" className="mt-5 rounded-lg border border-compass-line bg-compass-paper p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-compass-slate">
+            <p className="text-sm font-semibold text-compass-ink">
+              {answer.correct
+                ? 'Correct.'
+                : `Not quite — the correct answer is ${optionLetters[question.correctIndex]}. ${
+                    question.options[question.correctIndex]
+                  }`}
+            </p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-compass-slate">
               Why
             </p>
             <p className="mt-1 text-sm leading-relaxed text-compass-ink">{question.explanation}</p>
@@ -196,7 +214,7 @@ function ResultsScreen({ answers, onRetake }) {
       <div className="card mt-6 text-center">
         <p className="font-display text-5xl font-semibold text-compass-heading">
           {score}
-          <span className="text-2xl font-normal text-compass-slate"> / 10</span>
+          <span className="text-2xl font-normal text-compass-slate"> / {challengeQuestions.length}</span>
         </p>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-compass-slate">
           {challengeResultsCopy.framing}
