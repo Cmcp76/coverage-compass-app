@@ -39,7 +39,7 @@ export default function Landing() {
           <StepCard
             step="1"
             title="Upload Your Policy"
-            body="Drop in your declarations page, ACORD form, or full policy, auto, home, renters, condo, landlord, or business. PDF or photo, it doesn't matter."
+            body="Drop in your declarations page, ACORD form, or full policy, auto, homeowners, general liability, workers' compensation, or trucking/motor carrier. PDF or text file works best."
           />
           <StepCard
             step="2"
@@ -77,7 +77,7 @@ export default function Landing() {
             />
             <FeatureCard
               title="Built for real coverage"
-              body="Homeowners, renters, condo, landlord, and small business policies included."
+              body="Auto, homeowners, general liability, workers' compensation, and trucking policies, each reviewed against the details that actually matter for that line of business."
             />
           </div>
         </div>
