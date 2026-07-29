@@ -81,8 +81,8 @@ export const samplePolicy = {
     {
       name: 'Roadside Assistance',
       what: 'Coverage for towing, jump-starts, lockouts, and flat tires.',
-      why: 'A low-cost add-on that some drivers assume is automatically included.',
-      status: 'Not Found in Policy',
+      why: 'Your policy mentions roadside assistance, but the service limits aren’t fully spelled out, worth confirming with your agent.',
+      status: 'Worth Confirming',
       icon: 'tool',
     },
   ],

@@ -9,14 +9,22 @@ let pdfjsLibPromise = null
 
 async function loadPdfjs() {
   if (!pdfjsLibPromise) {
-    pdfjsLibPromise = import('pdfjs-dist').then((lib) => {
-      // Bundled locally rather than fetched from a CDN at runtime, so PDF
-      // upload doesn't depend on an external host being reachable, and the
-      // worker version can never drift from whatever pdfjs-dist version is
-      // actually installed.
-      lib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl
-      return lib
-    })
+    pdfjsLibPromise = import('pdfjs-dist')
+      .then((lib) => {
+        // Bundled locally rather than fetched from a CDN at runtime, so PDF
+        // upload doesn't depend on an external host being reachable, and the
+        // worker version can never drift from whatever pdfjs-dist version is
+        // actually installed.
+        lib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl
+        return lib
+      })
+      .catch((err) => {
+        // Don't cache a failed import, a transient chunk-load failure would
+        // otherwise permanently break PDF upload for the rest of the tab's
+        // lifetime, with no way to recover short of a full page reload.
+        pdfjsLibPromise = null
+        throw err
+      })
   }
   return pdfjsLibPromise
 }
@@ -26,12 +34,18 @@ export async function extractTextFromPdf(file) {
   const arrayBuffer = await file.arrayBuffer()
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
 
-  let fullText = ''
-  const pageCount = Math.min(pdf.numPages, 20) // cap for a prototype
-  for (let i = 1; i <= pageCount; i += 1) {
-    const page = await pdf.getPage(i)
-    const content = await page.getTextContent()
-    fullText += content.items.map((item) => item.str).join(' ') + '\n'
+  try {
+    let fullText = ''
+    const pageCount = Math.min(pdf.numPages, 20) // cap for a prototype
+    for (let i = 1; i <= pageCount; i += 1) {
+      const page = await pdf.getPage(i)
+      const content = await page.getTextContent()
+      fullText += content.items.map((item) => item.str).join(' ') + '\n'
+    }
+    return fullText
+  } finally {
+    // Release the worker and retained page/text buffers, otherwise each
+    // upload (including retries via Upload.jsx's "Try again") leaks one.
+    pdf.destroy()
   }
-  return fullText
 }
