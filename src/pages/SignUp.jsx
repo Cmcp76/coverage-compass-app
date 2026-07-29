@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 export default function SignUp() {
   const navigate = useNavigate()
   const [agreed, setAgreed] = useState(false)
+  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -29,12 +30,21 @@ export default function SignUp() {
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-        <Field label="Full Name" type="text" placeholder="Maria Alvarez" required />
+        <Field
+          label="Full Name"
+          type="text"
+          placeholder="Maria Alvarez"
+          required
+          autoComplete="name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+        />
         <Field
           label="Email Address"
           type="email"
           placeholder="maria@email.com"
           required
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -43,6 +53,7 @@ export default function SignUp() {
           type="password"
           placeholder="••••••••"
           required
+          autoComplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -51,6 +62,7 @@ export default function SignUp() {
           type="password"
           placeholder="••••••••"
           required
+          autoComplete="new-password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           error={mismatchError ? "Passwords don't match." : null}

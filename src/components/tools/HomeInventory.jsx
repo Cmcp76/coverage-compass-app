@@ -43,7 +43,7 @@ export default function HomeInventory() {
       ...prev,
       [room]: [
         ...(prev[room] || []),
-        { id: nextId(), name: draft.name, value: parseFloat(draft.value) || 0, date: draft.date },
+        { id: nextId(), name: draft.name, value: Math.max(0, parseFloat(draft.value) || 0), date: draft.date },
       ],
     }))
     setDraft({ name: '', value: '', date: '' })
@@ -143,6 +143,7 @@ export default function HomeInventory() {
           />
           <input
             type="number"
+            min="0"
             aria-label="Estimated value"
             placeholder="Estimated value"
             value={draft.value}
@@ -158,7 +159,9 @@ export default function HomeInventory() {
           />
           <button
             onClick={() => addItem(openRoom)}
-            className="btn-secondary justify-center"
+            disabled={!draft.name.trim()}
+            title={!draft.name.trim() ? 'Enter an item name to add it' : undefined}
+            className="btn-secondary justify-center disabled:cursor-not-allowed disabled:opacity-50"
           >
             Add Item
           </button>

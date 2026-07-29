@@ -29,6 +29,7 @@ export default function Tools() {
 
       <Link
         to="/challenge"
+        state={{ fromApp: true }}
         className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
       >
         <div>
@@ -139,8 +140,9 @@ function NumberField({ label, value, onChange }) {
       <span className="mb-1 block text-xs font-medium text-compass-slate">{label}</span>
       <input
         type="number"
+        min="0"
         value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+        onChange={(e) => onChange(Math.max(0, parseFloat(e.target.value) || 0))}
         className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
       />
     </label>

@@ -41,9 +41,22 @@ const kindStyles = {
   report: { bg: 'bg-compass-mint', fg: 'text-compass-green', Icon: CheckCircleIcon },
 }
 
+const DISMISSED_KEY = 'coverage-compass-dismissed-notifications'
+
+function loadDismissed() {
+  try {
+    const raw = localStorage.getItem(DISMISSED_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
+
 export default function Notifications() {
   const { analysis } = usePolicy()
-  const [items, setItems] = useState(() => [
+  const [dismissed, setDismissed] = useState(loadDismissed)
+
+  const allNotifications = [
     {
       id: 1,
       kind: 'alert',
@@ -52,10 +65,19 @@ export default function Notifications() {
       to: '/gap-report',
     },
     ...staticNotifications,
-  ])
+  ]
+  const items = allNotifications.filter((n) => !dismissed.includes(n.id))
 
   function dismiss(id) {
-    setItems((prev) => prev.filter((n) => n.id !== id))
+    setDismissed((prev) => {
+      const next = [...prev, id]
+      try {
+        localStorage.setItem(DISMISSED_KEY, JSON.stringify(next))
+      } catch {
+        // Storage full or unavailable, dismissal still works for this session.
+      }
+      return next
+    })
   }
 
   return (

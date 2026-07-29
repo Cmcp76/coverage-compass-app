@@ -26,6 +26,7 @@ export default function Login() {
             type="email"
             placeholder="maria@email.com"
             required
+            autoComplete="email"
             className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
           />
         </label>
@@ -37,6 +38,7 @@ export default function Login() {
             type="password"
             placeholder="••••••••"
             required
+            autoComplete="current-password"
             className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
           />
         </label>

@@ -13,7 +13,7 @@ const navLinks = [
   { to: '/notifications', label: 'Notifications' },
 ]
 
-const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email', '/challenge']
+const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email']
 
 const pageTitles = {
   '/': 'Coverage Compass — Understand Your Coverage',
@@ -45,7 +45,9 @@ export default function Layout({ children }) {
   const navigate = useNavigate()
   const { reset } = usePolicy()
   const { theme, toggleTheme } = useTheme()
-  const isPreAuth = preAuthPaths.includes(location.pathname)
+  const isPreAuth =
+    preAuthPaths.includes(location.pathname) ||
+    (location.pathname === '/challenge' && !location.state?.fromApp)
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const headerRef = useRef(null)
