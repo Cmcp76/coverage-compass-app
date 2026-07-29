@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function AIReview() {
   const { analysis } = usePolicy()
+  const { lang } = useParams()
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
@@ -83,7 +85,7 @@ export default function AIReview() {
         </p>
       </div>
 
-      <Link to="/score" className="btn-primary mt-8 flex w-full justify-center">
+      <Link to={localePath(lang, '/score')} className="btn-primary mt-8 flex w-full justify-center">
         See My Coverage Score
       </Link>
     </div>

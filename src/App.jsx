@@ -1,9 +1,11 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
+import LocaleLayout from './components/LocaleLayout.jsx'
 import { PolicyProvider } from './context/PolicyContext.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
+import { DEFAULT_LANGUAGE } from './i18n/languages.js'
 
 const Landing = lazy(() => import('./pages/Landing.jsx'))
 const SignUp = lazy(() => import('./pages/SignUp.jsx'))
@@ -49,28 +51,34 @@ export default function App() {
           <ErrorBoundary key={location.pathname}>
             <Suspense fallback={<RouteFallback />}>
               <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/verify-email" element={<VerifyEmail />} />
-                <Route path="/welcome" element={<Welcome />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/upload" element={<Upload />} />
-                <Route path="/ai-review" element={<AIReview />} />
-                <Route path="/score" element={<CoverageScore />} />
-                <Route path="/gap-report" element={<GapReport />} />
-                <Route path="/report" element={<Report />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/learning-center" element={<LearningCenter />} />
-                <Route path="/tools" element={<Tools />} />
-                <Route path="/challenge" element={<Challenge />} />
-                <Route path="/trucking-startup" element={<TruckingStartup />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="*" element={<NotFound />} />
+                {/* Bare root has no language segment yet — send it to the
+                    default language. LocaleLayout below is what actually
+                    resolves/persists the language for every real route. */}
+                <Route path="/" element={<Navigate to={`/${DEFAULT_LANGUAGE}`} replace />} />
+                <Route path="/:lang" element={<LocaleLayout />}>
+                  <Route index element={<Landing />} />
+                  <Route path="signup" element={<SignUp />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="reset-password" element={<ResetPassword />} />
+                  <Route path="verify-email" element={<VerifyEmail />} />
+                  <Route path="welcome" element={<Welcome />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="upload" element={<Upload />} />
+                  <Route path="ai-review" element={<AIReview />} />
+                  <Route path="score" element={<CoverageScore />} />
+                  <Route path="gap-report" element={<GapReport />} />
+                  <Route path="report" element={<Report />} />
+                  <Route path="reports" element={<Reports />} />
+                  <Route path="notifications" element={<Notifications />} />
+                  <Route path="learning-center" element={<LearningCenter />} />
+                  <Route path="tools" element={<Tools />} />
+                  <Route path="challenge" element={<Challenge />} />
+                  <Route path="trucking-startup" element={<TruckingStartup />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="privacy" element={<Privacy />} />
+                  <Route path="terms" element={<Terms />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
               </Routes>
             </Suspense>
           </ErrorBoundary>

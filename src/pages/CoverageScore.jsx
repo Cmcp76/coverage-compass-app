@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { localePath } from '../utils/localeRouting.js'
 import {
   BarChart,
   Bar,
@@ -31,6 +32,7 @@ const categoryDetails = {
 export default function CoverageScore() {
   const { analysis } = usePolicy()
   const { theme } = useTheme()
+  const { lang } = useParams()
   const chartColors = getChartColors(theme)
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -125,7 +127,7 @@ export default function CoverageScore() {
         ))}
       </div>
 
-      <Link to="/gap-report" className="btn-primary mt-8 flex w-full justify-center">
+      <Link to={localePath(lang, '/gap-report')} className="btn-primary mt-8 flex w-full justify-center">
         See Full Report
       </Link>
 

@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { articles } from '../data/mockData.js'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function Landing() {
+  const { lang } = useParams()
   return (
     <div>
       {/* Hero */}
@@ -17,10 +19,10 @@ export default function Landing() {
             ever filing a claim.
           </p>
           <div className="animate-fade-up animate-fade-up-delay-2 mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Link to="/upload" className="btn-primary px-6 py-3 text-base">
+            <Link to={localePath(lang, '/upload')} className="btn-primary px-6 py-3 text-base">
               Upload Your Policy
             </Link>
-            <Link to="/learning-center" className="btn-secondary px-6 py-3 text-base">
+            <Link to={localePath(lang, '/learning-center')} className="btn-secondary px-6 py-3 text-base">
               Learn About Insurance
             </Link>
           </div>
@@ -69,7 +71,7 @@ export default function Landing() {
             Answer 10 quick questions about auto, home, and everyday coverage and get an
             educational Coverage Compass Score, no policy upload required.
           </p>
-          <Link to="/challenge" className="btn-primary mt-6 inline-flex px-6 py-3 text-base">
+          <Link to={localePath(lang, '/challenge')} className="btn-primary mt-6 inline-flex px-6 py-3 text-base">
             Start the Challenge
           </Link>
         </div>
@@ -139,7 +141,7 @@ export default function Landing() {
             {articles.slice(0, 4).map((a) => (
               <Link
                 key={a.title}
-                to="/learning-center"
+                to={localePath(lang, '/learning-center')}
                 className="card block transition hover:border-compass-blue"
               >
                 <span className="tag-neutral">{a.category}</span>

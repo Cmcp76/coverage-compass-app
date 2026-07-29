@@ -1,0 +1,16 @@
+{
+  "generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
+  "network": "No pudimos conectarnos. Verifica tu conexión a internet e inténtalo de nuevo.",
+  "required": "Este campo es obligatorio.",
+  "invalidEmail": "Ingresa un correo electrónico válido.",
+  "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+  "passwordsDontMatch": "Las contraseñas no coinciden.",
+  "termsNotAccepted": "Debes aceptar los Términos de Servicio y la Política de Privacidad para continuar.",
+  "loginFailed": "Esa combinación de correo electrónico y contraseña no funcionó. Inténtalo de nuevo.",
+  "uploadFailed": "No pudimos procesar ese archivo. Intenta con otro archivo o formato (PDF, JPG, PNG).",
+  "uploadTooLarge": "Ese archivo es demasiado grande. Sube un archivo de menos de 15MB.",
+  "unsupportedFileType": "Ese tipo de archivo no es compatible. Sube un PDF, JPG o PNG.",
+  "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
+  "resetLinkExpired": "Ese enlace de restablecimiento ha expirado. Solicita uno nuevo abajo.",
+  "verificationExpired": "Ese enlace de verificación ha expirado. Reenvía el correo para obtener uno nuevo."
+}

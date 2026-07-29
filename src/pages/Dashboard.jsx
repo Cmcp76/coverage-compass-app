@@ -1,12 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import ScoreGauge from '../components/ScoreGauge.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function Dashboard() {
   const { analysis, history, loadFromHistory } = usePolicy()
   const navigate = useNavigate()
+  const { lang } = useParams()
 
   const latestReview = history[0]
     ? {
@@ -14,13 +16,13 @@ export default function Dashboard() {
         date: history[0].analyzedAt,
         onView: () => {
           loadFromHistory(history[0].id)
-          navigate('/gap-report')
+          navigate(localePath(lang, '/gap-report'))
         },
       }
     : {
         title: 'Sample auto policy reviewed (demo data)',
         date: 'Upload your own to replace this',
-        onView: () => navigate('/gap-report'),
+        onView: () => navigate(localePath(lang, '/gap-report')),
       }
   const activityFeed = [latestReview, ...recentActivity.slice(1)]
 
@@ -38,13 +40,13 @@ export default function Dashboard() {
             Here's where things stand today.
           </p>
         </div>
-        <Link to="/upload" className="btn-primary">
+        <Link to={localePath(lang, '/upload')} className="btn-primary">
           Upload Policy
         </Link>
       </div>
 
       <Link
-        to="/trucking-startup"
+        to={localePath(lang, '/trucking-startup')}
         className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
       >
         <div>
@@ -61,7 +63,7 @@ export default function Dashboard() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Score card */}
-        <Link to="/score" className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">
+        <Link to={localePath(lang, '/score')} className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">
           <p className="text-sm text-compass-slate">Your Coverage Score</p>
           <ScoreGauge score={analysis.coverageScore} size={140} strokeWidth={10}>
             {(animated) => (
@@ -130,18 +132,18 @@ export default function Dashboard() {
           <ul className="space-y-3 text-sm text-compass-slate">
             {topGaps.map((gap) => (
               <li key={gap.name}>
-                <Link to="/gap-report" className="text-compass-link hover:underline">
+                <Link to={localePath(lang, '/gap-report')} className="text-compass-link hover:underline">
                   Would {gap.name.toLowerCase()} make sense for you?
                 </Link>
               </li>
             ))}
             <li>
-              <Link to="/tools" className="text-compass-link hover:underline">
+              <Link to={localePath(lang, '/tools')} className="text-compass-link hover:underline">
                 Try the Deductible Calculator
               </Link>
             </li>
             <li>
-              <Link to="/challenge" state={{ fromApp: true }} className="text-compass-link hover:underline">
+              <Link to={localePath(lang, '/challenge')} state={{ fromApp: true }} className="text-compass-link hover:underline">
                 Take the Coverage Compass Challenge
               </Link>
             </li>

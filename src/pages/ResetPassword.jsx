@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function ResetPassword() {
   const [step, setStep] = useState(1)
@@ -7,6 +8,7 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [mismatchError, setMismatchError] = useState(false)
   const navigate = useNavigate()
+  const { lang } = useParams()
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-16">
@@ -59,7 +61,7 @@ export default function ResetPassword() {
                 return
               }
               setMismatchError(false)
-              navigate('/login')
+              navigate(localePath(lang, '/login'))
             }}
             className="mt-8 space-y-4"
           >

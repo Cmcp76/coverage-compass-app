@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import RequestCallback from '../components/RequestCallback.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function GapReport() {
   const { analysis } = usePolicy()
+  const { lang } = useParams()
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
@@ -69,10 +71,10 @@ export default function GapReport() {
       </div>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link to="/report" className="btn-primary">
+        <Link to={localePath(lang, '/report')} className="btn-primary">
           Download Full Report
         </Link>
-        <Link to="/learning-center" className="btn-secondary">
+        <Link to={localePath(lang, '/learning-center')} className="btn-secondary">
           Explore These Topics in the Learning Center
         </Link>
       </div>

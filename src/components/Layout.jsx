@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { FooterDisclaimer } from './Disclaimer.jsx'
+import LanguageSelector from './LanguageSelector.jsx'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
+import { SUPPORTED_LANGUAGE_CODES } from '../i18n/languages.js'
+import { localePath } from '../utils/localeRouting.js'
 
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -63,9 +67,21 @@ export default function Layout({ children }) {
   const navigate = useNavigate()
   const { reset } = usePolicy()
   const { theme, toggleTheme } = useTheme()
+  const { i18n } = useTranslation()
+  // Layout renders as an ancestor of <Routes>, not a descendant of the
+  // matched Route, so useParams() can't see the :lang segment here — read
+  // the language i18next/LocaleLayout already resolved instead. To match
+  // pageTitles/pageDescriptions/preAuthPaths (all keyed by the pre-i18n,
+  // un-prefixed path shape, e.g. "/dashboard"), strip that language segment
+  // back off the real pathname before doing any of those lookups.
+  const lang = i18n.language
+  const pathSegments = location.pathname.split('/')
+  const logicalPath = SUPPORTED_LANGUAGE_CODES.includes(pathSegments[1])
+    ? '/' + pathSegments.slice(2).join('/')
+    : location.pathname
   const isPreAuth =
-    preAuthPaths.includes(location.pathname) ||
-    (location.pathname === '/challenge' && !location.state?.fromApp)
+    preAuthPaths.includes(logicalPath) ||
+    (logicalPath === '/challenge' && !location.state?.fromApp)
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const headerRef = useRef(null)
@@ -82,10 +98,10 @@ export default function Layout({ children }) {
   }, [location.pathname])
 
   useEffect(() => {
-    document.title = pageTitles[location.pathname] || defaultTitle
+    document.title = pageTitles[logicalPath] || defaultTitle
     const meta = document.querySelector('meta[name="description"]')
-    if (meta) meta.setAttribute('content', pageDescriptions[location.pathname] || defaultDescription)
-  }, [location.pathname])
+    if (meta) meta.setAttribute('content', pageDescriptions[logicalPath] || defaultDescription)
+  }, [logicalPath])
 
   useEffect(() => {
     if (!menuOpen && !accountMenuOpen) return
@@ -146,7 +162,7 @@ export default function Layout({ children }) {
     reset()
     setMenuOpen(false)
     setAccountMenuOpen(false)
-    navigate('/')
+    navigate(localePath(lang, '/'))
   }
 
   return (
@@ -156,7 +172,7 @@ export default function Layout({ children }) {
         className="sticky top-0 z-20 border-b border-compass-line bg-compass-surface/90 backdrop-blur print:hidden"
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex shrink-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
+          <Link to={localePath(lang, '/')} className="flex shrink-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
             <CompassMark />
             <span className="hidden font-display text-lg font-semibold text-compass-heading sm:inline">
               Coverage Compass
@@ -167,9 +183,9 @@ export default function Layout({ children }) {
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
-                  to={link.to}
+                  to={localePath(lang, link.to)}
                   className={`text-sm font-medium transition ${
-                    location.pathname === link.to
+                    logicalPath === link.to
                       ? 'text-compass-link'
                       : 'text-compass-slate hover:text-compass-ink'
                   }`}
@@ -180,6 +196,7 @@ export default function Layout({ children }) {
             </nav>
           )}
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <LanguageSelector />
             <button
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-compass-line text-compass-slate transition hover:text-compass-ink"
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -189,10 +206,10 @@ export default function Layout({ children }) {
             </button>
             {isPreAuth ? (
               <>
-                <Link to="/login" className="btn-secondary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
+                <Link to={localePath(lang, '/login')} className="btn-secondary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
                   Log In
                 </Link>
-                <Link to="/signup" className="btn-primary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
+                <Link to={localePath(lang, '/signup')} className="btn-primary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
                   Sign Up
                 </Link>
               </>
@@ -220,7 +237,7 @@ export default function Layout({ children }) {
                       className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-compass-surface py-1 shadow-card"
                     >
                       <Link
-                        to="/dashboard"
+                        to={localePath(lang, '/dashboard')}
                         role="menuitem"
                         onClick={() => setAccountMenuOpen(false)}
                         className="block px-4 py-2 text-sm text-compass-ink hover:bg-compass-paper"
@@ -259,10 +276,10 @@ export default function Layout({ children }) {
             {navLinks.map((link) => (
               <Link
                 key={link.to}
-                to={link.to}
+                to={localePath(lang, link.to)}
                 onClick={() => setMenuOpen(false)}
                 className={`py-2 text-sm font-medium ${
-                  location.pathname === link.to
+                  logicalPath === link.to
                     ? 'text-compass-link'
                     : 'text-compass-slate'
                 }`}
@@ -294,16 +311,16 @@ export default function Layout({ children }) {
               Helping people understand insurance before they need it.
             </p>
             <div className="flex gap-5 text-sm text-compass-slate">
-              <Link to="/about" className="hover:text-compass-link">
+              <Link to={localePath(lang, '/about')} className="hover:text-compass-link">
                 About
               </Link>
-              <Link to="/privacy" className="hover:text-compass-link">
+              <Link to={localePath(lang, '/privacy')} className="hover:text-compass-link">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="hover:text-compass-link">
+              <Link to={localePath(lang, '/terms')} className="hover:text-compass-link">
                 Terms of Service
               </Link>
-              <Link to="/learning-center" className="hover:text-compass-link">
+              <Link to={localePath(lang, '/learning-center')} className="hover:text-compass-link">
                 Learning Center
               </Link>
             </div>

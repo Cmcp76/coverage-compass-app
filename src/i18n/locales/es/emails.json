@@ -1,0 +1,30 @@
+{
+  "verification": {
+    "subject": "Verifica tu cuenta de Coverage Compass",
+    "heading": "Revisa Tu Bandeja de Entrada",
+    "body": "Enviamos un enlace de verificación a {{email}}. Haz clic en el enlace para activar tu cuenta y comenzar con la revisión de tu primera póliza.",
+    "cta": "Verificar Mi Correo"
+  },
+  "passwordReset": {
+    "subject": "Restablece tu contraseña de Coverage Compass",
+    "heading": "Restablece Tu Contraseña",
+    "body": "Recibimos una solicitud para restablecer tu contraseña. Haz clic abajo para elegir una nueva. Si no solicitaste esto, puedes ignorar este correo.",
+    "cta": "Restablecer Contraseña"
+  },
+  "reportReady": {
+    "subject": "Tu informe de Coverage Compass está listo",
+    "heading": "Tu Informe Está Listo",
+    "body": "Tu Puntaje de Cobertura y el informe educativo para tu póliza de {{policyType}} ya están listos para ver.",
+    "cta": "Ver Mi Informe"
+  },
+  "renewalReminder": {
+    "subject": "Tu póliza de {{policyType}} se renueva pronto",
+    "heading": "Renovación Próxima",
+    "body": "Tu póliza de {{policyType}} se renueva en {{days}} días. Este es un buen momento para volver a Coverage Compass y obtener una revisión actualizada.",
+    "cta": "Revisar Mi Cobertura"
+  },
+  "footer": {
+    "disclaimer": "Coverage Compass es una plataforma educativa de seguros independiente. No es una compañía de seguros, agencia o corredor, y no vende, emite, cancela ni modifica pólizas de seguro. La información proporcionada es solo educativa y no constituye asesoramiento legal, financiero o de seguros.",
+    "unsubscribe": "Administrar preferencias de correo"
+  }
+}

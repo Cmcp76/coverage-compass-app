@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { localePath } from '../utils/localeRouting.js'
 import {
   challengeIntro,
   challengeQuestions,
@@ -228,6 +229,7 @@ function ResultsScreen({ answers, onRetake }) {
   const score = getChallengeScore(answers)
   const missedTopics = getMissedTopics(challengeQuestions, answers)
   const headingRef = useRef(null)
+  const { lang } = useParams()
 
   useEffect(() => {
     headingRef.current?.focus()
@@ -279,7 +281,7 @@ function ResultsScreen({ answers, onRetake }) {
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <Link to="/learning-center" className="btn-secondary">
+        <Link to={localePath(lang, '/learning-center')} className="btn-secondary">
           {challengeResultsCopy.secondaryCta}
         </Link>
         <button type="button" className="text-sm font-medium text-compass-link" onClick={onRetake}>

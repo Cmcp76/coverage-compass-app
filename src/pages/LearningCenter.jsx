@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { articles, glossaryTerms, categories } from '../data/mockData.js'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function LearningCenter() {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
+  const { lang } = useParams()
 
   const filtered = articles.filter((a) => {
     const matchesSearch = a.title.toLowerCase().includes(search.toLowerCase())
@@ -104,7 +106,7 @@ export default function LearningCenter() {
         <p className="font-display text-lg font-semibold text-compass-heading">
           Ready to See Your Own Policy in Plain Language?
         </p>
-        <Link to="/upload" className="btn-primary mt-4 inline-flex">
+        <Link to={localePath(lang, '/upload')} className="btn-primary mt-4 inline-flex">
           Upload Your Policy
         </Link>
       </div>

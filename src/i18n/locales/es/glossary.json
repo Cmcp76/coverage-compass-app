@@ -1,0 +1,65 @@
+{
+  "disclaimer": "Este glosario ofrece definiciones generales y en lenguaje sencillo de términos comunes de seguros. Es solo con fines educativos, puede no reflejar el lenguaje específico de tu póliza, y no sustituye la revisión de tus documentos oficiales de póliza ni la consulta con un profesional de seguros con licencia.",
+  "terms": {
+    "declarationsPage": {
+      "term": "Página de Declaraciones",
+      "definition": "La página resumen de tu póliza — usualmente la primera página — que muestra quién está asegurado, qué está cubierto, tus límites, deducibles y fechas de vigencia."
+    },
+    "subrogation": {
+      "term": "Subrogación",
+      "definition": "El proceso mediante el cual tu compañía de seguros busca reembolso de la aseguradora de la parte responsable después de pagar tu reclamo."
+    },
+    "endorsement": {
+      "term": "Endoso",
+      "definition": "Un cambio o adición a tu póliza que ajusta, agrega o elimina cobertura de la póliza base."
+    },
+    "deductible": {
+      "term": "Deducible",
+      "definition": "La cantidad que pagas de tu bolsillo antes de que tu cobertura de seguro comience a pagar un reclamo."
+    },
+    "liabilityLimit": {
+      "term": "Límite de Responsabilidad Civil",
+      "definition": "La cantidad máxima que pagará tu póliza si se determina que eres legalmente responsable por lesiones o daños a otra persona."
+    },
+    "actualCashValue": {
+      "term": "Valor Real en Efectivo (ACV)",
+      "definition": "El valor de la propiedad dañada después de tener en cuenta la depreciación — generalmente un pago menor que el costo de reemplazo."
+    },
+    "replacementCost": {
+      "term": "Costo de Reemplazo",
+      "definition": "El costo de reemplazar la propiedad dañada con propiedad nueva de tipo y calidad similar, sin deducir la depreciación."
+    },
+    "umbrellaPolicy": {
+      "term": "Póliza Paraguas",
+      "definition": "Protección adicional de responsabilidad civil que entra en vigor por encima de los límites de tu póliza de auto o vivienda, una vez agotados esos límites."
+    },
+    "additionalInsured": {
+      "term": "Asegurado Adicional",
+      "definition": "Una persona o negocio agregado a una póliza que recibe algunas de las protecciones del asegurado nombrado, a menudo requerido en contratos o contratos de arrendamiento."
+    },
+    "certificateOfInsurance": {
+      "term": "Certificado de Seguro (COI)",
+      "definition": "Un documento que resume la cobertura, los límites y las fechas de vigencia de una póliza, a menudo solicitado por propietarios o socios contractuales como prueba de cobertura."
+    },
+    "generalLiability": {
+      "term": "Responsabilidad Civil General (GL)",
+      "definition": "Cobertura empresarial que ayuda a proteger contra reclamos de lesiones corporales, daños a la propiedad y daños publicitarios que surjan de tus operaciones."
+    },
+    "workersCompensation": {
+      "term": "Compensación para Trabajadores",
+      "definition": "Cobertura que paga los costos médicos y los salarios perdidos de empleados lesionados en el trabajo, generalmente requerida por la ley estatal."
+    },
+    "motorCarrierAuthority": {
+      "term": "Autoridad MC",
+      "definition": "Autoridad operativa otorgada por la FMCSA que permite a un transportista transportar mercancías o pasajeros regulados entre estados a cambio de una compensación."
+    },
+    "usdotNumber": {
+      "term": "Número USDOT",
+      "definition": "Un identificador único emitido por la FMCSA que se usa para monitorear la seguridad y el cumplimiento de una operación de vehículo comercial."
+    },
+    "bobtailCoverage": {
+      "term": "Cobertura Bobtail",
+      "definition": "Cobertura de responsabilidad civil para un tractor que opera sin un remolque adjunto, típicamente cuando no está bajo despacho."
+    }
+  }
+}

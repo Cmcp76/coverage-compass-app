@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   BarChart,
   Bar,
@@ -12,17 +12,19 @@ import {
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
 import { getChartColors } from '../lib/chartTheme.js'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function Reports() {
   const { history, loadFromHistory, removeFromHistory } = usePolicy()
   const navigate = useNavigate()
+  const { lang } = useParams()
   const { theme } = useTheme()
   const chartColors = getChartColors(theme)
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   function openReport(id, path) {
     loadFromHistory(id)
-    navigate(path)
+    navigate(localePath(lang, path))
   }
 
   // Oldest-first so the chart reads left-to-right in the order you uploaded,
@@ -93,7 +95,7 @@ export default function Reports() {
           <p className="mt-1 text-sm text-compass-slate">
             Upload a policy to get your first Coverage Score and report.
           </p>
-          <Link to="/upload" className="btn-primary mt-5 inline-flex">
+          <Link to={localePath(lang, '/upload')} className="btn-primary mt-5 inline-flex">
             Upload Your Policy
           </Link>
         </div>

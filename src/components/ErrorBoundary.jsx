@@ -1,6 +1,17 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { isChunkLoadError } from '../lib/errorClassification.js'
+import { SUPPORTED_LANGUAGE_CODES } from '../i18n/languages.js'
+import { localePath } from '../utils/localeRouting.js'
+
+// A class component (required for getDerivedStateFromError/componentDidCatch,
+// no hook equivalent exists), so it can't call useParams() — read the
+// language straight off window.location.pathname instead. localePath()
+// already falls back to the default language for anything unsupported.
+function currentLang() {
+  const segment = window.location.pathname.split('/')[1]
+  return SUPPORTED_LANGUAGE_CODES.includes(segment) ? segment : undefined
+}
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -35,7 +46,7 @@ export default class ErrorBoundary extends Component {
           <button type="button" className="btn-primary" onClick={() => window.location.reload()}>
             Refresh the Page
           </button>
-          <Link to="/dashboard" className="btn-secondary">
+          <Link to={localePath(currentLang(), '/dashboard')} className="btn-secondary">
             Go to Dashboard
           </Link>
         </div>

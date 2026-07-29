@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { analyzeText } from '../lib/policyAnalysis.js'
 import { extractTextFromPdf } from '../lib/pdfText.js'
+import { localePath } from '../utils/localeRouting.js'
 
 const MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024 // 15MB, generous for a declarations page/policy PDF
 
@@ -12,6 +13,7 @@ export default function Upload() {
   const [errorMsg, setErrorMsg] = useState('')
   const inputRef = useRef(null)
   const navigate = useNavigate()
+  const { lang } = useParams()
   const { setAnalysis, addToHistory } = usePolicy()
 
   async function handleFile(file) {
@@ -156,7 +158,7 @@ export default function Upload() {
             <button
               type="button"
               className="btn-primary mt-5"
-              onClick={() => navigate('/ai-review')}
+              onClick={() => navigate(localePath(lang, '/ai-review'))}
             >
               See Your Policy Review
             </button>

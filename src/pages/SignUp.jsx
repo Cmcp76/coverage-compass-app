@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function SignUp() {
   const navigate = useNavigate()
+  const { lang } = useParams()
   const [agreed, setAgreed] = useState(false)
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -17,7 +19,7 @@ export default function SignUp() {
       return
     }
     setMismatchError(false)
-    navigate('/verify-email', { state: { email } })
+    navigate(localePath(lang, '/verify-email'), { state: { email } })
   }
 
   return (
@@ -78,11 +80,11 @@ export default function SignUp() {
           />
           <span>
             I agree to the{' '}
-            <Link to="/terms" target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
+            <Link to={localePath(lang, '/terms')} target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link to="/privacy" target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
+            <Link to={localePath(lang, '/privacy')} target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
               Privacy Policy
             </Link>
           </span>
@@ -94,7 +96,7 @@ export default function SignUp() {
 
         <p className="text-center text-sm text-compass-slate">
           Already have an account?{' '}
-          <Link to="/login" className="font-medium text-compass-link">
+          <Link to={localePath(lang, '/login')} className="font-medium text-compass-link">
             Log In
           </Link>
         </p>

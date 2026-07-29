@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function VerifyEmail() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { lang } = useParams()
   const [resent, setResent] = useState(false)
   const email = location.state?.email
 
@@ -39,7 +41,7 @@ export default function VerifyEmail() {
         </p>
       )}
 
-      <button className="btn-primary mx-auto mt-8" onClick={() => navigate('/welcome')}>
+      <button className="btn-primary mx-auto mt-8" onClick={() => navigate(localePath(lang, '/welcome'))}>
         Simulate verification (prototype)
       </button>
 

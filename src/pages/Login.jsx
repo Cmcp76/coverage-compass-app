@@ -1,11 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function Login() {
   const navigate = useNavigate()
+  const { lang } = useParams()
 
   function handleSubmit(e) {
     e.preventDefault()
-    navigate('/dashboard')
+    navigate(localePath(lang, '/dashboard'))
   }
 
   return (
@@ -47,7 +49,7 @@ export default function Login() {
           <label className="flex items-center gap-2 text-compass-slate">
             <input type="checkbox" /> Remember Me
           </label>
-          <Link to="/reset-password" className="font-medium text-compass-link">
+          <Link to={localePath(lang, '/reset-password')} className="font-medium text-compass-link">
             Forgot Password?
           </Link>
         </div>
@@ -58,7 +60,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-compass-slate">
           Don't have an account?{' '}
-          <Link to="/signup" className="font-medium text-compass-link">
+          <Link to={localePath(lang, '/signup')} className="font-medium text-compass-link">
             Sign Up
           </Link>
         </p>

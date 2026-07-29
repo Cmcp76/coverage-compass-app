@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import HomeInventory from '../components/tools/HomeInventory.jsx'
 import ComparisonTool from '../components/tools/ComparisonTool.jsx'
 import AnnualCheckup from '../components/tools/AnnualCheckup.jsx'
 import Glossary from '../components/tools/Glossary.jsx'
+import { localePath } from '../utils/localeRouting.js'
 
 const toolList = [
   { id: 'deductible', label: 'Deductible Calculator' },
@@ -16,6 +17,7 @@ const toolList = [
 
 export default function Tools() {
   const [active, setActive] = useState('deductible')
+  const { lang } = useParams()
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
@@ -28,7 +30,7 @@ export default function Tools() {
       </p>
 
       <Link
-        to="/challenge"
+        to={localePath(lang, '/challenge')}
         state={{ fromApp: true }}
         className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
       >
@@ -46,7 +48,7 @@ export default function Tools() {
       </Link>
 
       <Link
-        to="/trucking-startup"
+        to={localePath(lang, '/trucking-startup')}
         className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
       >
         <div>
@@ -204,6 +206,7 @@ function buildSuggestions(answers) {
 function RiskQuiz() {
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const { lang } = useParams()
 
   function select(i, option) {
     setAnswers((prev) => ({ ...prev, [i]: option }))
@@ -268,7 +271,7 @@ function RiskQuiz() {
             These aren't recommendations, they're starting points for a conversation
             with your insurance professional.
           </p>
-          <Link to="/upload" className="btn-secondary mt-4 inline-flex">
+          <Link to={localePath(lang, '/upload')} className="btn-secondary mt-4 inline-flex">
             Upload Your Policy for a More Specific Review
           </Link>
         </div>

@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function Welcome() {
+  const { lang } = useParams()
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col items-center justify-center px-6 py-16 text-center">
       <span className="flex h-20 w-20 items-center justify-center rounded-full bg-compass-mint">
@@ -29,10 +31,10 @@ export default function Welcome() {
         with a licensed insurance professional.
       </p>
       <div className="mt-8 flex flex-col items-center gap-3">
-        <Link to="/upload" className="btn-primary px-6 py-3">
+        <Link to={localePath(lang, '/upload')} className="btn-primary px-6 py-3">
           Upload Your First Policy
         </Link>
-        <Link to="/learning-center" className="text-sm font-medium text-compass-link">
+        <Link to={localePath(lang, '/learning-center')} className="text-sm font-medium text-compass-link">
           Explore the Learning Center first
         </Link>
       </div>

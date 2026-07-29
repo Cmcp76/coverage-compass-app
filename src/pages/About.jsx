@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function About() {
+  const { lang } = useParams()
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="font-display text-2xl font-semibold text-compass-heading">About Coverage Compass</h1>
@@ -28,10 +30,10 @@ export default function About() {
         <li>Suggests questions worth asking an agent before you rely on the policy.</li>
       </ul>
       <div className="mt-10 flex flex-wrap gap-3">
-        <Link to="/" className="btn-secondary">
+        <Link to={localePath(lang, '/')} className="btn-secondary">
           Back to Home
         </Link>
-        <Link to="/upload" className="btn-primary">
+        <Link to={localePath(lang, '/upload')} className="btn-primary">
           Try It
         </Link>
       </div>

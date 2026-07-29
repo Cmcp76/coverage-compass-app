@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { localePath } from '../../utils/localeRouting.js'
 
 const prompts = [
   'Have you moved, renovated, or made major purchases this year?',
@@ -12,6 +13,7 @@ const prompts = [
 export default function AnnualCheckup() {
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const { lang } = useParams()
 
   const yesCount = Object.values(answers).filter((a) => a === 'Yes').length
   const allAnswered = prompts.every((_, i) => answers[i])
@@ -65,7 +67,7 @@ export default function AnnualCheckup() {
               ? `Based on your answers, it looks like you've had ${yesCount} change${yesCount > 1 ? 's' : ''} worth reviewing. These are common reasons policies fall out of date. Consider reaching out to your insurance professional to confirm your coverage still fits.`
               : "Based on your answers, it doesn't look like much has changed this year. Still, an annual check-in with your insurance professional is a good habit."}
           </p>
-          <Link to="/upload" className="btn-secondary mt-4 inline-flex">
+          <Link to={localePath(lang, '/upload')} className="btn-secondary mt-4 inline-flex">
             Re-Upload Your Policy for an Updated Review
           </Link>
         </div>

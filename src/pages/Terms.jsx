@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
+import { localePath } from '../utils/localeRouting.js'
 
 export default function Terms() {
+  const { lang } = useParams()
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="font-display text-2xl font-semibold text-compass-heading">Terms of Service</h1>
@@ -37,7 +39,7 @@ export default function Terms() {
         the Privacy Policy, and are not transmitted to or stored on a server.
       </p>
       <div className="mt-10">
-        <Link to="/" className="text-sm font-medium text-compass-link">
+        <Link to={localePath(lang, '/')} className="text-sm font-medium text-compass-link">
           Back to Home
         </Link>
       </div>
