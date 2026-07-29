@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import { PolicyProvider } from './context/PolicyContext.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 
@@ -36,36 +37,43 @@ function RouteFallback() {
 }
 
 export default function App() {
+  const location = useLocation()
+
   return (
     <ThemeProvider>
       <PolicyProvider>
         <Layout>
-          <Suspense fallback={<RouteFallback />}>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/verify-email" element={<VerifyEmail />} />
-              <Route path="/welcome" element={<Welcome />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/upload" element={<Upload />} />
-              <Route path="/ai-review" element={<AIReview />} />
-              <Route path="/score" element={<CoverageScore />} />
-              <Route path="/gap-report" element={<GapReport />} />
-              <Route path="/report" element={<Report />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/learning-center" element={<LearningCenter />} />
-              <Route path="/tools" element={<Tools />} />
-              <Route path="/challenge" element={<Challenge />} />
-              <Route path="/trucking-startup" element={<TruckingStartup />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
+          {/* Keyed by pathname so navigating away from a page that crashed
+              (or hitting "Go to Dashboard" from the fallback itself) remounts
+              the boundary with a clean slate instead of staying stuck. */}
+          <ErrorBoundary key={location.pathname}>
+            <Suspense fallback={<RouteFallback />}>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/verify-email" element={<VerifyEmail />} />
+                <Route path="/welcome" element={<Welcome />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/upload" element={<Upload />} />
+                <Route path="/ai-review" element={<AIReview />} />
+                <Route path="/score" element={<CoverageScore />} />
+                <Route path="/gap-report" element={<GapReport />} />
+                <Route path="/report" element={<Report />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/notifications" element={<Notifications />} />
+                <Route path="/learning-center" element={<LearningCenter />} />
+                <Route path="/tools" element={<Tools />} />
+                <Route path="/challenge" element={<Challenge />} />
+                <Route path="/trucking-startup" element={<TruckingStartup />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
         </Layout>
       </PolicyProvider>
     </ThemeProvider>
