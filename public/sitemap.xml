@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://cmcp76.github.io/coverage-compass-app/challenge</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://cmcp76.github.io/coverage-compass-app/learning-center</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -14,5 +19,25 @@
     <loc>https://cmcp76.github.io/coverage-compass-app/tools</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cmcp76.github.io/coverage-compass-app/trucking-startup</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cmcp76.github.io/coverage-compass-app/about</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://cmcp76.github.io/coverage-compass-app/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://cmcp76.github.io/coverage-compass-app/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>
