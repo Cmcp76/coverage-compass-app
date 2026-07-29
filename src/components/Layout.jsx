@@ -15,6 +15,31 @@ const navLinks = [
 
 const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email', '/challenge']
 
+const pageTitles = {
+  '/': 'Coverage Compass — Understand Your Coverage',
+  '/signup': 'Sign Up — Coverage Compass',
+  '/login': 'Log In — Coverage Compass',
+  '/reset-password': 'Reset Password — Coverage Compass',
+  '/verify-email': 'Verify Your Email — Coverage Compass',
+  '/welcome': 'Welcome — Coverage Compass',
+  '/dashboard': 'Dashboard — Coverage Compass',
+  '/upload': 'Upload Your Policy — Coverage Compass',
+  '/ai-review': 'Policy Summary — Coverage Compass',
+  '/score': 'Your Coverage Score — Coverage Compass',
+  '/gap-report': 'Coverage Gap Report — Coverage Compass',
+  '/report': 'Your Report — Coverage Compass',
+  '/reports': 'Your Reports — Coverage Compass',
+  '/notifications': 'Notifications — Coverage Compass',
+  '/learning-center': 'Learning Center — Coverage Compass',
+  '/tools': 'Insurance Tools — Coverage Compass',
+  '/challenge': 'The Coverage Compass Challenge',
+  '/trucking-startup': 'Start My Trucking Company — Coverage Compass',
+  '/about': 'About — Coverage Compass',
+  '/privacy': 'Privacy Policy — Coverage Compass',
+  '/terms': 'Terms of Service — Coverage Compass',
+}
+const defaultTitle = 'Coverage Compass'
+
 export default function Layout({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
@@ -34,6 +59,10 @@ export default function Layout({ children }) {
   useEffect(() => {
     setMenuOpen(false)
     setAccountMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    document.title = pageTitles[location.pathname] || defaultTitle
   }, [location.pathname])
 
   useEffect(() => {
