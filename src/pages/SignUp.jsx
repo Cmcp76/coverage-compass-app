@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Trans, useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function SignUp() {
+  const { t } = useTranslation('common')
   const navigate = useNavigate()
   const { lang } = useParams()
   const [agreed, setAgreed] = useState(false)
@@ -33,7 +35,7 @@ export default function SignUp() {
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         <Field
-          label="Full Name"
+          label={t('forms.fullName')}
           type="text"
           placeholder="Maria Alvarez"
           required
@@ -42,7 +44,7 @@ export default function SignUp() {
           onChange={(e) => setFullName(e.target.value)}
         />
         <Field
-          label="Email Address"
+          label={t('forms.emailAddress')}
           type="email"
           placeholder="maria@email.com"
           required
@@ -51,7 +53,7 @@ export default function SignUp() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <Field
-          label="Password"
+          label={t('forms.password')}
           type="password"
           placeholder="••••••••"
           required
@@ -60,14 +62,14 @@ export default function SignUp() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Field
-          label="Confirm Password"
+          label={t('forms.confirmPassword')}
           type="password"
           placeholder="••••••••"
           required
           autoComplete="new-password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          error={mismatchError ? "Passwords don't match." : null}
+          error={mismatchError ? t('errors:passwordsDontMatch') : null}
         />
 
         <label className="flex items-start gap-2 text-sm text-compass-slate">
@@ -79,32 +81,31 @@ export default function SignUp() {
             required
           />
           <span>
-            I agree to the{' '}
-            <Link to={localePath(lang, '/terms')} target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link to={localePath(lang, '/privacy')} target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
-              Privacy Policy
-            </Link>
+            <Trans
+              i18nKey="forms.agreeToTerms"
+              ns="common"
+              components={[
+                <Link key="terms" to={localePath(lang, '/terms')} target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline" />,
+                <Link key="privacy" to={localePath(lang, '/privacy')} target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline" />,
+              ]}
+            />
           </span>
         </label>
 
         <button type="submit" className="btn-primary w-full">
-          Create My Account
+          {t('buttons.createMyAccount')}
         </button>
 
         <p className="text-center text-sm text-compass-slate">
-          Already have an account?{' '}
-          <Link to={localePath(lang, '/login')} className="font-medium text-compass-link">
-            Log In
-          </Link>
+          <Trans
+            i18nKey="forms.alreadyHaveAccount"
+            ns="common"
+            components={[<Link key="login" to={localePath(lang, '/login')} className="font-medium text-compass-link" />]}
+          />
         </p>
 
         <p className="disclaimer text-center">
-          This prototype doesn't send your information to a server or create a
-          real account. Coverage Compass is an independent educational
-          platform, not an insurance company.
+          {t('trust.accountLine')}
         </p>
       </form>
     </div>

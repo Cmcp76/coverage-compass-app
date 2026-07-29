@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { analyzeText } from '../lib/policyAnalysis.js'
 import { extractTextFromPdf } from '../lib/pdfText.js'
@@ -8,6 +9,7 @@ import { localePath } from '../utils/localeRouting.js'
 const MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024 // 15MB, generous for a declarations page/policy PDF
 
 export default function Upload() {
+  const { t } = useTranslation('common')
   const [state, setState] = useState('idle') // idle | reading | scanning | done | error
   const [fileName, setFileName] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -90,7 +92,7 @@ export default function Upload() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="font-display text-2xl font-semibold text-compass-heading">
-        Upload Your Policy
+        {t('buttons.uploadYourPolicy')}
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
         Drop in a declarations page, ACORD form, or full policy, auto, homeowners,
@@ -117,7 +119,7 @@ export default function Upload() {
               className="btn-secondary mt-5"
               onClick={() => inputRef.current?.click()}
             >
-              Choose a File
+              {t('buttons.chooseFile')}
             </button>
             <input
               ref={inputRef}

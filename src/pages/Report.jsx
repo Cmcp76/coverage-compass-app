@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 
 export default function Report() {
+  const { t } = useTranslation('common')
   const { analysis } = usePolicy()
   const [generating, setGenerating] = useState(false)
 
@@ -29,7 +31,7 @@ export default function Report() {
           Print
         </button>
         <button onClick={downloadPdf} disabled={generating} className="btn-primary disabled:cursor-not-allowed disabled:opacity-60">
-          {generating ? 'Preparing…' : 'Download PDF'}
+          {generating ? 'Preparing…' : t('buttons.downloadPdf')}
         </button>
       </div>
 

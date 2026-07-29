@@ -47,10 +47,10 @@
     "newPassword": "Nueva Contraseña",
     "confirmNewPassword": "Confirmar Nueva Contraseña",
     "rememberMe": "Recordarme",
-    "agreeToTerms": "Acepto los Términos de Servicio y la Política de Privacidad",
+    "agreeToTerms": "Acepto los <0>Términos de Servicio</0> y la <1>Política de Privacidad</1>",
     "forgotPassword": "¿Olvidaste tu contraseña?",
-    "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
-    "dontHaveAccount": "¿No tienes una cuenta? Regístrate"
+    "alreadyHaveAccount": "¿Ya tienes una cuenta? <0>Inicia sesión</0>",
+    "dontHaveAccount": "¿No tienes una cuenta? <0>Regístrate</0>"
   },
   "trust": {
     "landingLine": "Revisión educativa gratuita. Tus documentos nunca se venden ni se comparten. No estamos afiliados a ninguna aseguradora en particular.",

@@ -1,8 +1,10 @@
 import { Fragment, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function ResetPassword() {
+  const { t } = useTranslation('common')
   const [step, setStep] = useState(1)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -30,7 +32,7 @@ export default function ResetPassword() {
           >
             <label className="block">
               <span className="mb-1 block text-sm font-medium text-compass-ink">
-                Email Address
+                {t('forms.emailAddress')}
               </span>
               <input
                 type="email"
@@ -40,7 +42,7 @@ export default function ResetPassword() {
               />
             </label>
             <button type="submit" className="btn-primary w-full">
-              Send Reset Link
+              {t('buttons.sendResetLink')}
             </button>
           </form>
         </Fragment>
@@ -67,7 +69,7 @@ export default function ResetPassword() {
           >
             <label className="block">
               <span className="mb-1 block text-sm font-medium text-compass-ink">
-                New Password
+                {t('forms.newPassword')}
               </span>
               <input
                 type="password"
@@ -80,7 +82,7 @@ export default function ResetPassword() {
             </label>
             <label className="block">
               <span className="mb-1 block text-sm font-medium text-compass-ink">
-                Confirm New Password
+                {t('forms.confirmNewPassword')}
               </span>
               <input
                 type="password"
@@ -96,12 +98,12 @@ export default function ResetPassword() {
               />
               {mismatchError && (
                 <span role="alert" className="mt-1 block text-xs text-red-600 dark:text-red-400">
-                  Passwords don't match.
+                  {t('errors:passwordsDontMatch')}
                 </span>
               )}
             </label>
             <button type="submit" className="btn-primary w-full">
-              Update Password
+              {t('buttons.updatePassword')}
             </button>
           </form>
         </Fragment>

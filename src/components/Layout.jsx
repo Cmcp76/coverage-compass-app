@@ -9,12 +9,12 @@ import { SUPPORTED_LANGUAGE_CODES } from '../i18n/languages.js'
 import { localePath } from '../utils/localeRouting.js'
 
 const navLinks = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/upload', label: 'Upload Policy' },
-  { to: '/reports', label: 'Reports' },
-  { to: '/learning-center', label: 'Learning Center' },
-  { to: '/tools', label: 'Tools' },
-  { to: '/notifications', label: 'Notifications' },
+  { to: '/dashboard', labelKey: 'nav.dashboard' },
+  { to: '/upload', labelKey: 'nav.uploadPolicy' },
+  { to: '/reports', labelKey: 'nav.reports' },
+  { to: '/learning-center', labelKey: 'nav.learningCenter' },
+  { to: '/tools', labelKey: 'nav.tools' },
+  { to: '/notifications', labelKey: 'nav.notifications' },
 ]
 
 const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email']
@@ -67,7 +67,7 @@ export default function Layout({ children }) {
   const navigate = useNavigate()
   const { reset } = usePolicy()
   const { theme, toggleTheme } = useTheme()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation('common')
   // Layout renders as an ancestor of <Routes>, not a descendant of the
   // matched Route, so useParams() can't see the :lang segment here — read
   // the language i18next/LocaleLayout already resolved instead. To match
@@ -175,7 +175,7 @@ export default function Layout({ children }) {
           <Link to={localePath(lang, '/')} className="flex shrink-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
             <CompassMark />
             <span className="hidden font-display text-lg font-semibold text-compass-heading sm:inline">
-              Coverage Compass
+              {t('brand.name')}
             </span>
           </Link>
           {!isPreAuth && (
@@ -190,7 +190,7 @@ export default function Layout({ children }) {
                       : 'text-compass-slate hover:text-compass-ink'
                   }`}
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </Link>
               ))}
             </nav>
@@ -207,10 +207,10 @@ export default function Layout({ children }) {
             {isPreAuth ? (
               <>
                 <Link to={localePath(lang, '/login')} className="btn-secondary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
-                  Log In
+                  {t('nav.logIn')}
                 </Link>
                 <Link to={localePath(lang, '/signup')} className="btn-primary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
-                  Sign Up
+                  {t('nav.signUp')}
                 </Link>
               </>
             ) : (
@@ -242,14 +242,14 @@ export default function Layout({ children }) {
                         onClick={() => setAccountMenuOpen(false)}
                         className="block px-4 py-2 text-sm text-compass-ink hover:bg-compass-paper"
                       >
-                        Dashboard
+                        {t('nav.dashboard')}
                       </Link>
                       <button
                         role="menuitem"
                         onClick={handleLogOut}
                         className="block w-full px-4 py-2 text-left text-sm text-compass-ink hover:bg-compass-paper"
                       >
-                        Log Out
+                        {t('nav.logOut')}
                       </button>
                     </div>
                   )}
@@ -284,7 +284,7 @@ export default function Layout({ children }) {
                     : 'text-compass-slate'
                 }`}
               >
-                {link.label}
+                {t(link.labelKey)}
               </Link>
             ))}
             <div className="mt-2 flex items-center justify-between border-t border-compass-line pt-3 sm:hidden">
@@ -295,7 +295,7 @@ export default function Layout({ children }) {
                 Maria Alvarez
               </span>
               <button onClick={handleLogOut} className="text-sm font-medium text-compass-link">
-                Log Out
+                {t('nav.logOut')}
               </button>
             </div>
           </nav>
@@ -308,20 +308,20 @@ export default function Layout({ children }) {
         <div className="mx-auto max-w-6xl px-6 py-10">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
             <p className="font-display text-sm text-compass-heading">
-              Helping people understand insurance before they need it.
+              {t('brand.tagline')}
             </p>
             <div className="flex gap-5 text-sm text-compass-slate">
               <Link to={localePath(lang, '/about')} className="hover:text-compass-link">
-                About
+                {t('footer.about')}
               </Link>
               <Link to={localePath(lang, '/privacy')} className="hover:text-compass-link">
-                Privacy Policy
+                {t('footer.privacyPolicy')}
               </Link>
               <Link to={localePath(lang, '/terms')} className="hover:text-compass-link">
-                Terms of Service
+                {t('footer.termsOfService')}
               </Link>
               <Link to={localePath(lang, '/learning-center')} className="hover:text-compass-link">
-                Learning Center
+                {t('footer.learningCenter')}
               </Link>
             </div>
           </div>

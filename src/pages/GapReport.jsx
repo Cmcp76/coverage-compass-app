@@ -1,10 +1,21 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import RequestCallback from '../components/RequestCallback.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import { localePath } from '../utils/localeRouting.js'
 
+// analyzeText()/mockData.js produce these two literal English status strings;
+// map them to the matching translation keys rather than translating the raw
+// value directly (gapReport.statusLimitLow has no corresponding real status
+// value anywhere in the app today, so it's left unmapped).
+const STATUS_KEYS = {
+  'Worth Confirming': 'gapReport.statusWorthConfirming',
+  'Not Found in Policy': 'gapReport.statusNotFound',
+}
+
 export default function GapReport() {
+  const { t } = useTranslation('common')
   const { analysis } = usePolicy()
   const { lang } = useParams()
 
@@ -12,12 +23,10 @@ export default function GapReport() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <OlderReportBanner />
       <h1 className="font-display text-2xl font-semibold text-compass-heading">
-        Areas Worth a Second Look
+        {t('gapReport.title')}
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
-        Based on your policy, here are some coverage areas that commonly get missed,
-        not because your policy is wrong, but because these are easy to overlook
-        without a conversation.
+        {t('gapReport.subheadline')}
       </p>
       <p className="mt-1 text-xs text-compass-slate">
         These aren't errors or guarantees of a gap. They're educational prompts to
@@ -34,7 +43,7 @@ export default function GapReport() {
                   gap.status === 'Worth Confirming' ? 'tag-review' : 'tag-neutral'
                 }`}
               >
-                {gap.status}
+                {STATUS_KEYS[gap.status] ? t(STATUS_KEYS[gap.status]) : gap.status}
               </span>
             </div>
             <p className="mt-2 text-xs text-compass-slate">
@@ -55,7 +64,7 @@ export default function GapReport() {
 
       <div className="mt-8 rounded-xl bg-compass-paper p-6">
         <p className="text-sm font-medium text-compass-ink">
-          What Questions Should You Ask Your Insurance Professional?
+          {t('gapReport.questionsHeadline')}
         </p>
         <p className="mt-1 text-xs text-compass-slate">
           Use these as a starting point for your next conversation. There are no wrong
@@ -72,7 +81,7 @@ export default function GapReport() {
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Link to={localePath(lang, '/report')} className="btn-primary">
-          Download Full Report
+          {t('buttons.downloadFullReport')}
         </Link>
         <Link to={localePath(lang, '/learning-center')} className="btn-secondary">
           Explore These Topics in the Learning Center

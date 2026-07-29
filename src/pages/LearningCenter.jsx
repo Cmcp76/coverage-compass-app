@@ -1,9 +1,16 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { articles, glossaryTerms, categories } from '../data/mockData.js'
+import { useTranslation } from 'react-i18next'
+import { articles, categories } from '../data/mockData.js'
 import { localePath } from '../utils/localeRouting.js'
 
+// These 3 terms are the same content as glossaryTerms in mockData.js, kept as
+// translation keys here since this preview is the only place that data is
+// used (mockData.js's own glossaryTerms export has no other consumer).
+const GLOSSARY_PREVIEW_KEYS = ['declarationsPage', 'subrogation', 'endorsement']
+
 export default function LearningCenter() {
+  const { t } = useTranslation('common')
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
   const { lang } = useParams()
@@ -93,10 +100,14 @@ export default function LearningCenter() {
           specific.
         </p>
         <div className="mt-4 space-y-4">
-          {glossaryTerms.map((g) => (
-            <div key={g.term}>
-              <p className="text-sm font-medium text-compass-ink">{g.term}</p>
-              <p className="text-xs text-compass-slate">{g.definition}</p>
+          {GLOSSARY_PREVIEW_KEYS.map((key) => (
+            <div key={key}>
+              <p className="text-sm font-medium text-compass-ink">
+                {t(`terms.${key}.term`, { ns: 'glossary' })}
+              </p>
+              <p className="text-xs text-compass-slate">
+                {t(`terms.${key}.definition`, { ns: 'glossary' })}
+              </p>
             </div>
           ))}
         </div>
@@ -107,7 +118,7 @@ export default function LearningCenter() {
           Ready to See Your Own Policy in Plain Language?
         </p>
         <Link to={localePath(lang, '/upload')} className="btn-primary mt-4 inline-flex">
-          Upload Your Policy
+          {t('buttons.uploadYourPolicy')}
         </Link>
       </div>
 

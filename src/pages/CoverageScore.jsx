@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
 import {
   BarChart,
@@ -29,7 +30,22 @@ const categoryDetails = {
     'Flags missing information, unclear exclusions, or areas the document did not provide enough detail to evaluate.',
 }
 
+// Maps analyzeText()'s literal English category names to the translated
+// label. The bar chart's shortened y-axis tick labels (further down) are
+// left in English regardless of language — the translation file only has
+// full-length category names, and the chart's own label-shortening logic
+// (stripping " Protection"/" Coverages") is written against those specific
+// English suffixes, so it can't correctly shorten a translated label either.
+const CATEGORY_KEYS = {
+  'Liability Protection': 'score.categories.liability',
+  'Property Protection': 'score.categories.property',
+  Deductibles: 'score.categories.deductibles',
+  'Optional Coverages': 'score.categories.optional',
+  'Risk Areas': 'score.categories.risk',
+}
+
 export default function CoverageScore() {
+  const { t } = useTranslation('common')
   const { analysis } = usePolicy()
   const { theme } = useTheme()
   const { lang } = useParams()
@@ -46,7 +62,7 @@ export default function CoverageScore() {
     <div className="mx-auto max-w-2xl px-6 py-12">
       <OlderReportBanner />
       <h1 className="text-center font-display text-xl font-semibold text-compass-heading">
-        Your Coverage Score
+        {t('score.title')}
       </h1>
 
       <div className="mt-6 rounded-2xl bg-compass-skyblue p-10 text-center">
@@ -61,9 +77,7 @@ export default function CoverageScore() {
           </ScoreGauge>
         </div>
         <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-compass-ink">
-          Your Coverage Score is an educational snapshot of how your policy compares
-          across key protection areas, not a rating of you, and not a guarantee of how
-          a claim would be handled.
+          {t('score.shortExplainer')}
         </p>
       </div>
 
@@ -115,7 +129,9 @@ export default function CoverageScore() {
         {analysis.scoreCategories.map((cat) => (
           <details key={cat.name} className="rounded-lg border border-compass-line bg-compass-surface p-4">
             <summary className="flex cursor-pointer list-none items-center justify-between marker:content-none">
-              <span className="text-sm text-compass-ink">{cat.name}</span>
+              <span className="text-sm text-compass-ink">
+                {CATEGORY_KEYS[cat.name] ? t(CATEGORY_KEYS[cat.name]) : cat.name}
+              </span>
               <span className={cat.status === 'good' ? 'tag-good' : 'tag-review'}>
                 {cat.status === 'good' ? 'Good' : 'Worth a look'}
               </span>
@@ -128,7 +144,7 @@ export default function CoverageScore() {
       </div>
 
       <Link to={localePath(lang, '/gap-report')} className="btn-primary mt-8 flex w-full justify-center">
-        See Full Report
+        {t('buttons.seeFullReport')}
       </Link>
 
       <p className="disclaimer mt-6">

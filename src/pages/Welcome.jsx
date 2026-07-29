@@ -1,7 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function Welcome() {
+  const { t } = useTranslation('common')
   const { lang } = useParams()
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col items-center justify-center px-6 py-16 text-center">
@@ -32,10 +34,10 @@ export default function Welcome() {
       </p>
       <div className="mt-8 flex flex-col items-center gap-3">
         <Link to={localePath(lang, '/upload')} className="btn-primary px-6 py-3">
-          Upload Your First Policy
+          {t('buttons.uploadYourFirstPolicy')}
         </Link>
         <Link to={localePath(lang, '/learning-center')} className="text-sm font-medium text-compass-link">
-          Explore the Learning Center first
+          {t('buttons.exploreLearningCenter')}
         </Link>
       </div>
     </div>

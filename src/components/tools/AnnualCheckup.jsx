@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { localePath } from '../../utils/localeRouting.js'
 
 const prompts = [
@@ -11,6 +12,7 @@ const prompts = [
 ]
 
 export default function AnnualCheckup() {
+  const { t } = useTranslation('common')
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
   const { lang } = useParams()
@@ -68,7 +70,7 @@ export default function AnnualCheckup() {
               : "Based on your answers, it doesn't look like much has changed this year. Still, an annual check-in with your insurance professional is a good habit."}
           </p>
           <Link to={localePath(lang, '/upload')} className="btn-secondary mt-4 inline-flex">
-            Re-Upload Your Policy for an Updated Review
+            {t('buttons.reUploadPolicy')}
           </Link>
         </div>
       )}

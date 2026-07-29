@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function VerifyEmail() {
+  const { t } = useTranslation('common')
   const navigate = useNavigate()
   const location = useLocation()
   const { lang } = useParams()
@@ -33,7 +35,7 @@ export default function VerifyEmail() {
         disabled={resent}
         onClick={() => setResent(true)}
       >
-        {resent ? 'Verification Email Sent' : 'Resend Verification Email'}
+        {resent ? 'Verification Email Sent' : t('buttons.resendVerificationEmail')}
       </button>
       {resent && (
         <p role="status" className="mt-2 text-xs text-compass-green">

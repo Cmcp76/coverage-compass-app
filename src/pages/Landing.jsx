@@ -1,8 +1,10 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { articles } from '../data/mockData.js'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function Landing() {
+  const { t } = useTranslation('common')
   const { lang } = useParams()
   return (
     <div>
@@ -20,15 +22,14 @@ export default function Landing() {
           </p>
           <div className="animate-fade-up animate-fade-up-delay-2 mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link to={localePath(lang, '/upload')} className="btn-primary px-6 py-3 text-base">
-              Upload Your Policy
+              {t('buttons.uploadYourPolicy')}
             </Link>
             <Link to={localePath(lang, '/learning-center')} className="btn-secondary px-6 py-3 text-base">
-              Learn About Insurance
+              {t('buttons.learnAboutInsurance')}
             </Link>
           </div>
           <p className="animate-fade-up animate-fade-up-delay-3 mt-4 text-xs text-compass-slate">
-            Free educational review. Your documents are never sold or shared. Not
-            affiliated with any single carrier.
+            {t('trust.landingLine')}
           </p>
         </div>
       </section>
@@ -41,7 +42,7 @@ export default function Landing() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <StepCard
             step="1"
-            title="Upload Your Policy"
+            title={t('buttons.uploadYourPolicy')}
             body="Drop in your declarations page, ACORD form, or full policy, auto, homeowners, renters, general liability, workers' compensation, or trucking/motor carrier. PDF or text file works best."
             delay={0}
           />

@@ -47,10 +47,10 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "rememberMe": "Remember Me",
-    "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+    "agreeToTerms": "I agree to the <0>Terms of Service</0> and <1>Privacy Policy</1>",
     "forgotPassword": "Forgot Password?",
-    "alreadyHaveAccount": "Already have an account? Log In",
-    "dontHaveAccount": "Don't have an account? Sign Up"
+    "alreadyHaveAccount": "Already have an account? <0>Log In</0>",
+    "dontHaveAccount": "Don't have an account? <0>Sign Up</0>"
   },
   "trust": {
     "landingLine": "Free educational review. Your documents are never sold or shared. Not affiliated with any single carrier.",

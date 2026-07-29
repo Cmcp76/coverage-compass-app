@@ -1,7 +1,9 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Trans, useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function Login() {
+  const { t } = useTranslation('common')
   const navigate = useNavigate()
   const { lang } = useParams()
 
@@ -22,7 +24,7 @@ export default function Login() {
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-compass-ink">
-            Email Address
+            {t('forms.emailAddress')}
           </span>
           <input
             type="email"
@@ -34,7 +36,7 @@ export default function Login() {
         </label>
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-compass-ink">
-            Password
+            {t('forms.password')}
           </span>
           <input
             type="password"
@@ -47,22 +49,23 @@ export default function Login() {
 
         <div className="flex items-center justify-between text-sm">
           <label className="flex items-center gap-2 text-compass-slate">
-            <input type="checkbox" /> Remember Me
+            <input type="checkbox" /> {t('forms.rememberMe')}
           </label>
           <Link to={localePath(lang, '/reset-password')} className="font-medium text-compass-link">
-            Forgot Password?
+            {t('forms.forgotPassword')}
           </Link>
         </div>
 
         <button type="submit" className="btn-primary w-full">
-          Log In
+          {t('buttons.logIn')}
         </button>
 
         <p className="text-center text-sm text-compass-slate">
-          Don't have an account?{' '}
-          <Link to={localePath(lang, '/signup')} className="font-medium text-compass-link">
-            Sign Up
-          </Link>
+          <Trans
+            i18nKey="forms.dontHaveAccount"
+            ns="common"
+            components={[<Link key="signup" to={localePath(lang, '/signup')} className="font-medium text-compass-link" />]}
+          />
         </p>
       </form>
     </div>
