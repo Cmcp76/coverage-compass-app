@@ -83,6 +83,15 @@ https://cmcp76.github.io/coverage-compass-app/
   properties (`src/index.css`) rather than `dark:` classes scattered through
   components, and every color pair is WCAG AA contrast-checked. The
   printable Report always renders light regardless of the on-screen theme.
+  A `theme-color` meta tag keeps the mobile browser chrome in sync too.
+- **About / Privacy Policy / Terms of Service** — real static pages, not
+  placeholder links
+- **A top-level error boundary** (`src/components/ErrorBoundary.jsx`) — a
+  render error anywhere shows a friendly, on-brand fallback with a "Refresh"
+  and a "Go to Dashboard" action, instead of a blank white screen, and
+  specifically recognizes a stale-chunk-after-deploy failure (this app's
+  routes are lazy-loaded with content-hashed filenames) to suggest a
+  refresh rather than a generic error
 
 ## The analysis engine (`src/lib/policyAnalysis.js`)
 
@@ -116,7 +125,7 @@ and disclaimers were not paraphrased.
 
 ## Testing (Vitest)
 
-`npm test` runs 53 automated tests across two files. It also runs in this
+`npm test` runs 61 automated tests across three files. It also runs in this
 repo's GitHub Actions deploy workflow before every deploy, so a regression
 can't ship to the live preview.
 
@@ -140,6 +149,13 @@ or correctly-answered questions never do, the result is capped at 3 and
 never padded, and a specific missed-question pattern is pinned against the
 real quiz data to match the build brief's example bullets exactly.
 
+`src/lib/errorClassification.test.js` covers the app's top-level error
+boundary's chunk-load-failure detection (the trigger for "a new version
+is available, refresh" vs. a generic error message), pinned against the
+actual Chrome/Firefox/Safari dynamic-import failure message formats, with
+negative cases for ordinary app errors and messages that merely contain
+"import" as a substring.
+
 ## What's intentionally NOT built yet
 
 Per the build brief's guardrails:
@@ -157,11 +173,14 @@ Per the build brief's guardrails:
 
 Before you upload anything, every screen shows one consistent fictional demo
 auto policy (`src/data/mockData.js`, clearly labeled as demo data) — Coverage
-Score 87/100, sample carrier "Sample Insurance Co," and the gaps: no rental
-reimbursement, no umbrella policy referenced, roadside assistance not
-listed. Upload a real file (or one of the 6 samples in `sample-policies/`)
-and every screen switches to reflect that document's actual analysis
-instead, saved to your Reports history.
+Score 87/100, sample carrier "Sample Insurance Co," and the gaps: no
+umbrella policy referenced, no flood coverage, no gap insurance for a
+loan/lease payoff, and roadside assistance mentioned but worth confirming
+(the one gap in the demo data that exercises the "Worth Confirming" status,
+distinct from the other three's "Not Found in Policy"). Upload a real file
+(or one of the 6 samples in `sample-policies/`) and every screen switches
+to reflect that document's actual analysis instead, saved to your Reports
+history.
 
 ## Before this goes anywhere near real users
 
