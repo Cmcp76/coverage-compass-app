@@ -4,7 +4,7 @@ import { samplePolicy } from '../data/mockData.js'
 // Shape the default sample policy to match what analyzeText() produces, so
 // every downstream screen can read from one consistent shape whether or not
 // the person has actually uploaded a file yet.
-const defaultAnalysis = {
+export const defaultAnalysis = {
   fileName: 'sample auto policy (demo data)',
   analyzedAt: samplePolicy.reportGeneratedDate,
   hasRealText: false,
@@ -19,12 +19,12 @@ const defaultAnalysis = {
   strengths: samplePolicy.strengths,
 }
 
-const HISTORY_KEY = 'coverage-compass-report-history'
-const ANALYSIS_KEY = 'coverage-compass-current-analysis'
-const ACTIVE_HISTORY_ID_KEY = 'coverage-compass-active-history-id'
+export const HISTORY_KEY = 'coverage-compass-report-history'
+export const ANALYSIS_KEY = 'coverage-compass-current-analysis'
+export const ACTIVE_HISTORY_ID_KEY = 'coverage-compass-active-history-id'
 const MAX_HISTORY = 10
 
-function loadHistory() {
+export function loadHistory() {
   try {
     const raw = localStorage.getItem(HISTORY_KEY)
     const parsed = raw ? JSON.parse(raw) : []
@@ -34,7 +34,7 @@ function loadHistory() {
   }
 }
 
-function saveHistory(entries) {
+export function saveHistory(entries) {
   try {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(entries))
   } catch {
@@ -43,7 +43,7 @@ function saveHistory(entries) {
   }
 }
 
-function loadAnalysis() {
+export function loadAnalysis() {
   try {
     const raw = localStorage.getItem(ANALYSIS_KEY)
     const parsed = raw ? JSON.parse(raw) : defaultAnalysis
@@ -53,7 +53,7 @@ function loadAnalysis() {
   }
 }
 
-function saveAnalysis(analysis) {
+export function saveAnalysis(analysis) {
   try {
     localStorage.setItem(ANALYSIS_KEY, JSON.stringify(analysis))
   } catch {
@@ -62,7 +62,7 @@ function saveAnalysis(analysis) {
   }
 }
 
-function loadActiveHistoryId() {
+export function loadActiveHistoryId() {
   try {
     const raw = localStorage.getItem(ACTIVE_HISTORY_ID_KEY)
     return typeof raw === 'string' && raw ? raw : null
@@ -71,7 +71,7 @@ function loadActiveHistoryId() {
   }
 }
 
-function saveActiveHistoryId(id) {
+export function saveActiveHistoryId(id) {
   try {
     if (id) localStorage.setItem(ACTIVE_HISTORY_ID_KEY, id)
     else localStorage.removeItem(ACTIVE_HISTORY_ID_KEY)

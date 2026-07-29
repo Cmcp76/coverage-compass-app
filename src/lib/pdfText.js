@@ -29,6 +29,24 @@ async function loadPdfjs() {
   return pdfjsLibPromise
 }
 
+// pdf.js flags each text item with hasEOL when a line break follows it,
+// which is how it reconstructs line breaks lost in the raw text-item
+// stream. Joining every item with a plain space (as it used to) collapsed
+// every line on a page into one run-on line, which matters because
+// policyAnalysis's negation-window logic treats "\n" as a sentence
+// boundary specifically to handle tabular/columnar declarations pages
+// where lines are separated by breaks rather than periods, exactly the
+// case a real PDF upload hits most often. Exported as its own pure
+// function so this join logic is testable without needing to mock the
+// entire pdf.js document/page/worker pipeline.
+export function joinTextItems(items) {
+  let text = ''
+  for (const item of items) {
+    text += (item.str || '') + (item.hasEOL ? '\n' : ' ')
+  }
+  return text
+}
+
 export async function extractTextFromPdf(file) {
   const pdfjsLib = await loadPdfjs()
   const arrayBuffer = await file.arrayBuffer()
@@ -40,18 +58,7 @@ export async function extractTextFromPdf(file) {
     for (let i = 1; i <= pageCount; i += 1) {
       const page = await pdf.getPage(i)
       const content = await page.getTextContent()
-      // pdf.js flags each text item with hasEOL when a line break follows it,
-      // which is how it reconstructs line breaks lost in the raw text-item
-      // stream. Joining every item with a plain space (as before) collapsed
-      // every line on a page into one run-on line, which matters because
-      // policyAnalysis's negation-window logic treats "\n" as a sentence
-      // boundary specifically to handle tabular/columnar declarations pages
-      // where lines are separated by breaks rather than periods, exactly the
-      // case a real PDF upload hits most often.
-      for (const item of content.items) {
-        fullText += (item.str || '') + (item.hasEOL ? '\n' : ' ')
-      }
-      fullText += '\n'
+      fullText += joinTextItems(content.items) + '\n'
     }
     return fullText
   } finally {
