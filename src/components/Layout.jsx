@@ -40,6 +40,24 @@ const pageTitles = {
 }
 const defaultTitle = 'Coverage Compass'
 
+// Only the genuinely public, shareable/indexable pages get an override here.
+// Interior app pages (Dashboard, Upload, AIReview, Score, GapReport, Report,
+// Reports, Notifications, the auth screens) show user-specific derived data,
+// so the site-wide default in index.html's <meta name="description"> is a
+// perfectly fine fallback for them, same as it always was before per-route
+// titles existed.
+const pageDescriptions = {
+  '/challenge': 'Take the 5-minute Coverage Compass Challenge, a short quiz on common insurance coverage gaps, with a plain-language explanation for every answer.',
+  '/trucking-startup': 'A step-by-step checklist for starting a trucking company: business formation, FMCSA authority, driver and vehicle compliance, and the insurance coverage that matches your operation.',
+  '/learning-center': "Plain-language articles on auto, home, renters, and business insurance, so you understand your coverage before you ever need to file a claim.",
+  '/tools': 'Free interactive insurance tools: a deductible calculator, coverage comparison tool, home inventory tracker, and annual policy checkup.',
+  '/about': 'Learn about Coverage Compass, an independent insurance education platform that helps you understand your policy in plain language.',
+  '/privacy': "Coverage Compass's privacy policy: what this prototype collects, how it's used, and what stays only in your browser.",
+  '/terms': "Coverage Compass's terms of service for using this educational insurance prototype.",
+}
+const defaultDescription =
+  "Coverage Compass turns your insurance policy into plain language. Upload a policy to see what's covered, what might be missing, and what to ask your insurance professional before you ever file a claim."
+
 export default function Layout({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
@@ -65,6 +83,8 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     document.title = pageTitles[location.pathname] || defaultTitle
+    const meta = document.querySelector('meta[name="description"]')
+    if (meta) meta.setAttribute('content', pageDescriptions[location.pathname] || defaultDescription)
   }, [location.pathname])
 
   useEffect(() => {
