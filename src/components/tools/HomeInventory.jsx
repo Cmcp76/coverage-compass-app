@@ -13,7 +13,8 @@ const STORAGE_KEY = 'coverage-compass-home-inventory'
 function loadItems() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : {}
+    const parsed = raw ? JSON.parse(raw) : {}
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {}
   } catch {
     return {}
   }
@@ -119,7 +120,7 @@ export default function HomeInventory() {
                 </span>
                 <button
                   onClick={() => removeItem(openRoom, item.id)}
-                  className="text-xs text-compass-slate hover:text-compass-amber"
+                  className="shrink-0 rounded-lg px-2 py-1.5 text-xs text-compass-slate hover:text-compass-amber"
                   aria-label={`Remove ${item.name}`}
                 >
                   Remove

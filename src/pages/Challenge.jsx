@@ -204,10 +204,19 @@ function AnswerOption({ option, index, answered, isSelected, isCorrectOption, on
 function ResultsScreen({ answers, onRetake }) {
   const score = getChallengeScore(answers)
   const missedTopics = getMissedTopics(challengeQuestions, answers)
+  const headingRef = useRef(null)
+
+  useEffect(() => {
+    headingRef.current?.focus()
+  }, [])
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-center font-display text-2xl font-semibold text-compass-heading">
+      <h1
+        ref={headingRef}
+        tabIndex={-1}
+        className="text-center font-display text-2xl font-semibold text-compass-heading focus:outline-none"
+      >
         {challengeResultsCopy.headline}
       </h1>
 

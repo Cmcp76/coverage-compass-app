@@ -46,7 +46,8 @@ const DISMISSED_KEY = 'coverage-compass-dismissed-notifications'
 function loadDismissed() {
   try {
     const raw = localStorage.getItem(DISMISSED_KEY)
-    return raw ? JSON.parse(raw) : []
+    const parsed = raw ? JSON.parse(raw) : []
+    return Array.isArray(parsed) ? parsed : []
   } catch {
     return []
   }
@@ -116,7 +117,7 @@ export default function Notifications() {
                 </Link>
                 <button
                   onClick={() => dismiss(n.id)}
-                  className="text-xs text-compass-slate hover:text-compass-amber"
+                  className="shrink-0 rounded-lg px-3 py-2 text-xs text-compass-slate hover:text-compass-amber"
                   aria-label={`Dismiss: ${n.title}`}
                 >
                   Dismiss

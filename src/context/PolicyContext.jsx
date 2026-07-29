@@ -26,7 +26,8 @@ const MAX_HISTORY = 10
 function loadHistory() {
   try {
     const raw = localStorage.getItem(HISTORY_KEY)
-    return raw ? JSON.parse(raw) : []
+    const parsed = raw ? JSON.parse(raw) : []
+    return Array.isArray(parsed) ? parsed : []
   } catch {
     return []
   }
@@ -44,7 +45,8 @@ function saveHistory(entries) {
 function loadAnalysis() {
   try {
     const raw = localStorage.getItem(ANALYSIS_KEY)
-    return raw ? JSON.parse(raw) : defaultAnalysis
+    const parsed = raw ? JSON.parse(raw) : defaultAnalysis
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : defaultAnalysis
   } catch {
     return defaultAnalysis
   }
