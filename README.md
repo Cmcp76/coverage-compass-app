@@ -125,22 +125,49 @@ and disclaimers were not paraphrased.
 
 ## Testing (Vitest)
 
-`npm test` runs 61 automated tests across three files. It also runs in this
-repo's GitHub Actions deploy workflow before every deploy, so a regression
-can't ship to the live preview.
+`npm test` runs 1,243 automated tests across seven files (most of that count
+is generated fuzz-test cases, see below — there are roughly 90 hand-written
+test cases). It also runs in this repo's GitHub Actions deploy workflow
+before every deploy, so a regression can't ship to the live preview.
 
 `src/lib/policyAnalysis.test.js` covers the analysis engine:
 
 - Policy type detection and named insured extraction for all 6 sample
-  policies
+  policies, plus a renters-vs-homeowners tie-breaking regression
 - Negation handling ("does not include X" / "X is not included" / "X is
   excluded"), including the sentence-boundary-clipping regression this
-  logic went through during development
+  logic went through during development (both the original newline/period
+  version and a later regression where a decimal point in a dollar amount,
+  e.g. "$1,500.00", was mistaken for the end of a sentence)
 - A structural guard against a specific bug class found during development:
   a "gap" rule sharing an exact keyword with a "coverage" rule in the same
   rule set, which double-reports the same real-world concept
+- The closing "exclusions" question always surviving in `questionsToAsk`,
+  even when every gap protection is missing (an off-by-one regression)
 - Full-pipeline sanity checks (score bounds, non-empty results) against
   every sample policy
+
+`src/lib/policyAnalysis.fuzz.test.js` takes a different approach: rather than
+hand-picked cases, it generates ~1,150 randomized and adversarial inputs
+(seeded, so a failure is reproducible) and asserts the analysis engine never
+throws, stays within its score bounds, and never leaks `undefined`/`NaN`
+into user-facing text — including a dedicated pass of ReDoS-shaped input
+against every `limitPattern` regex in the ruleset, checking none of them
+exhibit catastrophic backtracking.
+
+`src/context/PolicyContext.test.js` covers the localStorage persistence
+layer: falling back safely when a stored value is valid JSON but the wrong
+shape (a real bug — `"null"` is valid JSON), round-tripping the current
+analysis/history, and the "viewing an older report" tracking used to warn
+someone browsing their report history that they've swapped out their active
+analysis.
+
+`src/lib/generateReportPdf.test.js` and `src/lib/pdfText.test.js` cover the
+PDF report generator's page-break/pagination math and the real-PDF-upload
+text-extraction line-join logic, respectively — both areas that had real,
+non-obvious bugs (a lost table header on one specific page-break trigger,
+and a lost line break that silently broke negation detection on real
+uploads) before gaining test coverage.
 
 `src/lib/challengeScoring.test.js` covers the Coverage Compass Challenge's
 "topics worth discussing" mapping — the one piece of real logic in that
@@ -190,8 +217,13 @@ history.
       Master Project instructions)
 - [ ] Add real authentication and encrypted document storage
 - [ ] Privacy, security, legal, and insurance-compliance review
-- [ ] Confirm color contrast and screen-reader behavior (basic semantic HTML
-      is in place, but this hasn't had a full accessibility audit)
+- [ ] Run a formal accessibility audit with real assistive-tech testing and
+      automated contrast tooling. Meaningful a11y work has gone into this
+      prototype already — focus management and focus trapping on the
+      account/mobile menus, `aria-pressed` on toggle controls, focus moving
+      to newly-shown content on the Challenge quiz, keyboard-reachable
+      controls throughout — but that's not a substitute for a real audit
+      before this reaches actual users.
 
 ## Notes for whoever picks this up next
 
