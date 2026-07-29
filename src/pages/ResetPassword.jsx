@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function ResetPassword() {
@@ -11,7 +11,7 @@ export default function ResetPassword() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-16">
       {step === 1 ? (
-        <>
+        <Fragment key="step-1">
           <h1 className="font-display text-2xl font-semibold text-compass-heading">
             Reset Your Password
           </h1>
@@ -40,9 +40,9 @@ export default function ResetPassword() {
               Send Reset Link
             </button>
           </form>
-        </>
+        </Fragment>
       ) : (
-        <>
+        <Fragment key="step-2">
           <h1 className="font-display text-2xl font-semibold text-compass-heading">
             Choose a New Password
           </h1>
@@ -97,7 +97,7 @@ export default function ResetPassword() {
               Update Password
             </button>
           </form>
-        </>
+        </Fragment>
       )}
     </div>
   )
