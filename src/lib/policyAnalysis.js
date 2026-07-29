@@ -23,6 +23,11 @@ const NEGATION_PATTERN = /\b(not|no|without|excludes?|excluding|excluded|except)
 // sentence below, so this only needs to be wide enough to span a full
 // sentence, not tight enough to avoid bleeding into the next one.
 const NEGATION_WINDOW = 80
+// A period only counts as a sentence boundary when it's not a decimal point
+// inside a dollar amount (e.g. "$1,500.00"), otherwise the window clips
+// right before a later negation ("...$1,500.00, not included.") and the
+// negation never gets inspected.
+const SENTENCE_END = /\.(?!\d)|\n/g
 
 export function keywordIsPresent(text, keywords) {
   for (const keyword of keywords) {
@@ -34,12 +39,13 @@ export function keywordIsPresent(text, keywords) {
       // $100,000\n\nThis policy does not include...") and wrongly blames an
       // unrelated negation on this match.
       let before = text.slice(Math.max(0, match.index - NEGATION_WINDOW), match.index)
-      const sentenceStart = Math.max(before.lastIndexOf('.'), before.lastIndexOf('\n'))
+      let sentenceStart = -1
+      for (const boundary of before.matchAll(SENTENCE_END)) sentenceStart = boundary.index
       if (sentenceStart !== -1) before = before.slice(sentenceStart + 1)
 
       const matchEnd = match.index + match[0].length
       let after = text.slice(matchEnd, matchEnd + NEGATION_WINDOW)
-      const sentenceEnd = after.search(/[.\n]/)
+      const sentenceEnd = after.search(SENTENCE_END)
       if (sentenceEnd !== -1) after = after.slice(0, sentenceEnd)
 
       if (!NEGATION_PATTERN.test(before) && !NEGATION_PATTERN.test(after)) return true
@@ -67,17 +73,22 @@ const policyTypeSignals = [
     keywords: [/general liability/i, /\bCGL\b/i, /completed operations/i, /premises (liability|operations)/i, /additional insured/i, /certificate of insurance/i, /products liability/i],
   },
   {
-    type: 'homeowners',
-    label: 'Homeowners',
-    keywords: [/dwelling coverage/i, /loss of use/i, /other structures/i, /homeowners? policy/i, /replacement cost/i, /actual cash value/i],
-  },
-  {
     type: 'renters',
     label: 'Renters',
     // A renters (HO-4) policy shares vocabulary with homeowners (loss of
     // use, actual cash value), so these lean on what's actually distinct:
     // no dwelling of your own to insure, someone else's building instead.
+    // Checked before homeowners below so that a tied score (common, since
+    // the shared vocabulary counts toward both) favors renters: these
+    // keywords (tenant, renters policy, HO-4) essentially never appear in a
+    // genuine homeowners policy, so a tie means the renters-only terms are
+    // real signal, not homeowners vocabulary being mistaken for it.
     keywords: [/renters?\s*insurance/i, /renters?\s*policy/i, /\bho-?4\b/i, /\btenant\b/i, /landlord'?s (policy|building|dwelling)/i],
+  },
+  {
+    type: 'homeowners',
+    label: 'Homeowners',
+    keywords: [/dwelling coverage/i, /loss of use/i, /other structures/i, /homeowners? policy/i, /replacement cost/i, /actual cash value/i],
   },
   {
     type: 'auto',
@@ -314,13 +325,18 @@ export function analyzeText(rawText, meta = {}) {
 }
 
 function buildQuestions(gaps) {
-  const notFound = gaps.filter((g) => !g.found).slice(0, 4)
+  // Capped at 3 gap-based questions, not 4: every rule set has exactly 4 gap
+  // entries, and the two static bookend questions below always need a slot
+  // each within a 5-question list. Slicing to 4 gap questions here used to
+  // silently drop the closing "exclusions" question whenever a policy had
+  // every gap protection missing, exactly the policy that most needed it.
+  const notFound = gaps.filter((g) => !g.found).slice(0, 3)
   const base = notFound.map((g) => `Would ${g.name.toLowerCase()} make sense for my situation?`)
   return [
     'Do I have enough liability protection given my exposure?',
     ...base,
     'Are there any exclusions in my policy I should know about?',
-  ].slice(0, 5)
+  ]
 }
 
 function buildStrengths(coverages) {

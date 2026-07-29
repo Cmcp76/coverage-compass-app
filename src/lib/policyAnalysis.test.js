@@ -49,6 +49,19 @@ describe('detectPolicyType', () => {
   }
 })
 
+describe('detectPolicyType tie-breaking', () => {
+  it('favors renters over homeowners on a tied score, since renters-only terms are distinctive', () => {
+    // Regression: homeowners was checked first in the signal list, so a tied
+    // match count (common, since "loss of use"/"actual cash value" count
+    // toward both) always resolved to homeowners, even when the text also
+    // contained renters-exclusive terms like "tenant" and "renters policy".
+    const text =
+      'This renters policy covers your belongings. Loss of use is included if the ' +
+      'rental becomes uninhabitable. Contents are valued at actual cash value. The tenant is the named insured.'
+    expect(detectPolicyType(text).type).toBe('renters')
+  })
+})
+
 describe('extractNamedInsured', () => {
   for (const [key, { file, namedInsured }] of Object.entries(samples)) {
     it(`extracts the named insured from the ${key} sample`, () => {
@@ -101,6 +114,17 @@ describe('keywordIsPresent negation handling', () => {
   it('still finds a plain affirmative match with no negation nearby', () => {
     expect(keywordIsPresent('Comprehensive $500 deductible', [/comprehensive/i])).toBe(true)
   })
+
+  it('does not let a decimal point in a dollar amount pass for a sentence boundary', () => {
+    // Regression: the sentence-boundary check treated the "." in "$1,500.00"
+    // as ending the sentence, clipping the window before it ever reached the
+    // negation a few words later.
+    expect(
+      keywordIsPresent('Rental Reimbursement: $1,500.00, not included with this policy.', [
+        /rental reimbursement/i,
+      ]),
+    ).toBe(false)
+  })
 })
 
 describe('coverage/gap rule sets stay conceptually distinct', () => {
@@ -121,6 +145,18 @@ describe('coverage/gap rule sets stay conceptually distinct', () => {
       expect(overlap).toEqual([])
     })
   }
+})
+
+describe('questionsToAsk always includes the closing exclusions question', () => {
+  it('keeps the closing question even when every gap protection is missing', () => {
+    // Regression: every rule set has exactly 4 gap entries, so when all 4
+    // are "not found" the built list was 6 items (2 static + 4 gap-based)
+    // before being sliced down to 5, silently dropping the final static
+    // "exclusions" question, exactly when a sparse policy needed it most.
+    const result = analyzeText('', { fileName: 'blank.txt' })
+    expect(result.questionsToAsk).toHaveLength(5)
+    expect(result.questionsToAsk).toContain('Are there any exclusions in my policy I should know about?')
+  })
 })
 
 describe('buildStrengths phrasing', () => {

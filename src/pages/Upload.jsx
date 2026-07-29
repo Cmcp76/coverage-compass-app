@@ -4,6 +4,8 @@ import { usePolicy } from '../context/PolicyContext.jsx'
 import { analyzeText } from '../lib/policyAnalysis.js'
 import { extractTextFromPdf } from '../lib/pdfText.js'
 
+const MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024 // 15MB, generous for a declarations page/policy PDF
+
 export default function Upload() {
   const [state, setState] = useState('idle') // idle | reading | scanning | done | error
   const [fileName, setFileName] = useState('')
@@ -17,6 +19,16 @@ export default function Upload() {
     setFileName(file.name)
     setErrorMsg('')
     setState('reading')
+
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      setErrorMsg(
+        `That file is too large for this prototype to read in the browser (${Math.round(
+          file.size / (1024 * 1024),
+        )}MB, 15MB max). Try a smaller file, like a declarations page instead of a full policy.`,
+      )
+      setState('error')
+      return
+    }
 
     try {
       let text = ''
@@ -58,8 +70,14 @@ export default function Upload() {
 
   function onDrop(e) {
     e.preventDefault()
-    const file = e.dataTransfer.files?.[0]
-    handleFile(file)
+    const files = e.dataTransfer.files
+    if (files && files.length > 1) {
+      setFileName('')
+      setErrorMsg('Drop just one file at a time, we can only review a single policy document per upload.')
+      setState('error')
+      return
+    }
+    handleFile(files?.[0])
   }
 
   return (

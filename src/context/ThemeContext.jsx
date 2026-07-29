@@ -1,15 +1,19 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 const STORAGE_KEY = 'coverage-compass-theme'
 
-function getInitialTheme() {
+function getSavedTheme() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved === 'light' || saved === 'dark') return saved
+    return saved === 'light' || saved === 'dark' ? saved : null
   } catch {
-    // localStorage unavailable (private browsing), fall through to system preference.
+    // localStorage unavailable (private browsing).
+    return null
   }
-  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+function getInitialTheme() {
+  return getSavedTheme() || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
 }
 
 const ThemeContext = createContext({
@@ -19,6 +23,11 @@ const ThemeContext = createContext({
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(getInitialTheme)
+  // Tracks whether the person (this session or a previous one) has ever
+  // explicitly chosen a theme. Only when that's false do we keep following
+  // the OS-level preference live, otherwise a manual choice would get
+  // silently overridden the next time the OS theme happens to change.
+  const hasManualPreference = useRef(getSavedTheme() !== null)
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
@@ -34,7 +43,19 @@ export function ThemeProvider({ children }) {
     }
   }, [theme])
 
+  useEffect(() => {
+    const media = window.matchMedia?.('(prefers-color-scheme: dark)')
+    if (!media) return
+    function handleChange(e) {
+      if (hasManualPreference.current) return
+      setTheme(e.matches ? 'dark' : 'light')
+    }
+    media.addEventListener('change', handleChange)
+    return () => media.removeEventListener('change', handleChange)
+  }, [])
+
   function toggleTheme() {
+    hasManualPreference.current = true
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
   }
 
