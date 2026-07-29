@@ -138,6 +138,11 @@ export default function Dashboard() {
                 Try the Deductible Calculator
               </Link>
             </li>
+            <li>
+              <Link to="/challenge" className="text-compass-link hover:underline">
+                Take the Coverage Compass Challenge
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

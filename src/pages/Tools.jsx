@@ -28,8 +28,25 @@ export default function Tools() {
       </p>
 
       <Link
-        to="/trucking-startup"
+        to="/challenge"
         className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
+      >
+        <div>
+          <span className="tag-neutral">5-minute challenge</span>
+          <p className="mt-2 text-sm font-medium text-compass-ink">
+            Prefer a quick quiz to a calculator?
+          </p>
+          <p className="mt-1 text-xs text-compass-slate">
+            Take the Coverage Compass Challenge, 10 quick questions about auto, home, and
+            everyday coverage, with an educational Coverage Compass Score at the end.
+          </p>
+        </div>
+        <span className="btn-secondary shrink-0">Start the Challenge</span>
+      </Link>
+
+      <Link
+        to="/trucking-startup"
+        className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
       >
         <div>
           <span className="tag-neutral">Trucking</span>
