@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
+import OlderReportBanner from '../components/OlderReportBanner.jsx'
 
 export default function Report() {
   const { analysis } = usePolicy()
@@ -22,6 +23,7 @@ export default function Report() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12 print:max-w-full">
+      <OlderReportBanner />
       <div className="mb-6 flex justify-end gap-3 print:hidden">
         <button onClick={() => window.print()} className="btn-secondary">
           Print

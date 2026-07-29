@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import ScoreGauge from '../components/ScoreGauge.jsx'
+import OlderReportBanner from '../components/OlderReportBanner.jsx'
 
 export default function Dashboard() {
   const { analysis, history, loadFromHistory } = usePolicy()
@@ -27,6 +28,7 @@ export default function Dashboard() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
+      <OlderReportBanner />
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold text-compass-heading">

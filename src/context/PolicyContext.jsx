@@ -21,6 +21,7 @@ const defaultAnalysis = {
 
 const HISTORY_KEY = 'coverage-compass-report-history'
 const ANALYSIS_KEY = 'coverage-compass-current-analysis'
+const ACTIVE_HISTORY_ID_KEY = 'coverage-compass-active-history-id'
 const MAX_HISTORY = 10
 
 function loadHistory() {
@@ -61,6 +62,25 @@ function saveAnalysis(analysis) {
   }
 }
 
+function loadActiveHistoryId() {
+  try {
+    const raw = localStorage.getItem(ACTIVE_HISTORY_ID_KEY)
+    return typeof raw === 'string' && raw ? raw : null
+  } catch {
+    return null
+  }
+}
+
+function saveActiveHistoryId(id) {
+  try {
+    if (id) localStorage.setItem(ACTIVE_HISTORY_ID_KEY, id)
+    else localStorage.removeItem(ACTIVE_HISTORY_ID_KEY)
+  } catch {
+    // Storage full or unavailable, the "viewing an older report" banner just
+    // won't survive a reload, the app still works this session.
+  }
+}
+
 const PolicyContext = createContext({
   analysis: defaultAnalysis,
   setAnalysis: () => {},
@@ -69,11 +89,25 @@ const PolicyContext = createContext({
   addToHistory: () => {},
   loadFromHistory: () => {},
   removeFromHistory: () => {},
+  isViewingOlderReport: false,
+  returnToLatest: () => {},
 })
 
 export function PolicyProvider({ children }) {
   const [analysis, setAnalysisState] = useState(loadAnalysis)
   const [history, setHistory] = useState(loadHistory)
+  // Tracks which history entry (if any) is the source of the active
+  // analysis. Browsing to an older report from Reports.jsx/Dashboard used to
+  // silently and permanently replace the "current" analysis everywhere
+  // (Dashboard's score gauge, AIReview, Score, GapReport), with no way back
+  // except re-uploading. This lets those pages tell the difference and offer
+  // a way back to the most recent upload.
+  const [activeHistoryId, setActiveHistoryIdState] = useState(loadActiveHistoryId)
+
+  function setActiveHistoryId(id) {
+    setActiveHistoryIdState(id)
+    saveActiveHistoryId(id)
+  }
 
   function setAnalysis(newAnalysis) {
     setAnalysisState(newAnalysis)
@@ -82,6 +116,7 @@ export function PolicyProvider({ children }) {
 
   function reset() {
     setAnalysisState(defaultAnalysis)
+    setActiveHistoryId(null)
     try {
       localStorage.removeItem(ANALYSIS_KEY)
     } catch {
@@ -98,6 +133,7 @@ export function PolicyProvider({ children }) {
       coverageScore: newAnalysis.coverageScore,
       analysis: newAnalysis,
     }
+    setActiveHistoryId(null) // a fresh upload is always the new latest, not a historical view
     setHistory((prev) => {
       const next = [entry, ...prev].slice(0, MAX_HISTORY)
       saveHistory(next)
@@ -107,7 +143,10 @@ export function PolicyProvider({ children }) {
 
   function loadFromHistory(id) {
     const entry = history.find((h) => h.id === id)
-    if (entry) setAnalysis(entry.analysis)
+    if (entry) {
+      setAnalysis(entry.analysis)
+      setActiveHistoryId(id)
+    }
   }
 
   function removeFromHistory(id) {
@@ -116,6 +155,12 @@ export function PolicyProvider({ children }) {
       saveHistory(next)
       return next
     })
+  }
+
+  const isViewingOlderReport = activeHistoryId != null && activeHistoryId !== history[0]?.id
+
+  function returnToLatest() {
+    if (history[0]) loadFromHistory(history[0].id)
   }
 
   return (
@@ -128,6 +173,8 @@ export function PolicyProvider({ children }) {
         addToHistory,
         loadFromHistory,
         removeFromHistory,
+        isViewingOlderReport,
+        returnToLatest,
       }}
     >
       {children}

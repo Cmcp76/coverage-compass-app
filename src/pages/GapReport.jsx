@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import RequestCallback from '../components/RequestCallback.jsx'
+import OlderReportBanner from '../components/OlderReportBanner.jsx'
 
 export default function GapReport() {
   const { analysis } = usePolicy()
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
+      <OlderReportBanner />
       <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Areas Worth a Second Look
       </h1>
