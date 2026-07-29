@@ -27,6 +27,21 @@ export default function Tools() {
         before or after you upload a policy.
       </p>
 
+      <Link
+        to="/trucking-startup"
+        className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
+      >
+        <div>
+          <span className="tag-neutral">Trucking</span>
+          <p className="mt-2 text-sm font-medium text-compass-ink">Starting a trucking company?</p>
+          <p className="mt-1 text-xs text-compass-slate">
+            A step-by-step checklist for business formation, FMCSA authority, driver and
+            vehicle compliance, and the insurance coverage that matches your operation.
+          </p>
+        </div>
+        <span className="btn-secondary shrink-0">Start My Trucking Company</span>
+      </Link>
+
       <div className="mt-6 flex flex-wrap gap-2">
         {toolList.map((t) => (
           <button

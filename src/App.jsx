@@ -21,6 +21,7 @@ const Notifications = lazy(() => import('./pages/Notifications.jsx'))
 const LearningCenter = lazy(() => import('./pages/LearningCenter.jsx'))
 const Tools = lazy(() => import('./pages/Tools.jsx'))
 const Challenge = lazy(() => import('./pages/Challenge.jsx'))
+const TruckingStartup = lazy(() => import('./pages/TruckingStartup.jsx'))
 const About = lazy(() => import('./pages/About.jsx'))
 const Privacy = lazy(() => import('./pages/Privacy.jsx'))
 const Terms = lazy(() => import('./pages/Terms.jsx'))
@@ -58,6 +59,7 @@ export default function App() {
               <Route path="/learning-center" element={<LearningCenter />} />
               <Route path="/tools" element={<Tools />} />
               <Route path="/challenge" element={<Challenge />} />
+              <Route path="/trucking-startup" element={<TruckingStartup />} />
               <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />

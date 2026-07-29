@@ -41,6 +41,22 @@ export default function Dashboard() {
         </Link>
       </div>
 
+      <Link
+        to="/trucking-startup"
+        className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
+      >
+        <div>
+          <span className="tag-neutral">Trucking</span>
+          <p className="mt-2 text-sm font-medium text-compass-ink">Starting a trucking company?</p>
+          <p className="mt-1 text-xs text-compass-slate">
+            A step-by-step checklist for business formation, FMCSA authority, driver and
+            vehicle compliance, and the insurance coverage that matches your operation. No
+            policy upload needed.
+          </p>
+        </div>
+        <span className="btn-secondary shrink-0">Start My Trucking Company</span>
+      </Link>
+
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Score card */}
         <Link to="/score" className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">

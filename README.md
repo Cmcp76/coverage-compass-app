@@ -70,6 +70,14 @@ https://cmcp76.github.io/coverage-compass-app/
   generated from which specific questions were missed, capped and never
   padded to a generic list. Reuses the same lead-gen "Request a Callback"
   flow and neutral tag styling as the Gap Report
+- **Start My Trucking Company** (`/trucking-startup`) — a step-by-step
+  checklist for setting up a motor carrier: business formation, FMCSA
+  authority, state/interstate registrations, driver and vehicle compliance,
+  and an interactive "what insurance do I need" guide keyed off operation
+  type (general freight, hazmat, household goods, refrigerated, leased
+  owner-operator). Checklist progress persists to `localStorage`. Linked
+  from the Dashboard and Tools page since it's meant to be reachable by
+  someone who just wants the checklist, with no policy upload required
 - **Dark mode** — toggle in the header, persisted to `localStorage`, defaults
   to system preference on first visit. Colors are driven by CSS custom
   properties (`src/index.css`) rather than `dark:` classes scattered through
