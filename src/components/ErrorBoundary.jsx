@@ -1,13 +1,6 @@
 import { Component } from 'react'
 import { Link } from 'react-router-dom'
-
-// Dynamic import() rejection messages differ by browser, but all contain
-// some form of "module" + "fetch/load/import" language, this catches the
-// common real-world trigger: a new deploy replaced this route's
-// content-hashed chunk while a user still has the old app shell open.
-function isChunkLoadError(error) {
-  return /module|chunk/i.test(String(error?.message || '')) && /fetch|load|import/i.test(String(error?.message || ''))
-}
+import { isChunkLoadError } from '../lib/errorClassification.js'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
