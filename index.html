@@ -26,6 +26,7 @@
       content="Turn your insurance policy into plain language. See what's covered, what might be missing, and what to ask before you ever file a claim."
     />
 
+    <meta name="theme-color" content="#ffffff" />
     <link
       rel="icon"
       type="image/svg+xml"
@@ -61,7 +62,11 @@
           var isDark =
             saved === 'dark' ||
             (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-          if (isDark) document.documentElement.classList.add('dark')
+          if (isDark) {
+            document.documentElement.classList.add('dark')
+            var meta = document.querySelector('meta[name="theme-color"]')
+            if (meta) meta.setAttribute('content', '#1a2d48')
+          }
         } catch (e) {
           // localStorage/matchMedia unavailable, default to light.
         }

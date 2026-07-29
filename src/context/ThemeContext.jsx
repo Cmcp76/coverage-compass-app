@@ -22,6 +22,11 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
+    // Keep the mobile browser chrome/status bar color in sync with the
+    // in-app theme, not just the OS-level preference a static <meta> tag
+    // would otherwise be stuck reflecting.
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#1a2d48' : '#ffffff')
     try {
       localStorage.setItem(STORAGE_KEY, theme)
     } catch {
