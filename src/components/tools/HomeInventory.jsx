@@ -116,7 +116,7 @@ export default function HomeInventory() {
               <span className="text-compass-ink">{item.name}</span>
               <div className="flex items-center gap-3">
                 <span className="text-compass-slate">
-                  ${item.value.toLocaleString()}
+                  ${Math.round(item.value).toLocaleString()}
                 </span>
                 <button
                   onClick={() => removeItem(openRoom, item.id)}
@@ -171,7 +171,7 @@ export default function HomeInventory() {
 
       <div className="mt-4 flex items-center justify-between">
         <p className="text-sm text-compass-ink">
-          Total estimated value: <strong>${total.toLocaleString()}</strong>
+          Total estimated value: <strong>${Math.round(total).toLocaleString()}</strong>
         </p>
         <button onClick={downloadCsv} className="btn-secondary">
           Download My Inventory (CSV)

@@ -27,14 +27,14 @@ export default function ComparisonTool() {
         {liabilityDiff !== 0 && (
           <p>
             Policy {liabilityDiff > 0 ? 'A' : 'B'} has a $
-            {Math.abs(liabilityDiff).toLocaleString()} higher liability limit than
+            {Math.round(Math.abs(liabilityDiff)).toLocaleString()} higher liability limit than
             Policy {liabilityDiff > 0 ? 'B' : 'A'}.
           </p>
         )}
         {deductibleDiff !== 0 && (
           <p>
             Policy {deductibleDiff > 0 ? 'B' : 'A'} has a lower deductible by $
-            {Math.abs(deductibleDiff).toLocaleString()}.
+            {Math.round(Math.abs(deductibleDiff)).toLocaleString()}.
           </p>
         )}
         {liabilityDiff === 0 && deductibleDiff === 0 && (
