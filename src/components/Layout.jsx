@@ -134,9 +134,9 @@ export default function Layout({ children }) {
         className="sticky top-0 z-20 border-b border-compass-line bg-compass-surface/90 backdrop-blur print:hidden"
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+          <Link to="/" className="flex shrink-0 items-center gap-2" onClick={() => setMenuOpen(false)}>
             <CompassMark />
-            <span className="font-display text-lg font-semibold text-compass-heading">
+            <span className="hidden font-display text-lg font-semibold text-compass-heading sm:inline">
               Coverage Compass
             </span>
           </Link>
@@ -157,9 +157,9 @@ export default function Layout({ children }) {
               ))}
             </nav>
           )}
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <button
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line text-compass-slate transition hover:text-compass-ink"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-compass-line text-compass-slate transition hover:text-compass-ink"
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               onClick={toggleTheme}
             >
@@ -167,10 +167,10 @@ export default function Layout({ children }) {
             </button>
             {isPreAuth ? (
               <>
-                <Link to="/login" className="btn-secondary">
+                <Link to="/login" className="btn-secondary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
                   Log In
                 </Link>
-                <Link to="/signup" className="btn-primary">
+                <Link to="/signup" className="btn-primary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
                   Sign Up
                 </Link>
               </>
