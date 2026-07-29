@@ -64,7 +64,16 @@ export default function SignUp() {
             onChange={(e) => setAgreed(e.target.checked)}
             required
           />
-          I agree to the Terms of Service and Privacy Policy
+          <span>
+            I agree to the{' '}
+            <Link to="/terms" target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link to="/privacy" target="_blank" rel="noreferrer" className="font-medium text-compass-link hover:underline">
+              Privacy Policy
+            </Link>
+          </span>
         </label>
 
         <button type="submit" className="btn-primary w-full">
