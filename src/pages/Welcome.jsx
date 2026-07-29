@@ -2,8 +2,20 @@ import { Link } from 'react-router-dom'
 
 export default function Welcome() {
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col justify-center px-6 py-16 text-center">
-      <h1 className="font-display text-3xl font-semibold text-compass-heading">
+    <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col items-center justify-center px-6 py-16 text-center">
+      <span className="flex h-20 w-20 items-center justify-center rounded-full bg-compass-mint">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M5 13l4 4L19 7"
+            stroke="currentColor"
+            className="text-compass-green"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+      <h1 className="mt-6 font-display text-3xl font-semibold text-compass-heading">
         You're All Set, Maria
       </h1>
       <p className="mt-3 text-compass-slate">
