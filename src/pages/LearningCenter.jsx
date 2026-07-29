@@ -71,7 +71,7 @@ export default function LearningCenter() {
               <div className="mt-3 flex items-center justify-between">
                 <span className="text-xs text-compass-slate">{a.readTime}</span>
                 <span className="text-xs font-medium text-compass-link group-open:hidden">
-                  Read Article →
+                  {t('buttons.readArticle')} →
                 </span>
                 <span className="hidden text-xs font-medium text-compass-link group-open:inline">
                   Close ↑

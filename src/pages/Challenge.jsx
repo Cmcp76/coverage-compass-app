@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
 import {
   challengeIntro,
@@ -12,6 +13,7 @@ import RequestCallback from '../components/RequestCallback.jsx'
 import { getChallengeScore, getMissedTopics } from '../lib/challengeScoring.js'
 
 export default function Challenge() {
+  const { t } = useTranslation('common')
   const [stage, setStage] = useState('intro') // intro | quiz | results
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState([])
@@ -320,13 +322,13 @@ function EmailCapture() {
       ) : (
         <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-2 sm:flex-row">
           <label className="sr-only" htmlFor="challenge-email">
-            Email Address
+            {t('forms.emailAddress')}
           </label>
           <input
             id="challenge-email"
             type="email"
             required
-            placeholder="Email Address"
+            placeholder={t('forms.emailAddress')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
