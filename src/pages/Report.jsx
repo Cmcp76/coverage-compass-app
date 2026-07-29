@@ -1,13 +1,23 @@
+import { useState } from 'react'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
-import { generateReportPdf } from '../lib/generateReportPdf.js'
 
 export default function Report() {
   const { analysis } = usePolicy()
+  const [generating, setGenerating] = useState(false)
 
-  function downloadPdf() {
-    const doc = generateReportPdf(analysis)
-    doc.save('coverage-compass-review.pdf')
+  async function downloadPdf() {
+    setGenerating(true)
+    try {
+      // jsPDF is a large dependency and most visits to this page just read
+      // it or click Print, so load it only when a PDF is actually requested
+      // instead of paying its bundle cost on every visit to /report.
+      const { generateReportPdf } = await import('../lib/generateReportPdf.js')
+      const doc = generateReportPdf(analysis)
+      doc.save('coverage-compass-review.pdf')
+    } finally {
+      setGenerating(false)
+    }
   }
 
   return (
@@ -16,8 +26,8 @@ export default function Report() {
         <button onClick={() => window.print()} className="btn-secondary">
           Print
         </button>
-        <button onClick={downloadPdf} className="btn-primary">
-          Download PDF
+        <button onClick={downloadPdf} disabled={generating} className="btn-primary disabled:cursor-not-allowed disabled:opacity-60">
+          {generating ? 'Preparing…' : 'Download PDF'}
         </button>
       </div>
 

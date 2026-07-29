@@ -66,7 +66,21 @@ export default function HomeInventory() {
     Object.entries(items).forEach(([room, roomItems]) => {
       roomItems.forEach((i) => rows.push([room, i.name, i.value, i.date || '']))
     })
-    const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
+    // A cell starting with =, +, -, or @ can be interpreted as a formula by
+    // Excel/Sheets/LibreOffice on open (CSV formula injection). Item names
+    // are free text, so prefix those with a leading apostrophe to force
+    // spreadsheet apps to treat the cell as plain text.
+    const csv = rows
+      .map((r) =>
+        r
+          .map((c) => {
+            const str = String(c)
+            const safe = /^[=+\-@]/.test(str) ? `'${str}` : str
+            return `"${safe.replace(/"/g, '""')}"`
+          })
+          .join(','),
+      )
+      .join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')

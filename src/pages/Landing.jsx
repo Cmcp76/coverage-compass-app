@@ -169,7 +169,7 @@ export default function Landing() {
           />
           <FaqItem
             q="Is my policy information secure?"
-            a="Yes. Documents are encrypted, used only to generate your educational review, and are never sold or shared with third parties."
+            a="Your document is read entirely in your browser and never uploaded to a server, and nothing is sold or shared with third parties. This prototype does save your review in your browser's local storage (not encrypted) so you can return to it, so avoid uploading real sensitive documents on a shared or public computer."
           />
           <FaqItem
             q="Does Coverage Compass guarantee my coverage is adequate?"

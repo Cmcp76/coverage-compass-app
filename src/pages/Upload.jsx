@@ -181,9 +181,9 @@ export default function Upload() {
       </div>
 
       <p className="mt-4 text-center text-xs text-compass-slate">
-        Encrypted. Never sold or shared. Not affiliated with any single carrier. This
+        Never sold or shared. Not affiliated with any single carrier. This
         prototype reads your file entirely in your browser, nothing is uploaded to a
-        server.
+        server. Your review is saved locally in this browser, not encrypted.
       </p>
     </div>
   )

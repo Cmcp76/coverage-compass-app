@@ -100,8 +100,9 @@ export default function SignUp() {
         </p>
 
         <p className="disclaimer text-center">
-          Your information is encrypted and never sold. Coverage Compass is an
-          independent educational platform, not an insurance company.
+          This prototype doesn't send your information to a server or create a
+          real account. Coverage Compass is an independent educational
+          platform, not an insurance company.
         </p>
       </form>
     </div>
