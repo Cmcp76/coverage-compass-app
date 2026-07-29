@@ -91,8 +91,13 @@ export function generateReportPdf(analysis) {
     `Report Generated: ${analysis.analyzedAt}`,
   ]
   for (const line of coverLines) {
-    doc.text(line, PAGE_WIDTH / 2, y, { align: 'center' })
-    y += 14
+    // A long uploaded file name or named insured can exceed the page width,
+    // so wrap it like every other text block instead of letting it run off
+    // the edges.
+    for (const wrapped of doc.splitTextToSize(line, CONTENT_WIDTH)) {
+      doc.text(wrapped, PAGE_WIDTH / 2, y, { align: 'center' })
+      y += 14
+    }
   }
   y += 10
   divider()
@@ -151,15 +156,25 @@ export function generateReportPdf(analysis) {
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(9.5)
     setColor(COLORS.ink)
-    doc.text(nameLines, colX.name, y)
+    // Rendered as individual lines at a fixed 12pt step, matching the
+    // explanation column below, rather than jsPDF's array-text form (which
+    // uses its own default line-height factor and would drift out of
+    // vertical alignment with the explanation column on any wrapped row).
+    nameLines.forEach((line, i) => doc.text(line, colX.name, y + i * 12))
     doc.setFont('helvetica', 'normal')
     setColor(COLORS.slate)
-    doc.text(limitLines, colX.limit, y)
+    limitLines.forEach((line, i) => doc.text(line, colX.limit, y + i * 12))
     explanationLines.forEach((line, i) => doc.text(line, colX.explanation, y + i * 12))
     y += rowHeight + 8
-    checkPageBreak(1)
-    doc.setDrawColor(...COLORS.line)
-    doc.line(MARGIN, y - 4, PAGE_WIDTH - MARGIN, y - 4)
+    // If the trailing divider itself is what triggers the page break, the
+    // break already reset y to the new page's top margin, so draw the table
+    // header there instead of a stray divider floating above the margin.
+    if (checkPageBreak(1)) {
+      drawTableHeader()
+    } else {
+      doc.setDrawColor(...COLORS.line)
+      doc.line(MARGIN, y - 4, PAGE_WIDTH - MARGIN, y - 4)
+    }
   }
   y += 12
   divider()
@@ -211,6 +226,19 @@ export function generateReportPdf(analysis) {
     'Coverage Compass is an independent insurance education platform. It is not an insurance company, agency, or broker, and does not sell, bind, cancel, or modify insurance policies. Information provided is educational only and does not constitute insurance, legal, or financial advice. Coverage decisions should be made in consultation with a licensed insurance professional. Coverage Compass does not guarantee the accuracy of AI-generated summaries and recommends verifying all details against your official policy documents.',
     { size: 8, gap: 11 },
   )
+
+  // Page numbers, added last so the final page count is known. A report
+  // with a full coverage table plus several gaps/questions routinely spans
+  // multiple pages, and a printed/downloaded copy has no other way to tell
+  // how many pages it has or where in it you are.
+  const pageCount = doc.internal.getNumberOfPages()
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i)
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(8)
+    setColor(COLORS.slate)
+    doc.text(`Page ${i} of ${pageCount}`, PAGE_WIDTH / 2, PAGE_HEIGHT - MARGIN / 2, { align: 'center' })
+  }
 
   return doc
 }

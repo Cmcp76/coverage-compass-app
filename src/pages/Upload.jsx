@@ -16,6 +16,11 @@ export default function Upload() {
 
   async function handleFile(file) {
     if (!file) return
+    // The dropzone stays mounted (and droppable) across every state, so a
+    // second drop while the first file is still reading/scanning would
+    // otherwise race it: two concurrent analyses writing to the same
+    // PolicyContext state, with whichever resolves last silently winning.
+    if (state === 'reading' || state === 'scanning') return
     setFileName(file.name)
     setErrorMsg('')
     setState('reading')
