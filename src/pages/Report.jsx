@@ -66,24 +66,33 @@ export default function Report() {
 
         {/* Section 2: Summary */}
         <Section title="2. Policy Summary">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-compass-line text-left text-xs text-compass-slate">
-                <th className="py-2">Coverage</th>
-                <th className="py-2">Limit</th>
-                <th className="py-2">Explanation</th>
-              </tr>
-            </thead>
-            <tbody>
-              {analysis.coverages.map((c) => (
-                <tr key={c.name} className="border-b border-compass-line align-top">
-                  <td className="py-2 pr-3 font-medium text-compass-ink">{c.name}</td>
-                  <td className="py-2 pr-3 text-compass-slate">{c.limit}</td>
-                  <td className="py-2 text-compass-slate">{c.explanation}</td>
+          {/* The explanation column's content routinely needs more room than
+              a narrow phone screen has to give without wrapping into an
+              unreadable single-word-per-line mess, so let the table itself
+              scroll horizontally within its own box instead of pushing the
+              whole page wider than the viewport (which happened before this
+              wrapper existed). print:overflow-visible so a printed/downloaded
+              copy still shows the full table instead of clipping it. */}
+          <div className="overflow-x-auto print:overflow-visible">
+            <table className="w-full min-w-[560px] text-sm print:min-w-0">
+              <thead>
+                <tr className="border-b border-compass-line text-left text-xs text-compass-slate">
+                  <th className="py-2">Coverage</th>
+                  <th className="py-2">Limit</th>
+                  <th className="py-2">Explanation</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {analysis.coverages.map((c) => (
+                  <tr key={c.name} className="border-b border-compass-line align-top">
+                    <td className="py-2 pr-3 font-medium text-compass-ink">{c.name}</td>
+                    <td className="py-2 pr-3 text-compass-slate">{c.limit}</td>
+                    <td className="py-2 text-compass-slate">{c.explanation}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Section>
 
         {/* Section 3: Strengths */}
