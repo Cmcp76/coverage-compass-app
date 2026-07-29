@@ -299,7 +299,7 @@ export default function TruckingStartup() {
   const allItems = useMemo(() => SECTIONS.flatMap((s) => s.items), [])
   const totalCount = allItems.length
   const completedCount = allItems.filter((i) => completed[i.id]).length
-  const percent = Math.round((completedCount / totalCount) * 100)
+  const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
   const recurringOpen = allItems.filter((i) => i.recurring && !completed[i.id])
 
   function toggleItem(id) {
