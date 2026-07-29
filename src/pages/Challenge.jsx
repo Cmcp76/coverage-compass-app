@@ -67,7 +67,8 @@ export default function Challenge() {
 function IntroScreen({ onStart }) {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-xl flex-col items-center justify-center px-6 py-16 text-center">
-      <span className="tag-neutral">5-minute challenge</span>
+      <ChallengeCompassIcon />
+      <span className="mt-6 tag-neutral">5-minute challenge</span>
       <h1 className="mt-4 font-display text-3xl font-semibold text-compass-heading sm:text-4xl">
         {challengeIntro.headline}
       </h1>
@@ -79,6 +80,28 @@ function IntroScreen({ onStart }) {
         {challengeIntro.cta}
       </button>
     </div>
+  )
+}
+
+// A larger echo of the header's compass mark, so the intro screen reads as
+// an intentional part of the brand rather than the bare wall of text it was
+// before, without inventing a whole new visual motif for one screen.
+function ChallengeCompassIcon() {
+  return (
+    <span className="flex h-20 w-20 items-center justify-center rounded-full bg-compass-skyblue">
+      <svg width="44" height="44" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="12.5" className="text-compass-link" stroke="currentColor" strokeWidth="1.5" />
+        <g className="text-compass-slate" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+          <path d="M14 1.8v2.5" />
+          <path d="M14 23.7v2.5" />
+          <path d="M26.2 14h-2.5" />
+          <path d="M1.8 14h2.5" />
+        </g>
+        <path d="M14 6L16.3 14L14 12.7L11.7 14Z" className="text-compass-green" fill="currentColor" />
+        <path d="M14 22L16.3 14L14 15.3L11.7 14Z" className="text-compass-heading" fill="currentColor" />
+        <circle cx="14" cy="14" r="1.4" className="text-compass-heading" fill="currentColor" />
+      </svg>
+    </span>
   )
 }
 
