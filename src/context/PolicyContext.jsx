@@ -8,6 +8,7 @@ export const defaultAnalysis = {
   fileName: 'sample auto policy (demo data)',
   analyzedAt: samplePolicy.reportGeneratedDate,
   hasRealText: false,
+  truncated: false,
   isDemo: true,
   namedInsured: samplePolicy.customerFullName,
   detectedPolicyType: 'Personal / Commercial Auto (sample)',

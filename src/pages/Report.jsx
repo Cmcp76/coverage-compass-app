@@ -4,6 +4,7 @@ import { usePolicy } from '../context/PolicyContext.jsx'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
+import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
 
 export default function Report() {
   const { t } = useTranslation('common')
@@ -28,6 +29,7 @@ export default function Report() {
     <div className="mx-auto max-w-3xl px-6 py-12 print:max-w-full">
       <OlderReportBanner />
       <NoReadableTextBanner />
+      <TruncatedDocumentBanner />
       <div className="mb-6 flex justify-end gap-3 print:hidden">
         <button onClick={() => window.print()} className="btn-secondary">
           Print

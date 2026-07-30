@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { localePath } from '../utils/localeRouting.js'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
+import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
 
 export default function AIReview() {
   const { analysis } = usePolicy()
@@ -31,6 +32,7 @@ export default function AIReview() {
         </div>
       )}
       <NoReadableTextBanner />
+      <TruncatedDocumentBanner />
 
       <div className="space-y-3">
         {analysis.coverages.map((cov) => (

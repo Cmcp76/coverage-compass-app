@@ -41,9 +41,10 @@ export default function Upload() {
 
     try {
       let text = ''
+      let truncated = false
 
       if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-        text = await extractTextFromPdf(file)
+        ;({ text, truncated } = await extractTextFromPdf(file))
       } else if (file.type.startsWith('text/') || file.name.toLowerCase().endsWith('.txt')) {
         text = await file.text()
       } else if (file.type.startsWith('image/')) {
@@ -64,7 +65,7 @@ export default function Upload() {
       // for where a real OCR/extraction API call would happen for images.
       await new Promise((resolve) => setTimeout(resolve, 900))
 
-      const analysis = analyzeText(text, { fileName: file.name })
+      const analysis = analyzeText(text, { fileName: file.name, truncated })
       setAnalysis(analysis)
       addToHistory(analysis)
       setState('done')

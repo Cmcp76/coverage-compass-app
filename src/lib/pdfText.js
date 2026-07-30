@@ -47,6 +47,13 @@ export function joinTextItems(items) {
   return text
 }
 
+const MAX_PAGES = 20 // cap for a prototype
+
+// Returns { text, truncated } rather than a bare string so a document
+// longer than MAX_PAGES doesn't get silently and invisibly cut short -
+// without the truncated flag, a coverage section that only appears past
+// page 20 would just read as "missing" with no indication that the rest
+// of the document was never actually read.
 export async function extractTextFromPdf(file) {
   const pdfjsLib = await loadPdfjs()
   const arrayBuffer = await file.arrayBuffer()
@@ -54,13 +61,13 @@ export async function extractTextFromPdf(file) {
 
   try {
     let fullText = ''
-    const pageCount = Math.min(pdf.numPages, 20) // cap for a prototype
+    const pageCount = Math.min(pdf.numPages, MAX_PAGES)
     for (let i = 1; i <= pageCount; i += 1) {
       const page = await pdf.getPage(i)
       const content = await page.getTextContent()
       fullText += joinTextItems(content.items) + '\n'
     }
-    return fullText
+    return { text: fullText, truncated: pdf.numPages > MAX_PAGES }
   } finally {
     // Release the worker and retained page/text buffers, otherwise each
     // upload (including retries via Upload.jsx's "Try again") leaks one.

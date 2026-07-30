@@ -318,6 +318,7 @@ export function analyzeText(rawText, meta = {}) {
       day: 'numeric',
     }),
     hasRealText: text.trim().length > 40,
+    truncated: Boolean(meta.truncated),
     namedInsured: extractNamedInsured(text),
     detectedPolicyType: detected.label,
     coverageScore: Math.max(20, Math.min(98, coverageScore)),
