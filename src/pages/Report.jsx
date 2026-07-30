@@ -82,7 +82,7 @@ export default function Report() {
           <div className="overflow-x-auto print:overflow-visible">
             <table className="w-full min-w-[560px] text-sm print:min-w-0">
               <thead>
-                <tr className="border-b border-compass-line text-left text-xs text-compass-slate">
+                <tr className="border-b border-compass-line text-start text-xs text-compass-slate">
                   <th className="py-2">Coverage</th>
                   <th className="py-2">Limit</th>
                   <th className="py-2">Explanation</th>
@@ -91,8 +91,8 @@ export default function Report() {
               <tbody>
                 {analysis.coverages.map((c) => (
                   <tr key={c.name} className="border-b border-compass-line align-top">
-                    <td className="py-2 pr-3 font-medium text-compass-ink">{c.name}</td>
-                    <td className="py-2 pr-3 text-compass-slate">{c.limit}</td>
+                    <td className="py-2 pe-3 font-medium text-compass-ink">{c.name}</td>
+                    <td className="py-2 pe-3 text-compass-slate">{c.limit}</td>
                     <td className="py-2 text-compass-slate">{c.explanation}</td>
                   </tr>
                 ))}
@@ -103,7 +103,7 @@ export default function Report() {
 
         {/* Section 3: Strengths */}
         <Section title="3. Strengths">
-          <ul className="list-disc space-y-1 pl-5 text-sm text-compass-slate">
+          <ul className="list-disc space-y-1 ps-5 text-sm text-compass-slate">
             {analysis.strengths.map((s) => (
               <li key={s}>{s}</li>
             ))}
@@ -112,7 +112,7 @@ export default function Report() {
 
         {/* Section 4: Gaps */}
         <Section title="4. Potential Gaps">
-          <ul className="list-disc space-y-1 pl-5 text-sm text-compass-slate">
+          <ul className="list-disc space-y-1 ps-5 text-sm text-compass-slate">
             {analysis.gaps.map((g) => (
               <li key={g.name}>
                 <strong className="text-compass-ink">{g.name}:</strong> {g.why}
@@ -123,7 +123,7 @@ export default function Report() {
 
         {/* Section 5: Questions */}
         <Section title="5. Questions to Ask Your Insurance Professional">
-          <ul className="list-disc space-y-1 pl-5 text-sm text-compass-slate">
+          <ul className="list-disc space-y-1 ps-5 text-sm text-compass-slate">
             {analysis.questionsToAsk.map((q) => (
               <li key={q}>&ldquo;{q}&rdquo;</li>
             ))}
@@ -132,7 +132,7 @@ export default function Report() {
 
         {/* Section 6: Next steps */}
         <Section title="6. Next Steps" last>
-          <ol className="list-decimal space-y-1 pl-5 text-sm text-compass-slate">
+          <ol className="list-decimal space-y-1 ps-5 text-sm text-compass-slate">
             <li>Review this report alongside your official policy documents.</li>
             <li>Bring your questions to a licensed insurance professional.</li>
             <li>

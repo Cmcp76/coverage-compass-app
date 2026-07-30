@@ -390,7 +390,7 @@ export default function TruckingStartup() {
                 type="button"
                 onClick={() => toggleSection(section.id)}
                 aria-expanded={isOpen}
-                className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left transition-colors hover:bg-compass-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue focus-visible:ring-inset"
+                className="flex w-full items-center justify-between gap-4 px-6 py-4 text-start transition-colors hover:bg-compass-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue focus-visible:ring-inset"
               >
                 <div>
                   <h3 className="font-semibold text-compass-ink">{section.title}</h3>

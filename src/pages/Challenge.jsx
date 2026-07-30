@@ -215,10 +215,10 @@ function AnswerOption({ option, index, answered, isSelected, isCorrectOption, on
       disabled={answered}
       aria-pressed={isSelected}
       onClick={onSelect}
-      className={`flex w-full items-center justify-between gap-3 rounded-lg border px-4 py-3 text-left text-sm text-compass-ink transition disabled:cursor-default ${stateClasses}`}
+      className={`flex w-full items-center justify-between gap-3 rounded-lg border px-4 py-3 text-start text-sm text-compass-ink transition disabled:cursor-default ${stateClasses}`}
     >
       <span>
-        <span className="mr-2 font-semibold text-compass-slate">{optionLetters[index]}.</span>
+        <span className="me-2 font-semibold text-compass-slate">{optionLetters[index]}.</span>
         {option}
       </span>
       {pill}

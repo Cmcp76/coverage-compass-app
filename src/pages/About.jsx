@@ -23,7 +23,7 @@ export default function About() {
       <h2 className="mt-8 font-display text-lg font-semibold text-compass-heading">
         What it does
       </h2>
-      <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-compass-slate">
+      <ul className="mt-3 list-disc space-y-2 ps-5 text-sm text-compass-slate">
         <li>Detects the line of business (auto, homeowners, renters, general liability, workers' comp, or trucking) from the policy text.</li>
         <li>Summarizes coverages in plain language, with the limits and deductibles it can find.</li>
         <li>Flags common gaps for that policy type, coverages many policies of the same kind include but this one might not.</li>

@@ -264,7 +264,7 @@ function RiskQuiz() {
             Based on your answers, here are a few coverage areas that may be worth
             exploring:
           </p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-compass-ink">
+          <ul className="mt-2 list-disc space-y-1 ps-5 text-sm text-compass-ink">
             {buildSuggestions(answers).map((s) => (
               <li key={s}>{s}</li>
             ))}

@@ -248,7 +248,7 @@ export default function Layout({ children }) {
                       ref={accountMenuRef}
                       role="menu"
                       onKeyDown={(e) => trapTabKey(e, accountMenuRef)}
-                      className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-compass-surface py-1 shadow-card"
+                      className="absolute end-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-compass-surface py-1 shadow-card"
                     >
                       <Link
                         to={localePath(lang, '/dashboard')}
@@ -261,7 +261,7 @@ export default function Layout({ children }) {
                       <button
                         role="menuitem"
                         onClick={handleLogOut}
-                        className="block w-full px-4 py-2 text-left text-sm text-compass-ink hover:bg-compass-paper"
+                        className="block w-full px-4 py-2 text-start text-sm text-compass-ink hover:bg-compass-paper"
                       >
                         {t('nav.logOut')}
                       </button>
