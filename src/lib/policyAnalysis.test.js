@@ -115,6 +115,31 @@ describe('keywordIsPresent negation handling', () => {
     expect(keywordIsPresent('Comprehensive $500 deductible', [/comprehensive/i])).toBe(true)
   })
 
+  it('treats a contraction like "doesn\'t include X" as absent', () => {
+    // Regression: \bnot\b doesn't match inside "doesn't" because \b treats
+    // the apostrophe as a non-word boundary ("doesn" + "t"), so this
+    // silently fell through to "present" before the fix.
+    expect(
+      keywordIsPresent("This policy doesn't include rental reimbursement.", [
+        /rental reimbursement/i,
+      ]),
+    ).toBe(false)
+  })
+
+  it('treats "X isn\'t covered" (contraction after the keyword) as absent', () => {
+    expect(keywordIsPresent("Roadside assistance isn't covered under this policy.", [
+      /roadside assistance/i,
+    ])).toBe(false)
+  })
+
+  it('treats "cannot" (no space before "not") as a negation', () => {
+    // Regression: \bnot\b also requires a boundary before "not", which
+    // "cannot" doesn't have, so this was missed the same way contractions were.
+    expect(
+      keywordIsPresent('This policy cannot cover flood damage.', [/flood damage/i]),
+    ).toBe(false)
+  })
+
   it('does not let a decimal point in a dollar amount pass for a sentence boundary', () => {
     // Regression: the sentence-boundary check treated the "." in "$1,500.00"
     // as ending the sentence, clipping the window before it ever reached the
