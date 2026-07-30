@@ -86,6 +86,14 @@ https://cmcp76.github.io/coverage-compass-app/
   A `theme-color` meta tag keeps the mobile browser chrome in sync too.
 - **About / Privacy Policy / Terms of Service** — real static pages, not
   placeholder links
+- **Internationalization** — every route lives under a `/:lang` URL segment
+  (`/en/...`, `/es/...`), with a language switcher in the header. English is
+  the default and Spanish is fully live for navigation, forms, buttons, and
+  the glossary; French, Arabic, and Vietnamese are wired into the i18next
+  config and ready to enable once translations exist for them (`src/i18n/`).
+  Page-specific body copy (article text, page-specific descriptions) is not
+  yet migrated to translation files — see `src/i18n/locales/` for what's
+  covered today.
 - **A top-level error boundary** (`src/components/ErrorBoundary.jsx`) — a
   render error anywhere shows a friendly, on-brand fallback with a "Refresh"
   and a "Go to Dashboard" action, instead of a blank white screen, and
@@ -125,7 +133,7 @@ and disclaimers were not paraphrased.
 
 ## Testing (Vitest)
 
-`npm test` runs 1,243 automated tests across seven files (most of that count
+`npm test` runs 1,247 automated tests across seven files (most of that count
 is generated fuzz-test cases, see below — there are roughly 90 hand-written
 test cases). It also runs in this repo's GitHub Actions deploy workflow
 before every deploy, so a regression can't ship to the live preview.
@@ -231,6 +239,9 @@ history.
   palette (navy, blue, sky blue, green, mint, amber) used throughout — this
   is a first pass at the "blue, green, white" brand direction from the
   design brief and can be adjusted without touching component code.
-- Every page that shows AI-generated content displays a visible disclaimer,
-  not just a footer link, per the "non-negotiable guardrails" section of the
-  build brief.
+- Every page that shows the analysis engine's output displays a visible
+  disclaimer, not just a footer link, per the "non-negotiable guardrails"
+  section of the build brief. Copy across the app describes this as
+  pattern-matching analysis rather than "AI," matching what
+  `policyAnalysis.js` actually does — see Terms of Service for the precise
+  wording.

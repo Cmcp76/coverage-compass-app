@@ -36,7 +36,7 @@ them. Sequence them in parallel with Phase 1, not after.
 
 | Item | Est. | Owner |
 |---|---|---|
-| Privacy Policy, Terms of Service | days–weeks | Legal (currently the footer links to these go nowhere — placeholder scope, called out in the README) |
+| Privacy Policy, Terms of Service legal review | days–weeks | Legal — the footer already links to real, written pages (not placeholders), but the copy was written for the prototype and hasn't had a legal pass for a production launch |
 | Insurance-compliance review | varies by state | Legal/compliance — this product gives educational content adjacent to insurance advice; confirm what's permissible without a producer license in each state you operate in |
 | Security review | 1–2 wks internal, longer if a formal audit (e.g., SOC 2) is required | Depends on whether you're handling PII/financial documents at scale — likely yes here |
 | Real, permissioned testimonials | weeks–months | Business/marketing — depends on getting an actual user base first |
