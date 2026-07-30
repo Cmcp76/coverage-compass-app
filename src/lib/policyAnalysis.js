@@ -330,6 +330,25 @@ export function analyzeText(rawText, meta = {}) {
   }
 }
 
+// A plain .toLowerCase() on a rule name like "MC Authority / USDOT Status"
+// or "Hired & Non-Owned Auto Liability (HNOA)" mangles the acronyms into
+// "mc authority / usdot status" / "...(hnoa)" - readable as a typo, not a
+// deliberate lowercase, in a sentence otherwise written in normal prose.
+// Lowercase every token except ones whose letters are already all-uppercase
+// (an acronym), so "MC"/"USDOT"/"HNOA"/"BOC-3" survive untouched while
+// ordinary title-cased words like "Authority" or "Status" still lowercase
+// normally to fit the surrounding sentence.
+function lowercaseExceptAcronyms(name) {
+  return name
+    .split(/(\s+)/)
+    .map((token) => {
+      const letters = token.replace(/[^A-Za-z]/g, '')
+      const isAcronym = letters.length > 1 && letters === letters.toUpperCase()
+      return isAcronym ? token : token.toLowerCase()
+    })
+    .join('')
+}
+
 function buildQuestions(gaps) {
   // Capped at 3 gap-based questions, not 4: every rule set has exactly 4 gap
   // entries, and the two static bookend questions below always need a slot
@@ -337,7 +356,7 @@ function buildQuestions(gaps) {
   // silently drop the closing "exclusions" question whenever a policy had
   // every gap protection missing, exactly the policy that most needed it.
   const notFound = gaps.filter((g) => !g.found).slice(0, 3)
-  const base = notFound.map((g) => `Would ${g.name.toLowerCase()} make sense for my situation?`)
+  const base = notFound.map((g) => `Would ${lowercaseExceptAcronyms(g.name)} make sense for my situation?`)
   return [
     'Do I have enough liability protection given my exposure?',
     ...base,
@@ -359,7 +378,7 @@ function buildStrengths(coverages) {
   // experience modifier coverage." Skip the suffix for those too.
   const NOT_COVERAGE = /\b(limit|modifier|codes?|status|exposure|authority)\b/i
   return found.map((c) => {
-    const label = c.name.toLowerCase()
+    const label = lowercaseExceptAcronyms(c.name)
     const suffix = /coverage/i.test(label) || NOT_COVERAGE.test(label) ? '' : ' coverage'
     return `Your policy includes ${label}${suffix}${c.confidence === 'high' ? ` (${c.limit})` : ''}.`
   })

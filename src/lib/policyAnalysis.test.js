@@ -197,6 +197,16 @@ describe('buildStrengths phrasing', () => {
     const result = analyzeText(loadSample(samples.auto.file), { fileName: 'auto.txt' })
     expect(result.strengths.some((s) => s.includes('bodily injury liability coverage'))).toBe(true)
   })
+
+  it('preserves acronyms instead of mangling them into lowercase gibberish', () => {
+    // Regression: a plain .toLowerCase() on "MC Authority / USDOT Status"
+    // produced "mc authority / usdot status" - reads like a typo, not
+    // deliberate lowercase, in an otherwise normal-prose sentence.
+    const result = analyzeText(loadSample(samples.trucking.file), { fileName: 'trucking.txt' })
+    expect(result.strengths.some((s) => s.includes('MC authority / USDOT status'))).toBe(true)
+    expect(result.strengths.some((s) => s.includes('mc authority'))).toBe(false)
+    expect(result.strengths.some((s) => s.includes('usdot'))).toBe(false)
+  })
 })
 
 describe('scoreCategories omits inapplicable checks per line of business', () => {
