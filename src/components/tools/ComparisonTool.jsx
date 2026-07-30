@@ -4,7 +4,7 @@ import { useLocaleFormat } from '../../hooks/useLocaleFormat.js'
 const emptyPolicy = { liability: '', deductible: '', endorsements: '' }
 
 export default function ComparisonTool() {
-  const { formatNumber } = useLocaleFormat()
+  const { formatCurrency } = useLocaleFormat()
   const [a, setA] = useState({ ...emptyPolicy, liability: '250,000', deductible: '500', endorsements: 'Roadside assistance' })
   const [b, setB] = useState({ ...emptyPolicy, liability: '100,000', deductible: '1,000', endorsements: '—' })
 
@@ -28,15 +28,15 @@ export default function ComparisonTool() {
       <div className="mt-5 space-y-2 rounded-lg bg-compass-paper p-4 text-sm text-compass-ink">
         {liabilityDiff !== 0 && (
           <p>
-            Policy {liabilityDiff > 0 ? 'A' : 'B'} has a $
-            {formatNumber(Math.round(Math.abs(liabilityDiff)))} higher liability limit than
+            Policy {liabilityDiff > 0 ? 'A' : 'B'} has a{' '}
+            {formatCurrency(Math.round(Math.abs(liabilityDiff)))} higher liability limit than
             Policy {liabilityDiff > 0 ? 'B' : 'A'}.
           </p>
         )}
         {deductibleDiff !== 0 && (
           <p>
-            Policy {deductibleDiff > 0 ? 'B' : 'A'} has a lower deductible by $
-            {formatNumber(Math.round(Math.abs(deductibleDiff)))}.
+            Policy {deductibleDiff > 0 ? 'B' : 'A'} has a lower deductible by{' '}
+            {formatCurrency(Math.round(Math.abs(deductibleDiff)))}.
           </p>
         )}
         {liabilityDiff === 0 && deductibleDiff === 0 && (
