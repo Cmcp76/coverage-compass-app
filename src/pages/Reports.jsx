@@ -14,6 +14,7 @@ import { usePolicy } from '../context/PolicyContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
 import { getChartColors } from '../lib/chartTheme.js'
 import { localePath } from '../utils/localeRouting.js'
+import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 
 export default function Reports() {
   const { t } = useTranslation('common')
@@ -21,6 +22,7 @@ export default function Reports() {
   const navigate = useNavigate()
   const { lang } = useParams()
   const { theme } = useTheme()
+  const { formatShortDate } = useLocaleFormat()
   const chartColors = getChartColors(theme)
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
@@ -35,7 +37,7 @@ export default function Reports() {
   const chartData = [...history].reverse().map((r) => ({
     id: r.id,
     name: r.detectedPolicyType.replace(' / ', '/').replace(' (sample)', ''),
-    date: r.analyzedAt,
+    date: formatShortDate(r.analyzedAt),
     score: r.coverageScore,
   }))
 
@@ -113,7 +115,7 @@ export default function Reports() {
                   {r.detectedPolicyType}
                 </p>
                 <p className="text-xs text-compass-slate">
-                  {r.fileName} &middot; {r.analyzedAt} &middot; Score {r.coverageScore}/100
+                  {r.fileName} &middot; {formatShortDate(r.analyzedAt)} &middot; Score {r.coverageScore}/100
                 </p>
               </div>
               <div className="flex items-center gap-2">

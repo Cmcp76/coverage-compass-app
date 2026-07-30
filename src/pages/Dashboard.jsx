@@ -6,12 +6,14 @@ import { lowercaseExceptAcronyms } from '../lib/policyAnalysis.js'
 import ScoreGauge from '../components/ScoreGauge.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import { localePath } from '../utils/localeRouting.js'
+import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 
 export default function Dashboard() {
   const { t } = useTranslation('common')
   const { analysis, history, loadFromHistory } = usePolicy()
   const navigate = useNavigate()
   const { lang } = useParams()
+  const { formatShortDate } = useLocaleFormat()
 
   // Checking history[0] alone isn't enough: reset() (used by Log Out) only
   // clears the active analysis back to demo data, it doesn't wipe history -
@@ -23,7 +25,7 @@ export default function Dashboard() {
   const latestReview = !analysis.isDemo && history[0]
     ? {
         title: `${history[0].detectedPolicyType} reviewed`,
-        date: history[0].analyzedAt,
+        date: formatShortDate(history[0].analyzedAt),
         onView: () => {
           loadFromHistory(history[0].id)
           navigate(localePath(lang, '/gap-report'))

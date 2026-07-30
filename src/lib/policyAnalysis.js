@@ -312,11 +312,13 @@ export function analyzeText(rawText, meta = {}) {
 
   return {
     fileName: meta.fileName || 'uploaded document',
-    analyzedAt: new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }),
+    // A raw ISO timestamp, not a pre-formatted display string - this ran
+    // through toLocaleDateString('en-US', ...) directly here before, so a
+    // Spanish-speaking user always saw an English-formatted date no matter
+    // what language they'd chosen. Every consumer formats it at render time
+    // via useLocaleFormat().formatShortDate() instead, matching the app's
+    // active language.
+    analyzedAt: new Date().toISOString(),
     hasRealText: text.trim().length > 40,
     truncated: Boolean(meta.truncated),
     namedInsured: extractNamedInsured(text),

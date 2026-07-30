@@ -1,12 +1,14 @@
 import { Link, useParams } from 'react-router-dom'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { localePath } from '../utils/localeRouting.js'
+import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
 
 export default function AIReview() {
   const { analysis } = usePolicy()
   const { lang } = useParams()
+  const { formatShortDate } = useLocaleFormat()
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
@@ -20,7 +22,7 @@ export default function AIReview() {
           </h1>
           <p className="text-sm text-compass-slate">
             {analysis.detectedPolicyType} &middot; {analysis.fileName} &middot; reviewed{' '}
-            {analysis.analyzedAt}
+            {formatShortDate(analysis.analyzedAt)}
           </p>
         </div>
       </div>

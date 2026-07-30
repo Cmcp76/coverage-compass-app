@@ -7,7 +7,7 @@ export const samplePolicy = {
   policyType: 'Auto',
   carrierName: 'Sample Insurance Co',
   effectiveDate: 'Jan 1, 2026',
-  reportGeneratedDate: 'Jul 26, 2026',
+  reportGeneratedDate: '2026-07-26T12:00:00.000Z',
   coverageScore: 87,
   coverages: [
     {

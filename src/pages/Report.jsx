@@ -5,10 +5,12 @@ import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
+import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 
 export default function Report() {
   const { t } = useTranslation('common')
   const { analysis } = usePolicy()
+  const { formatShortDate } = useLocaleFormat()
   const [generating, setGenerating] = useState(false)
 
   async function downloadPdf() {
@@ -18,7 +20,9 @@ export default function Report() {
       // it or click Print, so load it only when a PDF is actually requested
       // instead of paying its bundle cost on every visit to /report.
       const { generateReportPdf } = await import('../lib/generateReportPdf.js')
-      const doc = generateReportPdf(analysis)
+      // generateReportPdf isn't a component and can't call useLocaleFormat
+      // itself, so the date is pre-formatted here and passed through.
+      const doc = generateReportPdf({ ...analysis, analyzedAt: formatShortDate(analysis.analyzedAt) })
       doc.save('coverage-compass-review.pdf')
     } finally {
       setGenerating(false)
@@ -54,7 +58,7 @@ export default function Report() {
             Document reviewed: {analysis.fileName}
           </p>
           <p className="text-sm text-compass-slate">
-            Report Generated: {analysis.analyzedAt}
+            Report Generated: {formatShortDate(analysis.analyzedAt)}
           </p>
         </div>
 
