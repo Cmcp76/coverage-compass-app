@@ -40,12 +40,21 @@ export default function LocaleLayout() {
   }, [lang, supported, i18n])
 
   if (!supported) {
-    // Unsupported or missing language code — fall back to default and
-    // preserve the rest of the path (e.g. /xx/dashboard -> /en/dashboard)
-    const rest = location.pathname.split('/').slice(2).join('/')
+    // Unsupported or missing language code — fall back to default. Keep the
+    // *entire* original path rather than stripping the unrecognized first
+    // segment off as if it were a language code: every real link into this
+    // app from before the /:lang restructuring (sitemap.xml, robots.txt,
+    // anything already indexed or bookmarked) is a bare top-level route
+    // like /challenge or /about with nothing after it, where that segment
+    // *is* the destination, not a language code. Stripping it turned every
+    // one of those legacy links into a silent redirect to the homepage
+    // instead of the page it named. Prepending instead of stripping fixes
+    // that (/challenge -> /en/challenge) at the cost of a 404, rather than
+    // a guess, for the much rarer case of someone hand-typing an actually
+    // invalid language code in front of a real path (e.g. /xx/dashboard).
     return (
       <Navigate
-        to={`/${DEFAULT_LANGUAGE}${rest ? `/${rest}` : ''}${location.search}${location.hash}`}
+        to={`/${DEFAULT_LANGUAGE}${location.pathname}${location.search}${location.hash}`}
         replace
       />
     )
