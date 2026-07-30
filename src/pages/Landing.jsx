@@ -49,7 +49,7 @@ export default function Landing() {
           <StepCard
             step="2"
             title="Get a Plain-Language Review"
-            body="Our AI reads through the document and translates the jargon into a summary anyone can understand: what's covered, your limits, and where there might be gaps worth a second look."
+            body="We read through the document and translate the jargon into a summary anyone can understand: what's covered, your limits, and where there might be gaps worth a second look."
             delay={1}
           />
           <StepCard

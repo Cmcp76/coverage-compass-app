@@ -223,7 +223,7 @@ export function generateReportPdf(analysis) {
 
   // Disclaimer
   paragraph(
-    'Coverage Compass is an independent insurance education platform. It is not an insurance company, agency, or broker, and does not sell, bind, cancel, or modify insurance policies. Information provided is educational only and does not constitute insurance, legal, or financial advice. Coverage decisions should be made in consultation with a licensed insurance professional. Coverage Compass does not guarantee the accuracy of AI-generated summaries and recommends verifying all details against your official policy documents.',
+    'Coverage Compass is an independent insurance education platform. It is not an insurance company, agency, or broker, and does not sell, bind, cancel, or modify insurance policies. Information provided is educational only and does not constitute insurance, legal, or financial advice. Coverage decisions should be made in consultation with a licensed insurance professional. Coverage Compass does not guarantee the accuracy of automatically generated summaries and recommends verifying all details against your official policy documents.',
     { size: 8, gap: 11 },
   )
 

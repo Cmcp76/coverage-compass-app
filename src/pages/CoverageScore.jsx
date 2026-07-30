@@ -152,7 +152,7 @@ export default function CoverageScore() {
       </Link>
 
       <p className="disclaimer mt-6">
-        Coverage Compass generates this score using AI analysis of the document you
+        Coverage Compass generates this score by analyzing the document you
         uploaded. It is for educational purposes only and does not constitute
         insurance, legal, or financial advice. Only a licensed insurance professional
         can evaluate whether your coverage is adequate for your specific needs.
