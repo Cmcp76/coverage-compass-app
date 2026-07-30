@@ -1,11 +1,12 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Layout from './components/Layout.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import LocaleLayout from './components/LocaleLayout.jsx'
 import { PolicyProvider } from './context/PolicyContext.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
-import { DEFAULT_LANGUAGE } from './i18n/languages.js'
+import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/languages.js'
 
 const Landing = lazy(() => import('./pages/Landing.jsx'))
 const SignUp = lazy(() => import('./pages/SignUp.jsx'))
@@ -40,6 +41,15 @@ function RouteFallback() {
 
 export default function App() {
   const location = useLocation()
+  const { i18n } = useTranslation()
+  // i18next's LanguageDetector already resolved i18n.language (from a saved
+  // preference, then browser language, then the <html lang> fallback)
+  // before this ever renders, since main.jsx imports ./i18n as a
+  // side effect before <App/> mounts. Bare root used to always redirect to
+  // DEFAULT_LANGUAGE regardless of that, so a returning visitor who'd
+  // chosen Spanish was bounced back to English every time they landed on
+  // the homepage - the resolved language never got a chance to matter.
+  const resolvedLang = isSupportedLanguage(i18n.language) ? i18n.language : DEFAULT_LANGUAGE
 
   return (
     <ThemeProvider>
@@ -52,9 +62,10 @@ export default function App() {
             <Suspense fallback={<RouteFallback />}>
               <Routes>
                 {/* Bare root has no language segment yet — send it to the
-                    default language. LocaleLayout below is what actually
-                    resolves/persists the language for every real route. */}
-                <Route path="/" element={<Navigate to={`/${DEFAULT_LANGUAGE}`} replace />} />
+                    resolved language (saved preference, else browser
+                    language, else the default). LocaleLayout below is what
+                    actually persists the language for every real route. */}
+                <Route path="/" element={<Navigate to={`/${resolvedLang}`} replace />} />
                 <Route path="/:lang" element={<LocaleLayout />}>
                   <Route index element={<Landing />} />
                   <Route path="signup" element={<SignUp />} />
