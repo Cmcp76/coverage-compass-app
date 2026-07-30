@@ -207,6 +207,22 @@ describe('buildStrengths phrasing', () => {
     expect(result.strengths.some((s) => s.includes('mc authority'))).toBe(false)
     expect(result.strengths.some((s) => s.includes('usdot'))).toBe(false)
   })
+
+  it('preserves a meaningful single-letter designator like "Coverage A"', () => {
+    // Regression: found via an end-to-end PDF download check after the
+    // acronym fix above - "Workers' Compensation (Coverage A)" still came
+    // out as "(coverage a)" because a lone uppercase letter didn't count as
+    // an acronym under the original (letters.length > 1) heuristic. Here
+    // "A"/"B" are meaningful part designators (same idea as Medicare Part
+    // A/B), not just capitalized because they start a title. "coverage"
+    // itself still lowercases normally since it's an ordinary word, not an
+    // acronym - only the designator letter is preserved.
+    const result = analyzeText(loadSample(samples.workersComp.file), { fileName: 'wc.txt' })
+    expect(result.strengths.some((s) => s.includes('(coverage A)'))).toBe(true)
+    expect(result.strengths.some((s) => s.includes('(coverage B)'))).toBe(true)
+    expect(result.strengths.some((s) => s.includes('coverage a)'))).toBe(false)
+    expect(result.strengths.some((s) => s.includes('coverage b)'))).toBe(false)
+  })
 })
 
 describe('scoreCategories omits inapplicable checks per line of business', () => {

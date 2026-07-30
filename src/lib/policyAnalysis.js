@@ -337,13 +337,16 @@ export function analyzeText(rawText, meta = {}) {
 // Lowercase every token except ones whose letters are already all-uppercase
 // (an acronym), so "MC"/"USDOT"/"HNOA"/"BOC-3" survive untouched while
 // ordinary title-cased words like "Authority" or "Status" still lowercase
-// normally to fit the surrounding sentence.
+// normally to fit the surrounding sentence. Single uppercase letters count
+// too - "Workers' Compensation (Coverage A)" has a meaningful "A"/"B" part
+// designator, not just a capitalized word, so "(coverage a)" reads as
+// wrong/truncated the same way a mangled acronym does.
 function lowercaseExceptAcronyms(name) {
   return name
     .split(/(\s+)/)
     .map((token) => {
       const letters = token.replace(/[^A-Za-z]/g, '')
-      const isAcronym = letters.length > 1 && letters === letters.toUpperCase()
+      const isAcronym = letters.length > 0 && letters === letters.toUpperCase()
       return isAcronym ? token : token.toLowerCase()
     })
     .join('')
