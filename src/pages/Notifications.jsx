@@ -62,10 +62,14 @@ export default function Notifications() {
   // dismissing "worth confirming umbrella insurance" also permanently
   // hides an unrelated "not found: flood coverage" alert from a later
   // upload, since both would share the same dismissed-forever id.
+  // Status is part of the id too, not just the name: buildCoverageAlertBody
+  // reads gap.status, so two uploads whose top gap shares a name but
+  // differs in status ("worth confirming" vs. "not found") produce
+  // different alert text that a name-only id would still collide on.
   const topGap = analysis.gaps?.[0]
   const allNotifications = [
     {
-      id: `alert-${topGap ? topGap.name : 'none'}`,
+      id: `alert-${topGap ? `${topGap.name}-${topGap.status}` : 'none'}`,
       kind: 'alert',
       title: 'Coverage alert',
       body: buildCoverageAlertBody(analysis),

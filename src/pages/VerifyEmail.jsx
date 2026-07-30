@@ -36,7 +36,7 @@ export default function VerifyEmail() {
         disabled={resent}
         onClick={() => setResent(true)}
       >
-        {resent ? 'Verification Email Sent' : t('buttons.resendVerificationEmail')}
+        {resent ? t('buttons.verificationEmailSent') : t('buttons.resendVerificationEmail')}
       </button>
       {resent && (
         <p role="status" className="mt-2 text-xs text-compass-green">

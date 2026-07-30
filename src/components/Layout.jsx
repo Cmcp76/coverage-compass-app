@@ -84,7 +84,6 @@ export default function Layout({ children }) {
     (logicalPath === '/challenge' && !location.state?.fromApp)
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
-  const headerRef = useRef(null)
   const accountButtonRef = useRef(null)
   const accountMenuRef = useRef(null)
   const menuButtonRef = useRef(null)
@@ -184,7 +183,6 @@ export default function Layout({ children }) {
   return (
     <div className="flex min-h-screen flex-col">
       <header
-        ref={headerRef}
         className="sticky top-0 z-20 border-b border-compass-line bg-compass-surface/90 backdrop-blur print:hidden"
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
