@@ -112,9 +112,25 @@ export default function Layout({ children }) {
       }
     }
     function handleClickOutside(e) {
-      if (headerRef.current && !headerRef.current.contains(e.target)) {
-        setMenuOpen(false)
+      // Scoped per-menu (its own trigger + panel), not "anywhere in the
+      // header" - the account-menu trigger (sm+) and the hamburger trigger
+      // (below lg) are both visible in the sm-lg range, and a header-wide
+      // check meant clicking one trigger, or an unrelated header control
+      // like the theme toggle, never counted as an "outside click" for the
+      // other menu, so it could stay open indefinitely.
+      if (
+        accountMenuOpen &&
+        !accountButtonRef.current?.contains(e.target) &&
+        !accountMenuRef.current?.contains(e.target)
+      ) {
         setAccountMenuOpen(false)
+      }
+      if (
+        menuOpen &&
+        !menuButtonRef.current?.contains(e.target) &&
+        !mobileNavRef.current?.contains(e.target)
+      ) {
+        setMenuOpen(false)
       }
     }
     document.addEventListener('keydown', handleKeyDown)

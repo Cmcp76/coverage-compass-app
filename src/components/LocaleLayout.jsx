@@ -10,7 +10,7 @@
 // RTL languages without per-component conditionals.
 
 import { useEffect } from 'react'
-import { Outlet, useParams, Navigate } from 'react-router-dom'
+import { Outlet, useParams, Navigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { isSupportedLanguage, getLanguage, DEFAULT_LANGUAGE } from '../i18n/languages'
 import { saveLanguagePreference } from '../i18n'
@@ -18,6 +18,7 @@ import { saveLanguagePreference } from '../i18n'
 export default function LocaleLayout() {
   const { lang } = useParams()
   const { i18n } = useTranslation()
+  const location = useLocation()
   const supported = isSupportedLanguage(lang)
 
   // Hooks must run unconditionally on every render, so the redirect for an
@@ -41,7 +42,13 @@ export default function LocaleLayout() {
   if (!supported) {
     // Unsupported or missing language code — fall back to default and
     // preserve the rest of the path (e.g. /xx/dashboard -> /en/dashboard)
-    return <Navigate to={`/${DEFAULT_LANGUAGE}`} replace />
+    const rest = location.pathname.split('/').slice(2).join('/')
+    return (
+      <Navigate
+        to={`/${DEFAULT_LANGUAGE}${rest ? `/${rest}` : ''}${location.search}${location.hash}`}
+        replace
+      />
+    )
   }
 
   return <Outlet />

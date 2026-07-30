@@ -104,7 +104,13 @@ export default function HomeInventory() {
         {defaultRooms.map((room) => (
           <button
             key={room}
-            onClick={() => setOpenRoom(room)}
+            onClick={() => {
+              // Switching rooms without submitting used to leave the
+              // in-progress draft attached to whichever room you add next,
+              // silently filing an item under the wrong room.
+              setOpenRoom(room)
+              setDraft({ name: '', value: '', date: '' })
+            }}
             aria-pressed={openRoom === room}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
               openRoom === room
