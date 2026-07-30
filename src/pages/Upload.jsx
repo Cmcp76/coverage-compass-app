@@ -30,10 +30,14 @@ export default function Upload() {
     setState('reading')
 
     if (file.size > MAX_FILE_SIZE_BYTES) {
+      // Math.round() alone can display "15MB" for a file that's actually a
+      // few KB over the 15MB cap (e.g. 15.03MB rounds down to 15), reading
+      // as a contradiction next to "15MB max" - round up to the nearest
+      // 0.1MB instead, so a rejected file never displays as exactly at the
+      // limit it was rejected for exceeding.
+      const sizeMb = Math.ceil((file.size / (1024 * 1024)) * 10) / 10
       setErrorMsg(
-        `That file is too large for this prototype to read in the browser (${Math.round(
-          file.size / (1024 * 1024),
-        )}MB, 15MB max). Try a smaller file, like a declarations page instead of a full policy.`,
+        `That file is too large for this prototype to read in the browser (${sizeMb}MB, 15MB max). Try a smaller file, like a declarations page instead of a full policy.`,
       )
       setState('error')
       return
