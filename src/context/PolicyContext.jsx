@@ -28,7 +28,20 @@ export function loadHistory() {
   try {
     const raw = localStorage.getItem(HISTORY_KEY)
     const parsed = raw ? JSON.parse(raw) : []
-    return Array.isArray(parsed) ? parsed : []
+    if (!Array.isArray(parsed)) return []
+    // Reports.jsx reads detectedPolicyType unconditionally on every entry
+    // (e.g. r.detectedPolicyType.replace(...)) to build its chart, so a
+    // malformed entry here would crash that page rather than degrade
+    // gracefully the way this loader's try/catch is meant to.
+    return parsed.filter(
+      (entry) =>
+        entry &&
+        typeof entry === 'object' &&
+        typeof entry.id === 'string' &&
+        typeof entry.detectedPolicyType === 'string' &&
+        entry.analysis &&
+        typeof entry.analysis === 'object',
+    )
   } catch {
     return []
   }
@@ -155,6 +168,11 @@ export function PolicyProvider({ children }) {
       saveHistory(next)
       return next
     })
+    // Removing the entry currently being viewed used to leave
+    // activeHistoryId pointing at a now-deleted id, stranding
+    // isViewingOlderReport (and the "Return to Latest" banner it drives)
+    // permanently true with no matching history[0] to return to.
+    if (id === activeHistoryId) setActiveHistoryId(null)
   }
 
   const isViewingOlderReport = activeHistoryId != null && activeHistoryId !== history[0]?.id

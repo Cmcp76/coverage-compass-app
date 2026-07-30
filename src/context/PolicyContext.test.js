@@ -68,7 +68,9 @@ describe('loadHistory', () => {
   })
 
   it('returns previously saved history entries', () => {
-    const entries = [{ id: 'a', fileName: 'one.pdf' }]
+    const entries = [
+      { id: 'a', fileName: 'one.pdf', detectedPolicyType: 'Auto', analysis: { coverageScore: 80 } },
+    ]
     saveHistory(entries)
     expect(loadHistory()).toEqual(entries)
   })
@@ -81,6 +83,24 @@ describe('loadHistory', () => {
   it('falls back to an empty array when the stored value is an object instead of an array', () => {
     localStorage.setItem(HISTORY_KEY, '{"id":"a"}')
     expect(loadHistory()).toEqual([])
+  })
+
+  it('drops entries missing the fields Reports.jsx reads unconditionally (id, detectedPolicyType, analysis)', () => {
+    // Regression: Reports.jsx's chart builder calls
+    // r.detectedPolicyType.replace(...) on every history entry without a
+    // null check, so a malformed-but-array-shaped entry used to crash the
+    // whole Reports page instead of degrading gracefully like this loader's
+    // try/catch is meant to.
+    localStorage.setItem(
+      HISTORY_KEY,
+      JSON.stringify([
+        { id: 'a', fileName: 'one.pdf' }, // missing detectedPolicyType and analysis
+        { id: 'b', fileName: 'two.pdf', detectedPolicyType: 'Auto', analysis: { coverageScore: 70 } },
+      ]),
+    )
+    expect(loadHistory()).toEqual([
+      { id: 'b', fileName: 'two.pdf', detectedPolicyType: 'Auto', analysis: { coverageScore: 70 } },
+    ])
   })
 })
 

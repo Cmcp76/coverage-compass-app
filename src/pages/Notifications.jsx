@@ -57,9 +57,15 @@ export default function Notifications() {
   const { analysis } = usePolicy()
   const [dismissed, setDismissed] = useState(loadDismissed)
 
+  // The coverage alert's content depends on the latest analysis's top gap,
+  // so its id has to change with that gap too - a fixed id would mean
+  // dismissing "worth confirming umbrella insurance" also permanently
+  // hides an unrelated "not found: flood coverage" alert from a later
+  // upload, since both would share the same dismissed-forever id.
+  const topGap = analysis.gaps?.[0]
   const allNotifications = [
     {
-      id: 1,
+      id: `alert-${topGap ? topGap.name : 'none'}`,
       kind: 'alert',
       title: 'Coverage alert',
       body: buildCoverageAlertBody(analysis),
