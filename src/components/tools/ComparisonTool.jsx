@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useLocaleFormat } from '../../hooks/useLocaleFormat.js'
 
 const emptyPolicy = { liability: '', deductible: '', endorsements: '' }
 
 export default function ComparisonTool() {
+  const { formatNumber } = useLocaleFormat()
   const [a, setA] = useState({ ...emptyPolicy, liability: '250,000', deductible: '500', endorsements: 'Roadside assistance' })
   const [b, setB] = useState({ ...emptyPolicy, liability: '100,000', deductible: '1,000', endorsements: '—' })
 
@@ -27,14 +29,14 @@ export default function ComparisonTool() {
         {liabilityDiff !== 0 && (
           <p>
             Policy {liabilityDiff > 0 ? 'A' : 'B'} has a $
-            {Math.round(Math.abs(liabilityDiff)).toLocaleString()} higher liability limit than
+            {formatNumber(Math.round(Math.abs(liabilityDiff)))} higher liability limit than
             Policy {liabilityDiff > 0 ? 'B' : 'A'}.
           </p>
         )}
         {deductibleDiff !== 0 && (
           <p>
             Policy {deductibleDiff > 0 ? 'B' : 'A'} has a lower deductible by $
-            {Math.round(Math.abs(deductibleDiff)).toLocaleString()}.
+            {formatNumber(Math.round(Math.abs(deductibleDiff)))}.
           </p>
         )}
         {liabilityDiff === 0 && deductibleDiff === 0 && (

@@ -5,6 +5,7 @@ import ComparisonTool from '../components/tools/ComparisonTool.jsx'
 import AnnualCheckup from '../components/tools/AnnualCheckup.jsx'
 import Glossary from '../components/tools/Glossary.jsx'
 import { localePath } from '../utils/localeRouting.js'
+import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 
 const toolList = [
   { id: 'deductible', label: 'Deductible Calculator' },
@@ -92,11 +93,12 @@ export default function Tools() {
 }
 
 function DeductibleCalculator() {
+  const { formatCurrency } = useLocaleFormat()
   const [claim, setClaim] = useState(5000)
   const [a, setA] = useState(500)
   const [b, setB] = useState(1000)
 
-  const fmt = (n) => `$${Math.max(0, Math.round(n)).toLocaleString()}`
+  const fmt = (n) => formatCurrency(Math.max(0, Math.round(n)))
   const outA = `You pay ${fmt(Math.min(a, claim))} out of pocket. Your policy would cover ${fmt(Math.max(0, claim - a))} of a ${fmt(claim)} claim.`
   const outB = `You pay ${fmt(Math.min(b, claim))} out of pocket. Your policy would cover ${fmt(Math.max(0, claim - b))} of a ${fmt(claim)} claim.`
 
