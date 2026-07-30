@@ -13,7 +13,14 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const { lang } = useParams()
 
-  const latestReview = history[0]
+  // Checking history[0] alone isn't enough: reset() (used by Log Out) only
+  // clears the active analysis back to demo data, it doesn't wipe history -
+  // logging out is meant to end a session, not delete a real upload's
+  // record, the same way logging out of any app doesn't delete your data.
+  // But that means right after a reset, history[0] still points at a real
+  // past upload, and showing it here as "recent activity" contradicts the
+  // score card right above it, which is correctly showing demo data.
+  const latestReview = !analysis.isDemo && history[0]
     ? {
         title: `${history[0].detectedPolicyType} reviewed`,
         date: history[0].analyzedAt,
