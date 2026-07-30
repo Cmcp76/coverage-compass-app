@@ -42,7 +42,14 @@ const pageTitles = {
   '/privacy': 'Privacy Policy — Coverage Compass',
   '/terms': 'Terms of Service — Coverage Compass',
 }
-const defaultTitle = 'Coverage Compass'
+// pageTitles above covers every real route exactly, so any logicalPath that
+// misses it is the "*" catch-all (NotFound.jsx) rather than a legitimate
+// page still loading - falling back to a generic title there left the
+// browser tab (and anything reading it, like a screen reader announcing the
+// page change) saying "Coverage Compass" on a broken link, with no hint
+// anything went wrong, even though the page itself visibly says "Page Not
+// Found."
+const notFoundTitle = 'Page Not Found — Coverage Compass'
 
 // Only the genuinely public, shareable/indexable pages get an override here.
 // Interior app pages (Dashboard, Upload, AIReview, Score, GapReport, Report,
@@ -97,7 +104,7 @@ export default function Layout({ children }) {
   }, [location.pathname])
 
   useEffect(() => {
-    document.title = pageTitles[logicalPath] || defaultTitle
+    document.title = pageTitles[logicalPath] || notFoundTitle
     const meta = document.querySelector('meta[name="description"]')
     if (meta) meta.setAttribute('content', pageDescriptions[logicalPath] || defaultDescription)
   }, [logicalPath])
