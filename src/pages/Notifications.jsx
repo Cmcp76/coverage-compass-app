@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { lowercaseExceptAcronyms } from '../lib/policyAnalysis.js'
 
 function buildCoverageAlertBody(analysis) {
   const topGap = analysis.gaps?.[0]
   if (!topGap) return 'No coverage gaps flagged for your latest policy review.'
   return topGap.status === 'Worth Confirming'
     ? `${topGap.name} is mentioned but worth confirming the details.`
-    : `Your policy doesn't show ${topGap.name.toLowerCase()}, worth asking about.`
+    : `Your policy doesn't show ${lowercaseExceptAcronyms(topGap.name)}, worth asking about.`
 }
 
 const staticNotifications = [

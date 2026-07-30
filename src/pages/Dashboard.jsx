@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { lowercaseExceptAcronyms } from '../lib/policyAnalysis.js'
 import ScoreGauge from '../components/ScoreGauge.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import { localePath } from '../utils/localeRouting.js'
@@ -135,7 +136,7 @@ export default function Dashboard() {
             {topGaps.map((gap) => (
               <li key={gap.name}>
                 <Link to={localePath(lang, '/gap-report')} className="text-compass-link hover:underline">
-                  Would {gap.name.toLowerCase()} make sense for you?
+                  Would {lowercaseExceptAcronyms(gap.name)} make sense for you?
                 </Link>
               </li>
             ))}

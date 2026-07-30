@@ -341,7 +341,7 @@ export function analyzeText(rawText, meta = {}) {
 // too - "Workers' Compensation (Coverage A)" has a meaningful "A"/"B" part
 // designator, not just a capitalized word, so "(coverage a)" reads as
 // wrong/truncated the same way a mangled acronym does.
-function lowercaseExceptAcronyms(name) {
+export function lowercaseExceptAcronyms(name) {
   return name
     .split(/(\s+)/)
     .map((token) => {
