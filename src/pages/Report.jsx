@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
+import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 
 export default function Report() {
   const { t } = useTranslation('common')
@@ -26,6 +27,7 @@ export default function Report() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12 print:max-w-full">
       <OlderReportBanner />
+      <NoReadableTextBanner />
       <div className="mb-6 flex justify-end gap-3 print:hidden">
         <button onClick={() => window.print()} className="btn-secondary">
           Print

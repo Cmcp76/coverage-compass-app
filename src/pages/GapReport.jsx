@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import RequestCallback from '../components/RequestCallback.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
+import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import { localePath } from '../utils/localeRouting.js'
 
 // analyzeText()/mockData.js produce these two literal English status strings;
@@ -22,6 +23,7 @@ export default function GapReport() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <OlderReportBanner />
+      <NoReadableTextBanner />
       <h1 className="font-display text-2xl font-semibold text-compass-heading">
         {t('gapReport.title')}
       </h1>

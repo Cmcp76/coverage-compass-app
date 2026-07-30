@@ -15,6 +15,7 @@ import { usePolicy } from '../context/PolicyContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
 import ScoreGauge from '../components/ScoreGauge.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
+import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import { getChartColors } from '../lib/chartTheme.js'
 
 const categoryDetails = {
@@ -61,6 +62,7 @@ export default function CoverageScore() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
       <OlderReportBanner />
+      <NoReadableTextBanner />
       <h1 className="text-center font-display text-xl font-semibold text-compass-heading">
         {t('score.title')}
       </h1>

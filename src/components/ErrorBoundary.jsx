@@ -46,7 +46,16 @@ export default class ErrorBoundary extends Component {
           <button type="button" className="btn-primary" onClick={() => window.location.reload()}>
             Refresh the Page
           </button>
-          <Link to={localePath(currentLang(), '/dashboard')} className="btn-secondary">
+          <Link
+            to={localePath(currentLang(), '/dashboard')}
+            className="btn-secondary"
+            // This boundary only resets when App.jsx's key={location.pathname}
+            // changes on it - if the error happened while already on
+            // /dashboard, clicking this link doesn't change the pathname, so
+            // the boundary never remounts and the crash screen would
+            // otherwise stay up forever. Clear the error state directly too.
+            onClick={() => this.setState({ error: null })}
+          >
             Go to Dashboard
           </Link>
         </div>
