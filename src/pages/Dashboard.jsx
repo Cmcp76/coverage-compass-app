@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import ScoreGauge from '../components/ScoreGauge.jsx'
@@ -6,6 +7,7 @@ import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function Dashboard() {
+  const { t } = useTranslation('common')
   const { analysis, history, loadFromHistory } = usePolicy()
   const navigate = useNavigate()
   const { lang } = useParams()
@@ -41,7 +43,7 @@ export default function Dashboard() {
           </p>
         </div>
         <Link to={localePath(lang, '/upload')} className="btn-primary">
-          Upload Policy
+          {t('nav.uploadPolicy')}
         </Link>
       </div>
 
@@ -64,7 +66,7 @@ export default function Dashboard() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Score card */}
         <Link to={localePath(lang, '/score')} className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">
-          <p className="text-sm text-compass-slate">Your Coverage Score</p>
+          <p className="text-sm text-compass-slate">{t('score.title')}</p>
           <ScoreGauge score={analysis.coverageScore} size={140} strokeWidth={10}>
             {(animated) => (
               <p className="font-display text-3xl font-semibold text-compass-link">

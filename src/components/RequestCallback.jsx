@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const timeOptions = ['Morning', 'Afternoon', 'Evening']
 
 export default function RequestCallback({ ctaLabel = 'Request a Callback', ctaVariant = 'secondary' }) {
+  const { t } = useTranslation('common')
   const [open, setOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [name, setName] = useState('')
@@ -79,7 +81,7 @@ export default function RequestCallback({ ctaLabel = 'Request a Callback', ctaVa
               Submit Request
             </button>
             <button type="button" className="btn-secondary" onClick={() => setOpen(false)}>
-              Cancel
+              {t('buttons.cancel')}
             </button>
           </div>
         </form>

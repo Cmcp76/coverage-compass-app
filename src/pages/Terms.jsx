@@ -1,12 +1,14 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function Terms() {
+  const { t } = useTranslation('common')
   const { lang } = useParams()
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="font-display text-2xl font-semibold text-compass-heading">Terms of Service</h1>
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">{t('footer.termsOfService')}</h1>
       <p className="mt-4 text-sm leading-relaxed text-compass-slate">
         Coverage Compass is a prototype built to demonstrate a plain-language
         insurance coverage review tool. By using it, you agree to the terms below.

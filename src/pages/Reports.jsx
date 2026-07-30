@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   BarChart,
   Bar,
@@ -15,6 +16,7 @@ import { getChartColors } from '../lib/chartTheme.js'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function Reports() {
+  const { t } = useTranslation('common')
   const { history, loadFromHistory, removeFromHistory } = usePolicy()
   const navigate = useNavigate()
   const { lang } = useParams()
@@ -96,7 +98,7 @@ export default function Reports() {
             Upload a policy to get your first Coverage Score and report.
           </p>
           <Link to={localePath(lang, '/upload')} className="btn-primary mt-5 inline-flex">
-            Upload Your Policy
+            {t('buttons.uploadYourPolicy')}
           </Link>
         </div>
       ) : (

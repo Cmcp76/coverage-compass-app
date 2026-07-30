@@ -1,12 +1,14 @@
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import { localePath } from '../utils/localeRouting.js'
 
 export default function Privacy() {
+  const { t } = useTranslation('common')
   const { lang } = useParams()
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="font-display text-2xl font-semibold text-compass-heading">Privacy Policy</h1>
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">{t('footer.privacyPolicy')}</h1>
       <p className="mt-4 text-sm leading-relaxed text-compass-slate">
         Coverage Compass is a client-side prototype. There is no server component
         in this build, so nothing you upload or type is transmitted anywhere.

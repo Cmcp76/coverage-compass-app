@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 
 function buildCoverageAlertBody(analysis) {
@@ -54,6 +55,7 @@ function loadDismissed() {
 }
 
 export default function Notifications() {
+  const { t } = useTranslation('common')
   const { analysis } = usePolicy()
   const [dismissed, setDismissed] = useState(loadDismissed)
 
@@ -94,7 +96,7 @@ export default function Notifications() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
       <h1 className="font-display text-2xl font-semibold text-compass-heading">
-        Notifications
+        {t('nav.notifications')}
       </h1>
 
       {items.length === 0 ? (
