@@ -43,6 +43,19 @@ export const samplePolicy = {
         'Not found in the uploaded document. Coverage details could not be confirmed.',
       confidence: 'missing',
     },
+    {
+      name: 'Uninsured/Underinsured Motorist',
+      limit: '$250,000 / $500,000',
+      explanation: 'Protects you if the at-fault driver has little or no insurance.',
+      confidence: 'high',
+    },
+    {
+      name: 'Roadside Assistance',
+      limit: 'Mentioned, limit not clearly detected',
+      explanation:
+        'Coverage for towing, jump-starts, lockouts, and flat tires. Limit not clearly stated in the document.',
+      confidence: 'medium',
+    },
   ],
   scoreCategories: [
     { name: 'Liability Protection', status: 'good', icon: 'shield' },

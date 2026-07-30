@@ -23,12 +23,13 @@ export default function VerifyEmail() {
         Check Your Inbox
       </h1>
       <p className="mt-3 text-sm leading-relaxed text-compass-slate">
-        We sent a verification link to{' '}
-        <strong>{email || 'the email address you signed up with'}</strong>. Click the
-        link to activate your account and get started with your first policy review.
+        In a live version of Coverage Compass, we'd send a verification link to{' '}
+        <strong>{email || 'the email address you signed up with'}</strong>. This is
+        a prototype with no real account or email delivery, so continue below to
+        simulate verifying your account.
       </p>
       <p className="mt-4 text-sm text-compass-slate">
-        Didn't get the email? Check your spam folder, or resend it below.
+        Nothing was actually sent, there's no inbox to check for this prototype.
       </p>
       <button
         className="btn-secondary mx-auto mt-4 disabled:cursor-not-allowed disabled:opacity-60"
@@ -39,17 +40,14 @@ export default function VerifyEmail() {
       </button>
       {resent && (
         <p role="status" className="mt-2 text-xs text-compass-green">
-          Check your inbox, it can take a minute to arrive.
+          In a live version, a new email would be sent now. This is a prototype, so
+          nothing was actually sent.
         </p>
       )}
 
       <button className="btn-primary mx-auto mt-8" onClick={() => navigate(localePath(lang, '/welcome'))}>
         Simulate verification (prototype)
       </button>
-
-      <p className="disclaimer mt-6">
-        Verification links expire after 24 hours for your security.
-      </p>
     </div>
   )
 }
