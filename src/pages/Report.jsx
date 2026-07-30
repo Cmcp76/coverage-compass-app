@@ -38,9 +38,9 @@ export default function Report() {
       <div className="rounded-2xl border border-compass-line bg-compass-surface p-10 print:border-none print:p-0">
         {/* Cover */}
         <div className="border-b border-compass-line pb-6 text-center">
-          <p className="font-display text-lg font-semibold text-compass-heading">
+          <h1 className="font-display text-lg font-semibold text-compass-heading">
             Coverage Compass Review
-          </p>
+          </h1>
           {analysis.namedInsured && (
             <p className="mt-3 text-sm text-compass-slate">
               Prepared for: <strong>{analysis.namedInsured}</strong>

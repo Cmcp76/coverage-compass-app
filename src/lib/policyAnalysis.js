@@ -18,7 +18,12 @@
 // the keyword in natural phrasing ("does not include X" vs "X is not
 // included" / "X is excluded"), so check a short window on both sides of
 // each match before counting it as "found."
-const NEGATION_PATTERN = /\b(not|no|without|excludes?|excluding|excluded|except)\b/i
+// \b treats the apostrophe in a contraction as a non-word boundary, so
+// \bnot\b alone misses "doesn't"/"isn't"/"wasn't" (tokenizes as "doesn" +
+// "t") and \bnot\b also can't match "not" glued onto "cannot" with no space
+// before it - both are common negation phrasings in real policy language,
+// so match them explicitly.
+const NEGATION_PATTERN = /\b(not|no|without|excludes?|excluding|excluded|except|cannot)\b|n't\b/i
 // Generous on purpose: each window is already clipped to the current
 // sentence below, so this only needs to be wide enough to span a full
 // sentence, not tight enough to avoid bleeding into the next one.

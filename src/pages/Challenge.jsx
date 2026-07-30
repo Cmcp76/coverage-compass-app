@@ -13,7 +13,6 @@ import RequestCallback from '../components/RequestCallback.jsx'
 import { getChallengeScore, getMissedTopics } from '../lib/challengeScoring.js'
 
 export default function Challenge() {
-  const { t } = useTranslation('common')
   const [stage, setStage] = useState('intro') // intro | quiz | results
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState([])
@@ -299,6 +298,7 @@ function ResultsScreen({ answers, onRetake }) {
 }
 
 function EmailCapture() {
+  const { t } = useTranslation('common')
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
 
