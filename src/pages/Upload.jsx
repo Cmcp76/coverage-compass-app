@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { analyzeText } from '../lib/policyAnalysis.js'
+import { analyzeWithLLM, AnalysisNotConfiguredError } from '../lib/analyzeWithLLM.js'
 import { extractTextFromPdf } from '../lib/pdfText.js'
 import { localePath } from '../utils/localeRouting.js'
 
@@ -65,11 +66,28 @@ export default function Upload() {
 
       setState('scanning')
 
-      // Small delay so the scanning state is visible, this also stands in
-      // for where a real OCR/extraction API call would happen for images.
-      await new Promise((resolve) => setTimeout(resolve, 900))
+      let analysis
+      try {
+        // Real document understanding via the Claude API (see /worker),
+        // not the local keyword matcher - this is the actual product value,
+        // and it takes real network/model time, so no artificial delay
+        // needed here the way the fallback path below needs one.
+        analysis = await analyzeWithLLM(text, { fileName: file.name, truncated })
+      } catch (err) {
+        // AnalysisNotConfiguredError just means no backend has been
+        // deployed yet (VITE_ANALYSIS_API_URL unset) - expected, not a
+        // failure worth logging. Anything else is a genuine request
+        // failure worth knowing about even though the person just sees a
+        // graceful fallback.
+        if (!(err instanceof AnalysisNotConfiguredError)) {
+          console.error('Real policy analysis failed, using local fallback:', err)
+        }
+        // Small delay so the scanning state is visible, this also stands in
+        // for where a real OCR/extraction step would happen for images.
+        await new Promise((resolve) => setTimeout(resolve, 900))
+        analysis = analyzeText(text, { fileName: file.name, truncated })
+      }
 
-      const analysis = analyzeText(text, { fileName: file.name, truncated })
       setAnalysis(analysis)
       addToHistory(analysis)
       setState('done')

@@ -215,6 +215,13 @@ export function analyzeText(rawText, meta = {}) {
     scoreCategories,
     questionsToAsk: buildQuestions(gaps),
     strengths: buildStrengths(coverages),
+    // Distinguishes this keyword-matching fallback from a real LLM-analyzed
+    // result (worker/src/mapAnalysis.js sets 'llm') so the UI can be honest
+    // about which one produced a given review - the two have meaningfully
+    // different accuracy, and a person switching between "backend was
+    // reachable" and "backend was down, here's the fallback" shouldn't be
+    // left to guess which kind of review they're looking at.
+    analysisSource: 'fallback',
   }
 }
 
