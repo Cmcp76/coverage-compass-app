@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocaleFormat } from '../../hooks/useLocaleFormat.js'
 
 const defaultRooms = [
   'Living Room',
@@ -8,16 +9,36 @@ const defaultRooms = [
   'Home Office',
 ]
 
-let idCounter = 0
+const STORAGE_KEY = 'coverage-compass-home-inventory'
+
+function loadItems() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    const parsed = raw ? JSON.parse(raw) : {}
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {}
+  } catch {
+    return {}
+  }
+}
+
 function nextId() {
-  idCounter += 1
-  return `item-${idCounter}`
+  return `item-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
 
 export default function HomeInventory() {
+  const { formatCurrency } = useLocaleFormat()
   const [openRoom, setOpenRoom] = useState(defaultRooms[0])
-  const [items, setItems] = useState({})
+  const [items, setItems] = useState(loadItems)
   const [draft, setDraft] = useState({ name: '', value: '', date: '' })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+    } catch {
+      // Storage full or unavailable, the inventory still works for this
+      // session, it just won't survive a reload.
+    }
+  }, [items])
 
   function addItem(room) {
     if (!draft.name.trim()) return
@@ -25,7 +46,7 @@ export default function HomeInventory() {
       ...prev,
       [room]: [
         ...(prev[room] || []),
-        { id: nextId(), name: draft.name, value: parseFloat(draft.value) || 0, date: draft.date },
+        { id: nextId(), name: draft.name, value: Math.max(0, parseFloat(draft.value) || 0), date: draft.date },
       ],
     }))
     setDraft({ name: '', value: '', date: '' })
@@ -47,7 +68,21 @@ export default function HomeInventory() {
     Object.entries(items).forEach(([room, roomItems]) => {
       roomItems.forEach((i) => rows.push([room, i.name, i.value, i.date || '']))
     })
-    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(',')).join('\n')
+    // A cell starting with =, +, -, or @ can be interpreted as a formula by
+    // Excel/Sheets/LibreOffice on open (CSV formula injection). Item names
+    // are free text, so prefix those with a leading apostrophe to force
+    // spreadsheet apps to treat the cell as plain text.
+    const csv = rows
+      .map((r) =>
+        r
+          .map((c) => {
+            const str = String(c)
+            const safe = /^[=+\-@]/.test(str) ? `'${str}` : str
+            return `"${safe.replace(/"/g, '""')}"`
+          })
+          .join(','),
+      )
+      .join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -59,7 +94,7 @@ export default function HomeInventory() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Home Inventory Checklist
       </h2>
       <p className="mt-1 text-sm text-compass-slate">
@@ -71,7 +106,14 @@ export default function HomeInventory() {
         {defaultRooms.map((room) => (
           <button
             key={room}
-            onClick={() => setOpenRoom(room)}
+            onClick={() => {
+              // Switching rooms without submitting used to leave the
+              // in-progress draft attached to whichever room you add next,
+              // silently filing an item under the wrong room.
+              setOpenRoom(room)
+              setDraft({ name: '', value: '', date: '' })
+            }}
+            aria-pressed={openRoom === room}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
               openRoom === room
                 ? 'bg-compass-blue text-white'
@@ -96,11 +138,11 @@ export default function HomeInventory() {
               <span className="text-compass-ink">{item.name}</span>
               <div className="flex items-center gap-3">
                 <span className="text-compass-slate">
-                  ${item.value.toLocaleString()}
+                  {formatCurrency(Math.round(item.value))}
                 </span>
                 <button
                   onClick={() => removeItem(openRoom, item.id)}
-                  className="text-xs text-compass-slate hover:text-compass-amber"
+                  className="shrink-0 rounded-lg px-2 py-1.5 text-xs text-compass-slate hover:text-compass-amber"
                   aria-label={`Remove ${item.name}`}
                 >
                   Remove
@@ -113,9 +155,10 @@ export default function HomeInventory() {
           )}
         </div>
 
-        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-4">
+        <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-5">
           <input
             type="text"
+            aria-label="Item name"
             placeholder="Item name"
             value={draft.name}
             onChange={(e) => setDraft({ ...draft, name: e.target.value })}
@@ -123,14 +166,25 @@ export default function HomeInventory() {
           />
           <input
             type="number"
+            min="0"
+            aria-label="Estimated value"
             placeholder="Estimated value"
             value={draft.value}
             onChange={(e) => setDraft({ ...draft, value: e.target.value })}
             className="rounded-lg border border-compass-line px-3 py-2 text-sm"
           />
+          <input
+            type="date"
+            aria-label="Purchase date"
+            value={draft.date}
+            onChange={(e) => setDraft({ ...draft, date: e.target.value })}
+            className="rounded-lg border border-compass-line px-3 py-2 text-sm text-compass-slate"
+          />
           <button
             onClick={() => addItem(openRoom)}
-            className="btn-secondary justify-center"
+            disabled={!draft.name.trim()}
+            title={!draft.name.trim() ? 'Enter an item name to add it' : undefined}
+            className="btn-secondary justify-center disabled:cursor-not-allowed disabled:opacity-50"
           >
             Add Item
           </button>
@@ -139,7 +193,7 @@ export default function HomeInventory() {
 
       <div className="mt-4 flex items-center justify-between">
         <p className="text-sm text-compass-ink">
-          Total estimated value: <strong>${total.toLocaleString()}</strong>
+          Total estimated value: <strong>{formatCurrency(Math.round(total))}</strong>
         </p>
         <button onClick={downloadCsv} className="btn-secondary">
           Download My Inventory (CSV)

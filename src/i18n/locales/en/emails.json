@@ -1,0 +1,30 @@
+{
+  "verification": {
+    "subject": "Verify your Coverage Compass account",
+    "heading": "Check Your Inbox",
+    "body": "We sent a verification link to {{email}}. Click the link to activate your account and get started with your first policy review.",
+    "cta": "Verify My Email"
+  },
+  "passwordReset": {
+    "subject": "Reset your Coverage Compass password",
+    "heading": "Reset Your Password",
+    "body": "We received a request to reset your password. Click below to choose a new one. If you didn't request this, you can safely ignore this email.",
+    "cta": "Reset Password"
+  },
+  "reportReady": {
+    "subject": "Your Coverage Compass report is ready",
+    "heading": "Your Report Is Ready",
+    "body": "Your Coverage Score and educational report for your {{policyType}} policy are ready to view.",
+    "cta": "View My Report"
+  },
+  "renewalReminder": {
+    "subject": "Your {{policyType}} policy renews soon",
+    "heading": "Renewal Coming Up",
+    "body": "Your {{policyType}} policy renews in {{days}} days. This is a good time to revisit Coverage Compass for an updated review.",
+    "cta": "Review My Coverage"
+  },
+  "footer": {
+    "disclaimer": "Coverage Compass is an independent insurance education platform. It is not an insurance company, agency, or broker, and does not sell, bind, cancel, or modify insurance policies. Information provided is educational only and does not constitute insurance, legal, or financial advice.",
+    "unsubscribe": "Manage email preferences"
+  }
+}

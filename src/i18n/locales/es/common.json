@@ -1,0 +1,92 @@
+{
+  "brand": {
+    "name": "Coverage Compass",
+    "tagline": "Ayudando a las personas a entender su seguro antes de necesitarlo."
+  },
+  "nav": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "uploadPolicy": "Subir Póliza",
+    "reports": "Informes",
+    "learningCenter": "Aprender",
+    "tools": "Herramientas",
+    "profile": "Perfil",
+    "notifications": "Notificaciones",
+    "logIn": "Iniciar Sesión",
+    "logOut": "Cerrar Sesión",
+    "signUp": "Registrarse"
+  },
+  "buttons": {
+    "uploadYourPolicy": "Sube Tu Póliza",
+    "learnAboutInsurance": "Aprende Sobre Seguros",
+    "createMyAccount": "Crear Mi Cuenta",
+    "logIn": "Iniciar Sesión",
+    "sendResetLink": "Enviar Enlace de Restablecimiento",
+    "updatePassword": "Actualizar Contraseña",
+    "resendVerificationEmail": "Reenviar Correo de Verificación",
+    "verificationEmailSent": "Correo de Verificación Enviado",
+    "uploadYourFirstPolicy": "Sube Tu Primera Póliza",
+    "exploreLearningCenter": "Explora primero el Centro de Aprendizaje",
+    "downloadFullReport": "Descargar Informe Completo",
+    "downloadPdf": "Descargar PDF",
+    "seeFullReport": "Ver Informe Completo",
+    "reUploadPolicy": "Vuelve a Subir Tu Póliza para una Revisión Actualizada",
+    "takePhoto": "Tomar una Foto",
+    "chooseFile": "Elegir un Archivo",
+    "readArticle": "Leer Artículo",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "submit": "Enviar"
+  },
+  "forms": {
+    "fullName": "Nombre Completo",
+    "emailAddress": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "rememberMe": "Recordarme",
+    "agreeToTerms": "Acepto los <0>Términos de Servicio</0> y la <1>Política de Privacidad</1>",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta? <0>Inicia sesión</0>",
+    "dontHaveAccount": "¿No tienes una cuenta? <0>Regístrate</0>"
+  },
+  "trust": {
+    "landingLine": "Revisión educativa gratuita. Tus documentos nunca se venden ni se comparten. No estamos afiliados a ninguna aseguradora en particular.",
+    "accountLine": "Este prototipo no envía tu información a un servidor ni crea una cuenta real. Coverage Compass es una plataforma educativa independiente, no una compañía de seguros.",
+    "uploadLine": "Nunca se vende ni se comparte. Se lee completamente en tu navegador, no está encriptado."
+  },
+  "score": {
+    "title": "Tu Puntaje de Cobertura",
+    "outOf": "de 100",
+    "shortExplainer": "Tu Puntaje de Cobertura es una instantánea educativa de cómo se compara tu póliza en las áreas clave de protección — no es una calificación tuya, ni una garantía de cómo se manejaría un reclamo.",
+    "categories": {
+      "liability": "Protección de Responsabilidad Civil",
+      "property": "Protección de Propiedad",
+      "deductibles": "Deducibles",
+      "optional": "Coberturas Opcionales",
+      "risk": "Áreas de Riesgo"
+    }
+  },
+  "gapReport": {
+    "title": "Áreas Que Vale la Pena Revisar",
+    "subheadline": "Según tu póliza, aquí hay algunas áreas de cobertura que comúnmente se pasan por alto — no porque tu póliza esté mal, sino porque son fáciles de omitir sin una conversación.",
+    "statusNotFound": "No Encontrado en la Póliza",
+    "statusLimitLow": "El Límite Podría Ser Bajo",
+    "statusWorthConfirming": "Vale la Pena Confirmar",
+    "questionsHeadline": "¿Qué Preguntas Deberías Hacerle a Tu Profesional de Seguros?"
+  },
+  "footer": {
+    "about": "Acerca de",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "contact": "Contacto",
+    "learningCenter": "Centro de Educación sobre Seguros"
+  },
+  "language": {
+    "selectLanguage": "Seleccionar idioma",
+    "currentLanguage": "Idioma: {{language}}"
+  }
+}

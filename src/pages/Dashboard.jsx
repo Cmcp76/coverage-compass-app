@@ -1,33 +1,90 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { lowercaseExceptAcronyms } from '../lib/policyAnalysis.js'
+import ScoreGauge from '../components/ScoreGauge.jsx'
+import OlderReportBanner from '../components/OlderReportBanner.jsx'
+import { localePath } from '../utils/localeRouting.js'
+import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 
 export default function Dashboard() {
-  const { analysis } = usePolicy()
+  const { t } = useTranslation('common')
+  const { analysis, history, loadFromHistory } = usePolicy()
+  const navigate = useNavigate()
+  const { lang } = useParams()
+  const { formatShortDate } = useLocaleFormat()
+
+  // Checking history[0] alone isn't enough: reset() (used by Log Out) only
+  // clears the active analysis back to demo data, it doesn't wipe history -
+  // logging out is meant to end a session, not delete a real upload's
+  // record, the same way logging out of any app doesn't delete your data.
+  // But that means right after a reset, history[0] still points at a real
+  // past upload, and showing it here as "recent activity" contradicts the
+  // score card right above it, which is correctly showing demo data.
+  const latestReview = !analysis.isDemo && history[0]
+    ? {
+        title: `${history[0].detectedPolicyType} reviewed`,
+        date: formatShortDate(history[0].analyzedAt),
+        onView: () => {
+          loadFromHistory(history[0].id)
+          navigate(localePath(lang, '/gap-report'))
+        },
+      }
+    : {
+        title: 'Sample auto policy reviewed (demo data)',
+        date: 'Upload your own to replace this',
+        onView: () => navigate(localePath(lang, '/gap-report')),
+      }
+  const activityFeed = [latestReview, ...recentActivity.slice(1)]
+
+  const topGaps = analysis.gaps.filter((g) => !g.found).slice(0, 2)
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
+      <OlderReportBanner />
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-compass-navy">
+          <h1 className="font-display text-2xl font-semibold text-compass-heading">
             Hi, Maria
           </h1>
           <p className="mt-1 text-sm text-compass-slate">
             Here's where things stand today.
           </p>
         </div>
-        <Link to="/upload" className="btn-primary">
-          Upload Policy
+        <Link to={localePath(lang, '/upload')} className="btn-primary">
+          {t('nav.uploadPolicy')}
         </Link>
       </div>
 
+      <Link
+        to={localePath(lang, '/trucking-startup')}
+        className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
+      >
+        <div>
+          <span className="tag-neutral">Trucking</span>
+          <p className="mt-2 text-sm font-medium text-compass-ink">Starting a trucking company?</p>
+          <p className="mt-1 text-xs text-compass-slate">
+            A step-by-step checklist for business formation, FMCSA authority, driver and
+            vehicle compliance, and the insurance coverage that matches your operation. No
+            policy upload needed.
+          </p>
+        </div>
+        <span className="btn-secondary shrink-0">Start My Trucking Company</span>
+      </Link>
+
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Score card */}
-        <Link to="/score" className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">
-          <p className="text-sm text-compass-slate">Your Coverage Score</p>
-          <p className="mt-2 font-display text-5xl font-semibold text-compass-blue">
-            {analysis.coverageScore}
-            <span className="text-xl text-compass-slate">/100</span>
-          </p>
+        <Link to={localePath(lang, '/score')} className="card flex flex-col items-center justify-center text-center transition hover:border-compass-blue">
+          <p className="text-sm text-compass-slate">{t('score.title')}</p>
+          <ScoreGauge score={analysis.coverageScore} size={140} strokeWidth={10}>
+            {(animated) => (
+              <p className="font-display text-3xl font-semibold text-compass-link">
+                {animated}
+                <span className="text-sm text-compass-slate">/100</span>
+              </p>
+            )}
+          </ScoreGauge>
           <p className="mt-2 text-xs text-compass-slate">
             Educational snapshot, not a guarantee
           </p>
@@ -60,19 +117,19 @@ export default function Dashboard() {
         <div className="card lg:col-span-2">
           <p className="mb-4 text-sm font-medium text-compass-ink">Recent activity</p>
           <div className="space-y-3">
-            {recentActivity.map((item) => (
+            {activityFeed.map((item) => (
               <div
                 key={item.title}
-                className="flex items-center justify-between rounded-lg border border-compass-line px-4 py-3"
+                className="flex items-center justify-between rounded-lg border border-compass-line px-4 py-3 transition hover:border-compass-blue/40 hover:bg-compass-paper"
               >
                 <div>
                   <p className="text-sm text-compass-ink">{item.title}</p>
                   <p className="text-xs text-compass-slate">{item.date}</p>
                 </div>
-                {item.type === 'review' && (
-                  <Link to="/gap-report" className="btn-secondary px-3 py-1.5 text-xs">
+                {item.onView && (
+                  <button onClick={item.onView} className="btn-secondary px-3 py-1.5 text-xs">
                     View Report
-                  </Link>
+                  </button>
                 )}
               </div>
             ))}
@@ -85,19 +142,21 @@ export default function Dashboard() {
             Educational recommendations
           </p>
           <ul className="space-y-3 text-sm text-compass-slate">
+            {topGaps.map((gap) => (
+              <li key={gap.name}>
+                <Link to={localePath(lang, '/gap-report')} className="text-compass-link hover:underline">
+                  Would {lowercaseExceptAcronyms(gap.name)} make sense for you?
+                </Link>
+              </li>
+            ))}
             <li>
-              <Link to="/learning-center" className="text-compass-blue hover:underline">
-                Do You Need an Umbrella Policy?
-              </Link>
-            </li>
-            <li>
-              <Link to="/learning-center" className="text-compass-blue hover:underline">
-                Renters Insurance 101
-              </Link>
-            </li>
-            <li>
-              <Link to="/tools" className="text-compass-blue hover:underline">
+              <Link to={localePath(lang, '/tools')} className="text-compass-link hover:underline">
                 Try the Deductible Calculator
+              </Link>
+            </li>
+            <li>
+              <Link to={localePath(lang, '/challenge')} state={{ fromApp: true }} className="text-compass-link hover:underline">
+                Take the Coverage Compass Challenge
               </Link>
             </li>
           </ul>

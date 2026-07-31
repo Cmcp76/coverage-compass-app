@@ -7,7 +7,7 @@ export const samplePolicy = {
   policyType: 'Auto',
   carrierName: 'Sample Insurance Co',
   effectiveDate: 'Jan 1, 2026',
-  reportGeneratedDate: 'Jul 26, 2026',
+  reportGeneratedDate: '2026-07-26T12:00:00.000Z',
   coverageScore: 87,
   coverages: [
     {
@@ -43,6 +43,19 @@ export const samplePolicy = {
         'Not found in the uploaded document. Coverage details could not be confirmed.',
       confidence: 'missing',
     },
+    {
+      name: 'Uninsured/Underinsured Motorist',
+      limit: '$250,000 / $500,000',
+      explanation: 'Protects you if the at-fault driver has little or no insurance.',
+      confidence: 'high',
+    },
+    {
+      name: 'Roadside Assistance',
+      limit: 'Mentioned, limit not clearly detected',
+      explanation:
+        'Coverage for towing, jump-starts, lockouts, and flat tires. Limit not clearly stated in the document.',
+      confidence: 'medium',
+    },
   ],
   scoreCategories: [
     { name: 'Liability Protection', status: 'good', icon: 'shield' },
@@ -72,17 +85,17 @@ export const samplePolicy = {
       icon: 'droplet',
     },
     {
-      name: 'Rental Car Coverage',
-      what: 'Coverage that pays for a rental car while your vehicle is being repaired after a covered claim.',
-      why: 'Without it, you may be responsible for rental costs out of pocket during repairs.',
-      status: 'Worth Confirming',
+      name: 'Gap Insurance (Loan/Lease Payoff)',
+      what: 'Covers the difference between what you owe on a loan or lease and your vehicle’s actual cash value after a total loss.',
+      why: 'A new vehicle can depreciate faster than a loan balance drops, leaving you owing money on a car you no longer have.',
+      status: 'Not Found in Policy',
       icon: 'car',
     },
     {
       name: 'Roadside Assistance',
       what: 'Coverage for towing, jump-starts, lockouts, and flat tires.',
-      why: 'A low-cost add-on that some drivers assume is automatically included.',
-      status: 'Not Found in Policy',
+      why: 'Your policy mentions roadside assistance, but the service limits aren’t fully spelled out, worth confirming with your agent.',
+      status: 'Worth Confirming',
       icon: 'tool',
     },
   ],
@@ -134,6 +147,20 @@ export const articles = [
     readTime: '3 min read',
   },
   {
+    category: 'Commercial',
+    title: 'Does Your Business Need Cyber Liability Insurance?',
+    summary:
+      'If you store customer data, take online payments, or rely on computer systems, your general liability policy probably isn’t covering a cyber incident.',
+    readTime: '4 min read',
+  },
+  {
+    category: 'Commercial',
+    title: 'General Liability vs. Professional Liability: Which One Do You Need?',
+    summary:
+      'GL covers third-party injury and property damage. It doesn’t cover a claim that your advice or work itself caused a client to lose money.',
+    readTime: '4 min read',
+  },
+  {
     category: 'Trucking',
     title: 'USDOT Number vs. MC Authority: What\u2019s the Difference?',
     summary:
@@ -157,6 +184,33 @@ export const articles = [
     category: 'Renters',
     title: 'Renters Insurance 101: What It Actually Covers',
     summary: 'A quick guide to personal property, liability, and additional living expenses.',
+    readTime: '3 min read',
+  },
+  {
+    category: 'Condo',
+    title: 'HO-6 Insurance: What Your Condo Association’s Policy Doesn’t Cover',
+    summary:
+      'The association’s master policy covers the building. Here’s what’s left for you to insure yourself.',
+    readTime: '3 min read',
+  },
+  {
+    category: 'Landlord',
+    title: 'Landlord Insurance vs. Homeowners: Why You Need a Different Policy',
+    summary:
+      'Renting out a property changes your risk, and a standard homeowners policy usually won’t follow you there.',
+    readTime: '4 min read',
+  },
+  {
+    category: 'Life',
+    title: 'Term vs. Whole Life Insurance: The Basics Everyone Should Know',
+    summary: 'Two very different products that both get called “life insurance.” Here’s how they differ.',
+    readTime: '4 min read',
+  },
+  {
+    category: "Workers' Compensation",
+    title: 'What Is an Experience Modifier, and Why Does It Change Your Premium?',
+    summary:
+      'A single number based on your claims history that can raise or lower what you pay for workers’ comp.',
     readTime: '3 min read',
   },
 ]

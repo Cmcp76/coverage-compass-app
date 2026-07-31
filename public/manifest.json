@@ -1,0 +1,24 @@
+{
+  "name": "Coverage Compass",
+  "short_name": "Coverage Compass",
+  "description": "Turn your insurance policy into plain language. See what's covered, what might be missing, and what to ask before you ever file a claim.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1D5FA6",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

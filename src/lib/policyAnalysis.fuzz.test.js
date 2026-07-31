@@ -1,0 +1,198 @@
+import { describe, expect, it } from 'vitest'
+import {
+  analyzeText,
+  coverageRuleSets,
+  detectPolicyType,
+  extractNamedInsured,
+  gapRuleSets,
+  keywordIsPresent,
+} from './policyAnalysis.js'
+
+// A tiny seeded PRNG (mulberry32) so a failing case is reproducible from its
+// seed rather than depending on Math.random, which would make a fuzz-found
+// bug impossible to pin down again on a re-run.
+function mulberry32(seed) {
+  let a = seed
+  return function () {
+    a |= 0
+    a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+const REAL_WORDS = [
+  'bodily', 'injury', 'liability', 'property', 'damage', 'comprehensive', 'collision',
+  'rental', 'reimbursement', 'dwelling', 'coverage', 'loss', 'of', 'use', 'personal',
+  'renters', 'tenant', 'HO-4', 'landlord', 'general', 'CGL', 'completed', 'operations',
+  'workers', 'compensation', 'employer', 'class', 'code', 'payroll', 'motor', 'carrier',
+  'cargo', 'bobtail', 'USDOT', 'umbrella', 'flood', 'jewelry', 'identity', 'theft',
+  'deductible', 'named', 'insured', 'policy', 'not', 'no', 'without', 'excludes',
+  'excluding', 'excluded', 'except', 'included', 'covered', 'the', 'this', 'a', 'is',
+]
+const PUNCTUATION = ['.', ',', '\n', '\n\n', ':', ';', '-', '$', '  ', '.  ', '.\n', '..', '...']
+const NUMBER_LIKE = ['1,500.00', '$1,500', '250,000', '$40,000,', '3.14159', '0', '-5', '5,000.5', '$$', ',,,,']
+const WEIRD = ['', ' ', '\t', '\u0000', '�', '😀', 'a'.repeat(5000), 'ñ'.repeat(50), '\\d+', '(?:)', '\r\n']
+
+function randomChoice(rng, arr) {
+  return arr[Math.floor(rng() * arr.length)]
+}
+
+function randomText(rng, tokenCount) {
+  const pools = [REAL_WORDS, REAL_WORDS, REAL_WORDS, PUNCTUATION, NUMBER_LIKE, WEIRD]
+  const tokens = []
+  for (let i = 0; i < tokenCount; i++) {
+    const pool = randomChoice(rng, pools)
+    tokens.push(randomChoice(rng, pool))
+  }
+  return tokens.join(' ')
+}
+
+const SEED = 20260729 // pinned so a failure is reproducible; bump to explore new cases
+const ITERATIONS = 500
+const MAX_MS_PER_CALL = 200 // generous ceiling to catch any catastrophic-backtracking-shaped regex
+
+describe('policyAnalysis fuzz: analyzeText never throws and always returns a sane shape', () => {
+  const rng = mulberry32(SEED)
+
+  for (let i = 0; i < ITERATIONS; i++) {
+    const tokenCount = Math.floor(rng() * 60)
+    const text = randomText(rng, tokenCount)
+
+    it(`case #${i} (tokenCount=${tokenCount})`, () => {
+      const start = performance.now()
+      let result
+      expect(() => {
+        result = analyzeText(text, { fileName: 'fuzz.txt' })
+      }).not.toThrow()
+      const elapsed = performance.now() - start
+      expect(elapsed).toBeLessThan(MAX_MS_PER_CALL)
+
+      // Core shape invariants that must hold for literally any input text.
+      expect(typeof result.detectedPolicyType).toBe('string')
+      expect(Object.values(gapRuleSets).some((rules) => rules.length > 0)).toBe(true)
+      expect(result.coverageScore).toBeGreaterThanOrEqual(20)
+      expect(result.coverageScore).toBeLessThanOrEqual(98)
+      expect(Number.isFinite(result.coverageScore)).toBe(true)
+      expect(Array.isArray(result.coverages)).toBe(true)
+      expect(Array.isArray(result.gaps)).toBe(true)
+      expect(Array.isArray(result.questionsToAsk)).toBe(true)
+      expect(Array.isArray(result.strengths)).toBe(true)
+      expect(result.strengths.length).toBeGreaterThan(0)
+
+      // questionsToAsk: always has the two static bookend questions (2 to 5
+      // items total), and must always end with the closing exclusions
+      // question — the exact invariant the buildQuestions off-by-one bug
+      // violated for a specific input shape earlier this session.
+      expect(result.questionsToAsk.length).toBeGreaterThanOrEqual(2)
+      expect(result.questionsToAsk.length).toBeLessThanOrEqual(5)
+      expect(result.questionsToAsk[0]).toBe('Do I have enough liability protection given my exposure?')
+      expect(result.questionsToAsk[result.questionsToAsk.length - 1]).toBe(
+        'Are there any exclusions in my policy I should know about?',
+      )
+
+      // "Not Found in Policy" gaps must always sort ahead of "Worth
+      // Confirming" ones (Dashboard/Notifications surface gaps[0] as the
+      // headline alert, so this ordering is load-bearing, not cosmetic).
+      const foundFlags = result.gaps.map((g) => g.found)
+      const firstFoundIndex = foundFlags.indexOf(true)
+      if (firstFoundIndex !== -1) {
+        expect(foundFlags.slice(0, firstFoundIndex).every((f) => f === false)).toBe(true)
+      }
+
+      // No strength/coverage/gap string should ever contain the literal
+      // "undefined" or "NaN" leaking through from a missing/malformed field.
+      const allStrings = [
+        ...result.strengths,
+        ...result.questionsToAsk,
+        ...result.coverages.flatMap((c) => [c.name, c.limit, c.explanation]),
+        ...result.gaps.flatMap((g) => [g.name, g.what, g.why, g.status]),
+      ]
+      for (const s of allStrings) {
+        expect(s).not.toMatch(/\bundefined\b/)
+        expect(s).not.toMatch(/\bNaN\b/)
+      }
+    })
+  }
+})
+
+describe('policyAnalysis fuzz: keywordIsPresent and detectPolicyType never throw', () => {
+  const rng = mulberry32(SEED + 1)
+  const allKeywordSets = [
+    ...Object.values(coverageRuleSets).flatMap((rules) => rules.map((r) => r.keywords)),
+    ...Object.values(gapRuleSets).flatMap((rules) => rules.map((r) => r.keywords)),
+  ]
+
+  for (let i = 0; i < ITERATIONS; i++) {
+    const text = randomText(rng, Math.floor(rng() * 40))
+    const keywords = randomChoice(rng, allKeywordSets)
+
+    it(`case #${i}`, () => {
+      expect(() => keywordIsPresent(text, keywords)).not.toThrow()
+      expect(() => detectPolicyType(text)).not.toThrow()
+      expect(() => extractNamedInsured(text)).not.toThrow()
+      const detected = detectPolicyType(text)
+      expect(['auto', 'homeowners', 'renters', 'general_liability', 'workers_comp', 'trucking']).toContain(
+        detected.type,
+      )
+    })
+  }
+})
+
+describe('policyAnalysis fuzz: adversarial period/decimal patterns around the negation window', () => {
+  // Targeted, not purely random: these specifically stress the sentence-
+  // boundary fix (SENTENCE_END = /\.(?!\d)|\n/g) with the kind of input most
+  // likely to break it — runs of decimal points, a match right at the very
+  // start/end of the text, and repeated negation words.
+  const cases = [
+    '1.2.3.4.5.6.7.8.9.0 comprehensive $1.2.3.4 not included',
+    'comprehensive',
+    'not included comprehensive',
+    'comprehensive not included',
+    '.comprehensive.',
+    '$.comprehensive.$',
+    'comprehensive' + '.'.repeat(50) + 'not included',
+    'not '.repeat(30) + 'comprehensive',
+    'comprehensive' + ' not'.repeat(30),
+    '$1,500.00.00.00 comprehensive not included $2,000.00.00',
+    'comprehensive'.repeat(20),
+    '\n\n\n\ncomprehensive\n\n\n\nnot included\n\n\n\n',
+  ]
+
+  for (const [i, text] of cases.entries()) {
+    it(`adversarial case #${i}: ${JSON.stringify(text.slice(0, 40))}`, () => {
+      const start = performance.now()
+      expect(() => keywordIsPresent(text, [/comprehensive/i])).not.toThrow()
+      expect(performance.now() - start).toBeLessThan(MAX_MS_PER_CALL)
+    })
+  }
+})
+
+describe('policyAnalysis fuzz: catastrophic-backtracking-shaped input against every limitPattern', () => {
+  // Every limitPattern combines a bounded [^$]{0,40} gap with a [\d,]*\d
+  // run, so the classic ReDoS shape to try against it is a long run of
+  // digits/commas that almost matches but is deliberately denied a
+  // terminating "$" or trailing digit, forcing maximum backtracking.
+  const allRules = [...Object.values(coverageRuleSets).flat(), ...Object.values(gapRuleSets).flat()].filter(
+    (r) => r.limitPattern,
+  )
+  const adversarialTails = [
+    ',' .repeat(2000),
+    '1,'.repeat(1000),
+    ','.repeat(1000) + 'x',
+    '$' + '1,'.repeat(1000),
+    ('1,2,3,4,5,'.repeat(300)) + '$',
+  ]
+
+  for (const rule of allRules) {
+    for (const [i, tail] of adversarialTails.entries()) {
+      it(`${rule.name} limitPattern vs adversarial tail #${i}`, () => {
+        const text = rule.name + ' ' + tail
+        const start = performance.now()
+        expect(() => text.match(rule.limitPattern)).not.toThrow()
+        expect(performance.now() - start).toBeLessThan(MAX_MS_PER_CALL)
+      })
+    }
+  }
+})

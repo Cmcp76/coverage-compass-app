@@ -6,7 +6,7 @@ export function FooterDisclaimer() {
       insurance policies. Information provided is educational only and does not
       constitute insurance, legal, or financial advice. Coverage decisions should be
       made in consultation with a licensed insurance professional. Coverage Compass
-      does not guarantee the accuracy of AI-generated summaries and recommends
+      does not guarantee the accuracy of automatically generated summaries and recommends
       verifying all details against your official policy documents.
     </p>
   )

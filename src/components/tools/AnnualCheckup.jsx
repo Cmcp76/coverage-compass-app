@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { localePath } from '../../utils/localeRouting.js'
 
 const prompts = [
   'Have you moved, renovated, or made major purchases this year?',
@@ -10,15 +12,17 @@ const prompts = [
 ]
 
 export default function AnnualCheckup() {
+  const { t } = useTranslation('common')
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const { lang } = useParams()
 
   const yesCount = Object.values(answers).filter((a) => a === 'Yes').length
   const allAnswered = prompts.every((_, i) => answers[i])
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Annual Insurance Checkup
       </h2>
       <p className="mt-1 text-sm text-compass-slate">
@@ -35,6 +39,7 @@ export default function AnnualCheckup() {
                 <button
                   key={opt}
                   onClick={() => setAnswers((prev) => ({ ...prev, [i]: opt }))}
+                  aria-pressed={answers[i] === opt}
                   className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
                     answers[i] === opt
                       ? 'bg-compass-blue text-white'
@@ -58,14 +63,14 @@ export default function AnnualCheckup() {
       </button>
 
       {submitted && (
-        <div className="mt-5 rounded-lg bg-compass-paper p-4">
+        <div role="status" className="mt-5 rounded-lg bg-compass-paper p-4">
           <p className="text-sm text-compass-ink">
             {yesCount > 0
               ? `Based on your answers, it looks like you've had ${yesCount} change${yesCount > 1 ? 's' : ''} worth reviewing. These are common reasons policies fall out of date. Consider reaching out to your insurance professional to confirm your coverage still fits.`
               : "Based on your answers, it doesn't look like much has changed this year. Still, an annual check-in with your insurance professional is a good habit."}
           </p>
-          <Link to="/upload" className="btn-secondary mt-4 inline-flex">
-            Re-Upload Your Policy for an Updated Review
+          <Link to={localePath(lang, '/upload')} className="btn-secondary mt-4 inline-flex">
+            {t('buttons.reUploadPolicy')}
           </Link>
         </div>
       )}

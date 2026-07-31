@@ -1,18 +1,38 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import RequestCallback from '../components/RequestCallback.jsx'
+import OlderReportBanner from '../components/OlderReportBanner.jsx'
+import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
+import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
+import FallbackAnalysisBanner from '../components/FallbackAnalysisBanner.jsx'
+import { localePath } from '../utils/localeRouting.js'
+
+// analyzeText()/mockData.js produce these two literal English status strings;
+// map them to the matching translation keys rather than translating the raw
+// value directly (gapReport.statusLimitLow has no corresponding real status
+// value anywhere in the app today, so it's left unmapped).
+const STATUS_KEYS = {
+  'Worth Confirming': 'gapReport.statusWorthConfirming',
+  'Not Found in Policy': 'gapReport.statusNotFound',
+}
 
 export default function GapReport() {
+  const { t } = useTranslation('common')
   const { analysis } = usePolicy()
+  const { lang } = useParams()
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
-        Areas Worth a Second Look
+      <OlderReportBanner />
+      <NoReadableTextBanner />
+      <TruncatedDocumentBanner />
+      <FallbackAnalysisBanner />
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
+        {t('gapReport.title')}
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
-        Based on your policy, here are some coverage areas that commonly get missed,
-        not because your policy is wrong, but because these are easy to overlook
-        without a conversation.
+        {t('gapReport.subheadline')}
       </p>
       <p className="mt-1 text-xs text-compass-slate">
         These aren't errors or guarantees of a gap. They're educational prompts to
@@ -22,14 +42,14 @@ export default function GapReport() {
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         {analysis.gaps.map((gap) => (
           <div key={gap.name} className="card">
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-2">
               <p className="text-sm font-medium text-compass-ink">{gap.name}</p>
               <span
-                className={
+                className={`shrink-0 ${
                   gap.status === 'Worth Confirming' ? 'tag-review' : 'tag-neutral'
-                }
+                }`}
               >
-                {gap.status}
+                {STATUS_KEYS[gap.status] ? t(STATUS_KEYS[gap.status]) : gap.status}
               </span>
             </div>
             <p className="mt-2 text-xs text-compass-slate">
@@ -44,9 +64,13 @@ export default function GapReport() {
         ))}
       </div>
 
+      <div className="mt-8">
+        <RequestCallback />
+      </div>
+
       <div className="mt-8 rounded-xl bg-compass-paper p-6">
         <p className="text-sm font-medium text-compass-ink">
-          What Questions Should You Ask Your Insurance Professional?
+          {t('gapReport.questionsHeadline')}
         </p>
         <p className="mt-1 text-xs text-compass-slate">
           Use these as a starting point for your next conversation. There are no wrong
@@ -62,10 +86,10 @@ export default function GapReport() {
       </div>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link to="/report" className="btn-primary">
-          Download Full Report
+        <Link to={localePath(lang, '/report')} className="btn-primary">
+          {t('buttons.downloadFullReport')}
         </Link>
-        <Link to="/learning-center" className="btn-secondary">
+        <Link to={localePath(lang, '/learning-center')} className="btn-secondary">
           Explore These Topics in the Learning Center
         </Link>
       </div>

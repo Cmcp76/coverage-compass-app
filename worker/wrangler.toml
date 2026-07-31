@@ -1,0 +1,9 @@
+name = "coverage-compass-analyze"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Non-secret configuration. ANTHROPIC_API_KEY is intentionally NOT here -
+# secrets go through `wrangler secret put`, never committed to a config
+# file. See worker/README.md.
+[vars]
+ALLOWED_ORIGINS = "http://localhost:5173,https://cmcp76.github.io"

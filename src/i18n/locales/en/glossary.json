@@ -1,0 +1,65 @@
+{
+  "disclaimer": "This glossary provides plain-language, general definitions for common insurance terms. It is educational only, may not reflect your policy's specific language, and is not a substitute for reviewing your official policy documents or consulting a licensed insurance professional.",
+  "terms": {
+    "declarationsPage": {
+      "term": "Declarations Page",
+      "definition": "The summary page of your policy — usually the first page — showing who's insured, what's covered, your limits, deductibles, and effective dates."
+    },
+    "subrogation": {
+      "term": "Subrogation",
+      "definition": "The process by which your insurance company seeks reimbursement from an at-fault party's insurer after paying your claim."
+    },
+    "endorsement": {
+      "term": "Endorsement",
+      "definition": "A change or addition to your policy that adjusts, adds, or removes coverage from the base policy."
+    },
+    "deductible": {
+      "term": "Deductible",
+      "definition": "The amount you pay out of pocket before your insurance coverage begins to pay on a claim."
+    },
+    "liabilityLimit": {
+      "term": "Liability Limit",
+      "definition": "The maximum amount your policy will pay if you're found legally responsible for injury or damage to someone else."
+    },
+    "actualCashValue": {
+      "term": "Actual Cash Value (ACV)",
+      "definition": "The value of damaged property after accounting for depreciation — generally a lower payout than replacement cost."
+    },
+    "replacementCost": {
+      "term": "Replacement Cost",
+      "definition": "The cost to replace damaged property with new property of similar kind and quality, without a deduction for depreciation."
+    },
+    "umbrellaPolicy": {
+      "term": "Umbrella Policy",
+      "definition": "Extra liability protection that kicks in above your auto or home policy limits once those limits are exhausted."
+    },
+    "additionalInsured": {
+      "term": "Additional Insured",
+      "definition": "A person or business added to a policy who receives some of the protections of the named insured, often required in contracts or leases."
+    },
+    "certificateOfInsurance": {
+      "term": "Certificate of Insurance (COI)",
+      "definition": "A document that summarizes a policy's coverage, limits, and effective dates, often requested by landlords or contract partners as proof of coverage."
+    },
+    "generalLiability": {
+      "term": "General Liability (GL)",
+      "definition": "Business coverage that helps protect against claims of bodily injury, property damage, and advertising injury arising from your operations."
+    },
+    "workersCompensation": {
+      "term": "Workers' Compensation",
+      "definition": "Coverage that pays medical costs and lost wages for employees injured on the job, generally required by state law."
+    },
+    "motorCarrierAuthority": {
+      "term": "MC Authority",
+      "definition": "Operating authority granted by the FMCSA that allows a motor carrier to transport regulated goods or passengers across state lines for compensation."
+    },
+    "usdotNumber": {
+      "term": "USDOT Number",
+      "definition": "A unique identifier issued by the FMCSA used to monitor a commercial vehicle operation's safety and compliance."
+    },
+    "bobtailCoverage": {
+      "term": "Bobtail Coverage",
+      "definition": "Liability coverage for a tractor operating without an attached trailer, typically when not under dispatch."
+    }
+  }
+}

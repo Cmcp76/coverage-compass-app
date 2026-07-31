@@ -1,0 +1,92 @@
+{
+  "brand": {
+    "name": "Coverage Compass",
+    "tagline": "Helping people understand insurance before they need it."
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "uploadPolicy": "Upload Policy",
+    "reports": "Reports",
+    "learningCenter": "Learn",
+    "tools": "Tools",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "logIn": "Log In",
+    "logOut": "Log Out",
+    "signUp": "Sign Up"
+  },
+  "buttons": {
+    "uploadYourPolicy": "Upload Your Policy",
+    "learnAboutInsurance": "Learn About Insurance",
+    "createMyAccount": "Create My Account",
+    "logIn": "Log In",
+    "sendResetLink": "Send Reset Link",
+    "updatePassword": "Update Password",
+    "resendVerificationEmail": "Resend Verification Email",
+    "verificationEmailSent": "Verification Email Sent",
+    "uploadYourFirstPolicy": "Upload Your First Policy",
+    "exploreLearningCenter": "Explore the Learning Center first",
+    "downloadFullReport": "Download Full Report",
+    "downloadPdf": "Download PDF",
+    "seeFullReport": "See Full Report",
+    "reUploadPolicy": "Re-Upload Your Policy for an Updated Review",
+    "takePhoto": "Take a Photo",
+    "chooseFile": "Choose a File",
+    "readArticle": "Read Article",
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back",
+    "submit": "Submit"
+  },
+  "forms": {
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "rememberMe": "Remember Me",
+    "agreeToTerms": "I agree to the <0>Terms of Service</0> and <1>Privacy Policy</1>",
+    "forgotPassword": "Forgot Password?",
+    "alreadyHaveAccount": "Already have an account? <0>Log In</0>",
+    "dontHaveAccount": "Don't have an account? <0>Sign Up</0>"
+  },
+  "trust": {
+    "landingLine": "Free educational review. Your documents are never sold or shared. Not affiliated with any single carrier.",
+    "accountLine": "This prototype doesn't send your information to a server or create a real account. Coverage Compass is an independent educational platform, not an insurance company.",
+    "uploadLine": "Never sold or shared. Read entirely in your browser, not encrypted."
+  },
+  "score": {
+    "title": "Your Coverage Score",
+    "outOf": "out of 100",
+    "shortExplainer": "Your Coverage Score is an educational snapshot of how your policy compares across key protection areas — not a rating of you, and not a guarantee of how a claim would be handled.",
+    "categories": {
+      "liability": "Liability Protection",
+      "property": "Property Protection",
+      "deductibles": "Deductibles",
+      "optional": "Optional Coverages",
+      "risk": "Risk Areas"
+    }
+  },
+  "gapReport": {
+    "title": "Areas Worth a Second Look",
+    "subheadline": "Based on your policy, here are some coverage areas that commonly get missed — not because your policy is wrong, but because these are easy to overlook without a conversation.",
+    "statusNotFound": "Not Found in Policy",
+    "statusLimitLow": "Limit May Be Low",
+    "statusWorthConfirming": "Worth Confirming",
+    "questionsHeadline": "What Questions Should You Ask Your Insurance Professional?"
+  },
+  "footer": {
+    "about": "About",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contact": "Contact",
+    "learningCenter": "Insurance Education Center"
+  },
+  "language": {
+    "selectLanguage": "Select language",
+    "currentLanguage": "Language: {{language}}"
+  }
+}

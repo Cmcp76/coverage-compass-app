@@ -1,44 +1,95 @@
 import { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { analyzeText } from '../lib/policyAnalysis.js'
+import { analyzeWithLLM, AnalysisNotConfiguredError } from '../lib/analyzeWithLLM.js'
 import { extractTextFromPdf } from '../lib/pdfText.js'
+import { localePath } from '../utils/localeRouting.js'
+
+const MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024 // 15MB, generous for a declarations page/policy PDF
 
 export default function Upload() {
+  const { t } = useTranslation('common')
   const [state, setState] = useState('idle') // idle | reading | scanning | done | error
   const [fileName, setFileName] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const inputRef = useRef(null)
   const navigate = useNavigate()
-  const { setAnalysis } = usePolicy()
+  const { lang } = useParams()
+  const { setAnalysis, addToHistory } = usePolicy()
 
   async function handleFile(file) {
     if (!file) return
+    // The dropzone stays mounted (and droppable) across every state, so a
+    // second drop while the first file is still reading/scanning would
+    // otherwise race it: two concurrent analyses writing to the same
+    // PolicyContext state, with whichever resolves last silently winning.
+    if (state === 'reading' || state === 'scanning') return
     setFileName(file.name)
     setErrorMsg('')
     setState('reading')
 
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      // Math.round() alone can display "15MB" for a file that's actually a
+      // few KB over the 15MB cap (e.g. 15.03MB rounds down to 15), reading
+      // as a contradiction next to "15MB max" - round up to the nearest
+      // 0.1MB instead, so a rejected file never displays as exactly at the
+      // limit it was rejected for exceeding.
+      const sizeMb = Math.ceil((file.size / (1024 * 1024)) * 10) / 10
+      setErrorMsg(
+        `That file is too large for this prototype to read in the browser (${sizeMb}MB, 15MB max). Try a smaller file, like a declarations page instead of a full policy.`,
+      )
+      setState('error')
+      return
+    }
+
     try {
       let text = ''
+      let truncated = false
 
       if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-        text = await extractTextFromPdf(file)
+        ;({ text, truncated } = await extractTextFromPdf(file))
       } else if (file.type.startsWith('text/') || file.name.toLowerCase().endsWith('.txt')) {
         text = await file.text()
       } else if (file.type.startsWith('image/')) {
         // No OCR in this prototype, fall through to the mocked scanning step
         // with a note rather than fabricating extracted text.
         text = ''
+      } else {
+        setErrorMsg(
+          "That file type isn't supported in this prototype. Try a text-based PDF, a plain .txt file, or a JPG/PNG image.",
+        )
+        setState('error')
+        return
       }
 
       setState('scanning')
 
-      // Small delay so the scanning state is visible, this also stands in
-      // for where a real OCR/extraction API call would happen for images.
-      await new Promise((resolve) => setTimeout(resolve, 900))
+      let analysis
+      try {
+        // Real document understanding via the Claude API (see /worker),
+        // not the local keyword matcher - this is the actual product value,
+        // and it takes real network/model time, so no artificial delay
+        // needed here the way the fallback path below needs one.
+        analysis = await analyzeWithLLM(text, { fileName: file.name, truncated })
+      } catch (err) {
+        // AnalysisNotConfiguredError just means no backend has been
+        // deployed yet (VITE_ANALYSIS_API_URL unset) - expected, not a
+        // failure worth logging. Anything else is a genuine request
+        // failure worth knowing about even though the person just sees a
+        // graceful fallback.
+        if (!(err instanceof AnalysisNotConfiguredError)) {
+          console.error('Real policy analysis failed, using local fallback:', err)
+        }
+        // Small delay so the scanning state is visible, this also stands in
+        // for where a real OCR/extraction step would happen for images.
+        await new Promise((resolve) => setTimeout(resolve, 900))
+        analysis = analyzeText(text, { fileName: file.name, truncated })
+      }
 
-      const analysis = analyzeText(text, { fileName: file.name })
       setAnalysis(analysis)
+      addToHistory(analysis)
       setState('done')
     } catch (err) {
       console.error(err)
@@ -51,20 +102,27 @@ export default function Upload() {
 
   function onDrop(e) {
     e.preventDefault()
-    const file = e.dataTransfer.files?.[0]
-    handleFile(file)
+    const files = e.dataTransfer.files
+    if (files && files.length > 1) {
+      setFileName('')
+      setErrorMsg('Drop just one file at a time, we can only review a single policy document per upload.')
+      setState('error')
+      return
+    }
+    handleFile(files?.[0])
   }
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
-        Upload Your Policy
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
+        {t('buttons.uploadYourPolicy')}
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
         Drop in a declarations page, ACORD form, or full policy, auto, homeowners,
-        general liability, workers' compensation, or a trucking/motor carrier policy.
-        The reviewer detects which line of business it's looking at and adjusts the
-        review accordingly. PDF or text file works best in this prototype.
+        renters, general liability, workers' compensation, or a trucking/motor
+        carrier policy. The reviewer detects which line of business it's looking at
+        and adjusts the review accordingly. PDF or text file works best in this
+        prototype.
       </p>
 
       <div
@@ -84,7 +142,7 @@ export default function Upload() {
               className="btn-secondary mt-5"
               onClick={() => inputRef.current?.click()}
             >
-              Choose a File
+              {t('buttons.chooseFile')}
             </button>
             <input
               ref={inputRef}
@@ -101,8 +159,8 @@ export default function Upload() {
             <p className="text-sm font-medium text-compass-ink">
               Reading {fileName}...
             </p>
-            <div className="mt-4 h-2 w-56 overflow-hidden rounded-full bg-compass-line">
-              <div className="h-full w-2/3 animate-pulse bg-compass-blue" />
+            <div className="relative mt-4 h-2 w-56 overflow-hidden rounded-full bg-compass-line">
+              <div className="progress-indeterminate" />
             </div>
           </>
         )}
@@ -125,7 +183,7 @@ export default function Upload() {
             <button
               type="button"
               className="btn-primary mt-5"
-              onClick={() => navigate('/ai-review')}
+              onClick={() => navigate(localePath(lang, '/ai-review'))}
             >
               See Your Policy Review
             </button>
@@ -133,7 +191,7 @@ export default function Upload() {
         )}
 
         {state === 'error' && (
-          <>
+          <div role="alert">
             <p className="text-sm font-medium text-compass-ink">
               Something went wrong reading that file
             </p>
@@ -145,14 +203,18 @@ export default function Upload() {
             >
               Try again
             </button>
-          </>
+          </div>
         )}
       </div>
 
       <p className="mt-4 text-center text-xs text-compass-slate">
-        Encrypted. Never sold or shared. Not affiliated with any single carrier. This
-        prototype reads your file entirely in your browser, nothing is uploaded to a
-        server.
+        Never sold or shared. Not affiliated with any single carrier. When
+        AI-powered analysis is available, your document's text is sent to our
+        server for review; otherwise it's read entirely in your browser. See the{' '}
+        <Link to={localePath(lang, '/privacy')} className="underline hover:text-compass-link">
+          Privacy Policy
+        </Link>{' '}
+        for details. Your review is saved locally in this browser, not encrypted.
       </p>
     </div>
   )
@@ -160,7 +222,7 @@ export default function Upload() {
 
 function UploadIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" className="text-compass-blue">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-compass-link">
       <path
         d="M12 16V4m0 0L7 9m5-5l5 5M5 20h14"
         stroke="currentColor"
@@ -174,7 +236,7 @@ function UploadIcon() {
 
 function ScanIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" className="animate-pulse text-compass-blue">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="animate-pulse text-compass-link">
       <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" strokeWidth="1.6" />
       <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
@@ -183,7 +245,7 @@ function ScanIcon() {
 
 function CheckIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" className="text-compass-green">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-compass-green">
       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.6" />
       <path d="M8 12l3 3 5-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>

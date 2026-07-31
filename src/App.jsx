@@ -1,46 +1,100 @@
-import { Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Layout from './components/Layout.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
+import LocaleLayout from './components/LocaleLayout.jsx'
 import { PolicyProvider } from './context/PolicyContext.jsx'
-import Landing from './pages/Landing.jsx'
-import SignUp from './pages/SignUp.jsx'
-import Login from './pages/Login.jsx'
-import ResetPassword from './pages/ResetPassword.jsx'
-import VerifyEmail from './pages/VerifyEmail.jsx'
-import Welcome from './pages/Welcome.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import Upload from './pages/Upload.jsx'
-import AIReview from './pages/AIReview.jsx'
-import CoverageScore from './pages/CoverageScore.jsx'
-import GapReport from './pages/GapReport.jsx'
-import Report from './pages/Report.jsx'
-import Reports from './pages/Reports.jsx'
-import Notifications from './pages/Notifications.jsx'
-import LearningCenter from './pages/LearningCenter.jsx'
-import Tools from './pages/Tools.jsx'
+import { ThemeProvider } from './context/ThemeContext.jsx'
+import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/languages.js'
+
+const Landing = lazy(() => import('./pages/Landing.jsx'))
+const SignUp = lazy(() => import('./pages/SignUp.jsx'))
+const Login = lazy(() => import('./pages/Login.jsx'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword.jsx'))
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail.jsx'))
+const Welcome = lazy(() => import('./pages/Welcome.jsx'))
+const Dashboard = lazy(() => import('./pages/Dashboard.jsx'))
+const Upload = lazy(() => import('./pages/Upload.jsx'))
+const AIReview = lazy(() => import('./pages/AIReview.jsx'))
+const CoverageScore = lazy(() => import('./pages/CoverageScore.jsx'))
+const GapReport = lazy(() => import('./pages/GapReport.jsx'))
+const Report = lazy(() => import('./pages/Report.jsx'))
+const Reports = lazy(() => import('./pages/Reports.jsx'))
+const Notifications = lazy(() => import('./pages/Notifications.jsx'))
+const LearningCenter = lazy(() => import('./pages/LearningCenter.jsx'))
+const Tools = lazy(() => import('./pages/Tools.jsx'))
+const Challenge = lazy(() => import('./pages/Challenge.jsx'))
+const TruckingStartup = lazy(() => import('./pages/TruckingStartup.jsx'))
+const About = lazy(() => import('./pages/About.jsx'))
+const Privacy = lazy(() => import('./pages/Privacy.jsx'))
+const Terms = lazy(() => import('./pages/Terms.jsx'))
+const NotFound = lazy(() => import('./pages/NotFound.jsx'))
+
+function RouteFallback() {
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-compass-line border-t-compass-blue" />
+    </div>
+  )
+}
 
 export default function App() {
+  const location = useLocation()
+  const { i18n } = useTranslation()
+  // i18next's LanguageDetector already resolved i18n.language (from a saved
+  // preference, then browser language, then the <html lang> fallback)
+  // before this ever renders, since main.jsx imports ./i18n as a
+  // side effect before <App/> mounts. Bare root used to always redirect to
+  // DEFAULT_LANGUAGE regardless of that, so a returning visitor who'd
+  // chosen Spanish was bounced back to English every time they landed on
+  // the homepage - the resolved language never got a chance to matter.
+  const resolvedLang = isSupportedLanguage(i18n.language) ? i18n.language : DEFAULT_LANGUAGE
+
   return (
-    <PolicyProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/ai-review" element={<AIReview />} />
-          <Route path="/score" element={<CoverageScore />} />
-          <Route path="/gap-report" element={<GapReport />} />
-          <Route path="/report" element={<Report />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/learning-center" element={<LearningCenter />} />
-          <Route path="/tools" element={<Tools />} />
-        </Routes>
-      </Layout>
-    </PolicyProvider>
+    <ThemeProvider>
+      <PolicyProvider>
+        <Layout>
+          {/* Keyed by pathname so navigating away from a page that crashed
+              (or hitting "Go to Dashboard" from the fallback itself) remounts
+              the boundary with a clean slate instead of staying stuck. */}
+          <ErrorBoundary key={location.pathname}>
+            <Suspense fallback={<RouteFallback />}>
+              <Routes>
+                {/* Bare root has no language segment yet — send it to the
+                    resolved language (saved preference, else browser
+                    language, else the default). LocaleLayout below is what
+                    actually persists the language for every real route. */}
+                <Route path="/" element={<Navigate to={`/${resolvedLang}`} replace />} />
+                <Route path="/:lang" element={<LocaleLayout />}>
+                  <Route index element={<Landing />} />
+                  <Route path="signup" element={<SignUp />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="reset-password" element={<ResetPassword />} />
+                  <Route path="verify-email" element={<VerifyEmail />} />
+                  <Route path="welcome" element={<Welcome />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="upload" element={<Upload />} />
+                  <Route path="ai-review" element={<AIReview />} />
+                  <Route path="score" element={<CoverageScore />} />
+                  <Route path="gap-report" element={<GapReport />} />
+                  <Route path="report" element={<Report />} />
+                  <Route path="reports" element={<Reports />} />
+                  <Route path="notifications" element={<Notifications />} />
+                  <Route path="learning-center" element={<LearningCenter />} />
+                  <Route path="tools" element={<Tools />} />
+                  <Route path="challenge" element={<Challenge />} />
+                  <Route path="trucking-startup" element={<TruckingStartup />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="privacy" element={<Privacy />} />
+                  <Route path="terms" element={<Terms />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
+        </Layout>
+      </PolicyProvider>
+    </ThemeProvider>
   )
 }

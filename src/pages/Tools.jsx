@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import HomeInventory from '../components/tools/HomeInventory.jsx'
 import ComparisonTool from '../components/tools/ComparisonTool.jsx'
 import AnnualCheckup from '../components/tools/AnnualCheckup.jsx'
 import Glossary from '../components/tools/Glossary.jsx'
+import { localePath } from '../utils/localeRouting.js'
+import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 
 const toolList = [
   { id: 'deductible', label: 'Deductible Calculator' },
@@ -16,10 +18,11 @@ const toolList = [
 
 export default function Tools() {
   const [active, setActive] = useState('deductible')
+  const { lang } = useParams()
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
-      <h1 className="font-display text-2xl font-semibold text-compass-navy">
+      <h1 className="font-display text-2xl font-semibold text-compass-heading">
         Insurance Tools to Help You Think It Through
       </h1>
       <p className="mt-2 text-sm text-compass-slate">
@@ -27,11 +30,45 @@ export default function Tools() {
         before or after you upload a policy.
       </p>
 
+      <Link
+        to={localePath(lang, '/challenge')}
+        state={{ fromApp: true }}
+        className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
+      >
+        <div>
+          <span className="tag-neutral">5-minute challenge</span>
+          <p className="mt-2 text-sm font-medium text-compass-ink">
+            Prefer a quick quiz to a calculator?
+          </p>
+          <p className="mt-1 text-xs text-compass-slate">
+            Take the Coverage Compass Challenge, 10 quick questions about auto, home, and
+            everyday coverage, with an educational Coverage Compass Score at the end.
+          </p>
+        </div>
+        <span className="btn-secondary shrink-0">Start the Challenge</span>
+      </Link>
+
+      <Link
+        to={localePath(lang, '/trucking-startup')}
+        className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-compass-line bg-compass-paper px-5 py-4 transition hover:border-compass-blue"
+      >
+        <div>
+          <span className="tag-neutral">Trucking</span>
+          <p className="mt-2 text-sm font-medium text-compass-ink">Starting a trucking company?</p>
+          <p className="mt-1 text-xs text-compass-slate">
+            A step-by-step checklist for business formation, FMCSA authority, driver and
+            vehicle compliance, and the insurance coverage that matches your operation.
+          </p>
+        </div>
+        <span className="btn-secondary shrink-0">Start My Trucking Company</span>
+      </Link>
+
       <div className="mt-6 flex flex-wrap gap-2">
         {toolList.map((t) => (
           <button
             key={t.id}
             onClick={() => setActive(t.id)}
+            aria-pressed={active === t.id}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
               active === t.id
                 ? 'bg-compass-blue text-white'
@@ -56,17 +93,18 @@ export default function Tools() {
 }
 
 function DeductibleCalculator() {
+  const { formatCurrency } = useLocaleFormat()
   const [claim, setClaim] = useState(5000)
   const [a, setA] = useState(500)
   const [b, setB] = useState(1000)
 
-  const fmt = (n) => `$${Math.max(0, Math.round(n)).toLocaleString()}`
+  const fmt = (n) => formatCurrency(Math.max(0, Math.round(n)))
   const outA = `You pay ${fmt(Math.min(a, claim))} out of pocket. Your policy would cover ${fmt(Math.max(0, claim - a))} of a ${fmt(claim)} claim.`
   const outB = `You pay ${fmt(Math.min(b, claim))} out of pocket. Your policy would cover ${fmt(Math.max(0, claim - b))} of a ${fmt(claim)} claim.`
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Deductible Calculator
       </h2>
       <p className="mt-1 text-sm text-compass-slate">
@@ -106,8 +144,9 @@ function NumberField({ label, value, onChange }) {
       <span className="mb-1 block text-xs font-medium text-compass-slate">{label}</span>
       <input
         type="number"
+        min="0"
         value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+        onChange={(e) => onChange(Math.max(0, parseFloat(e.target.value) || 0))}
         className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
       />
     </label>
@@ -132,14 +171,44 @@ const quizQuestions = [
     options: ['Yes', 'No', 'Not sure'],
   },
   {
+    q: 'Does your business store customer data, take online payments, or rely on computer systems to operate?',
+    options: ['Yes', 'No', 'Not sure'],
+  },
+  {
     q: 'Have you reviewed your policy in the last 12 months?',
     options: ['Yes', 'No'],
   },
 ]
 
+const propertySuggestions = {
+  'Own a home': 'Flood Coverage, often excluded from standard homeowners policies by default',
+  Rent: 'Renters Insurance for your personal belongings and liability',
+  'Own a condo': 'Condo (HO-6) Insurance and Loss Assessment Coverage',
+  Landlord: 'Landlord/Dwelling coverage and Loss of Rental Income Coverage',
+}
+
+function buildSuggestions(answers) {
+  const suggestions = []
+  if (propertySuggestions[answers[0]]) suggestions.push(propertySuggestions[answers[0]])
+  if (answers[1] === 'Yes') suggestions.push('Scheduled Personal Property for your high-value items')
+  if (answers[2] === 'Yes') {
+    suggestions.push('Umbrella Insurance, to extend liability protection above your underlying limits')
+  }
+  if (answers[3] === 'Yes') suggestions.push('A Business Use Endorsement or a separate commercial policy')
+  if (answers[4] === 'Yes') {
+    suggestions.push('Cyber Liability Insurance, to cover costs from data breaches, ransomware, or other cyber incidents')
+  }
+  if (answers[5] === 'No') suggestions.push('An annual policy review, since it has been over 12 months')
+  if (suggestions.length === 0) {
+    suggestions.push('Your basics look covered. An annual check-in is still a good habit.')
+  }
+  return suggestions.slice(0, 5)
+}
+
 function RiskQuiz() {
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const { lang } = useParams()
 
   function select(i, option) {
     setAnswers((prev) => ({ ...prev, [i]: option }))
@@ -149,7 +218,7 @@ function RiskQuiz() {
 
   return (
     <div className="card">
-      <h2 className="font-display text-lg font-semibold text-compass-navy">
+      <h2 className="font-display text-lg font-semibold text-compass-heading">
         Risk Assessment Quiz
       </h2>
       <p className="mt-1 text-sm text-compass-slate">
@@ -166,6 +235,7 @@ function RiskQuiz() {
                 <button
                   key={opt}
                   onClick={() => select(i, opt)}
+                  aria-pressed={answers[i] === opt}
                   className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
                     answers[i] === opt
                       ? 'bg-compass-blue text-white'
@@ -189,14 +259,21 @@ function RiskQuiz() {
       </button>
 
       {submitted && (
-        <div className="mt-5 rounded-lg bg-compass-paper p-4">
-          <p className="text-sm text-compass-ink">
+        <div role="status" className="mt-5 rounded-lg bg-compass-paper p-4">
+          <p className="text-sm font-medium text-compass-ink">
             Based on your answers, here are a few coverage areas that may be worth
-            exploring: Umbrella Insurance, Scheduled Personal Property, Business Use
-            Endorsement. These aren't recommendations, they're starting points for a
-            conversation with your insurance professional.
+            exploring:
           </p>
-          <Link to="/upload" className="btn-secondary mt-4 inline-flex">
+          <ul className="mt-2 list-disc space-y-1 ps-5 text-sm text-compass-ink">
+            {buildSuggestions(answers).map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-compass-slate">
+            These aren't recommendations, they're starting points for a conversation
+            with your insurance professional.
+          </p>
+          <Link to={localePath(lang, '/upload')} className="btn-secondary mt-4 inline-flex">
             Upload Your Policy for a More Specific Review
           </Link>
         </div>
