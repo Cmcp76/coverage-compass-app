@@ -17,6 +17,7 @@ import ScoreGauge from '../components/ScoreGauge.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
+import FallbackAnalysisBanner from '../components/FallbackAnalysisBanner.jsx'
 import { getChartColors } from '../lib/chartTheme.js'
 
 const categoryDetails = {
@@ -65,6 +66,7 @@ export default function CoverageScore() {
       <OlderReportBanner />
       <NoReadableTextBanner />
       <TruncatedDocumentBanner />
+      <FallbackAnalysisBanner />
       <h1 className="text-center font-display text-xl font-semibold text-compass-heading">
         {t('score.title')}
       </h1>

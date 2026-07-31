@@ -4,6 +4,7 @@ import { localePath } from '../utils/localeRouting.js'
 import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
+import FallbackAnalysisBanner from '../components/FallbackAnalysisBanner.jsx'
 
 export default function AIReview() {
   const { analysis } = usePolicy()
@@ -35,6 +36,7 @@ export default function AIReview() {
       )}
       <NoReadableTextBanner />
       <TruncatedDocumentBanner />
+      <FallbackAnalysisBanner />
 
       <div className="space-y-3">
         {analysis.coverages.map((cov) => (

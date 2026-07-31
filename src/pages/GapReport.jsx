@@ -5,6 +5,7 @@ import RequestCallback from '../components/RequestCallback.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
+import FallbackAnalysisBanner from '../components/FallbackAnalysisBanner.jsx'
 import { localePath } from '../utils/localeRouting.js'
 
 // analyzeText()/mockData.js produce these two literal English status strings;
@@ -26,6 +27,7 @@ export default function GapReport() {
       <OlderReportBanner />
       <NoReadableTextBanner />
       <TruncatedDocumentBanner />
+      <FallbackAnalysisBanner />
       <h1 className="font-display text-2xl font-semibold text-compass-heading">
         {t('gapReport.title')}
       </h1>

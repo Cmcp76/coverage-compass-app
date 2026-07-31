@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { analyzeText } from '../lib/policyAnalysis.js'
@@ -208,9 +208,13 @@ export default function Upload() {
       </div>
 
       <p className="mt-4 text-center text-xs text-compass-slate">
-        Never sold or shared. Not affiliated with any single carrier. This
-        prototype reads your file entirely in your browser, nothing is uploaded to a
-        server. Your review is saved locally in this browser, not encrypted.
+        Never sold or shared. Not affiliated with any single carrier. When
+        AI-powered analysis is available, your document's text is sent to our
+        server for review; otherwise it's read entirely in your browser. See the{' '}
+        <Link to={localePath(lang, '/privacy')} className="underline hover:text-compass-link">
+          Privacy Policy
+        </Link>{' '}
+        for details. Your review is saved locally in this browser, not encrypted.
       </p>
     </div>
   )

@@ -5,6 +5,7 @@ import { FooterDisclaimer } from '../components/Disclaimer.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
 import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
+import FallbackAnalysisBanner from '../components/FallbackAnalysisBanner.jsx'
 import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 
 export default function Report() {
@@ -34,6 +35,7 @@ export default function Report() {
       <OlderReportBanner />
       <NoReadableTextBanner />
       <TruncatedDocumentBanner />
+      <FallbackAnalysisBanner />
       <div className="mb-6 flex justify-end gap-3 print:hidden">
         <button onClick={() => window.print()} className="btn-secondary">
           Print
