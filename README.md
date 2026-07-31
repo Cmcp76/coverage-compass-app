@@ -32,6 +32,9 @@ npm test
 Live preview (auto-deployed from this branch via GitHub Actions):
 https://cmcp76.github.io/coverage-compass-app/
 
+This runs the app with real AI-powered policy analysis **off by default** —
+see "The analysis engine" below and `worker/README.md` to turn it on.
+
 ## What's included
 
 - **Landing page** — hero, three-step explainer, "Why Coverage Compass,"
@@ -101,39 +104,51 @@ https://cmcp76.github.io/coverage-compass-app/
   routes are lazy-loaded with content-hashed filenames) to suggest a
   refresh rather than a generic error
 
-## The analysis engine (`src/lib/policyAnalysis.js`)
+## The analysis engine
 
-This is the most "real" part of the prototype. Upload a file and it:
+Upload a file and it:
 
 1. Extracts actual text from the PDF (via `pdfjs-dist`, entirely in your
-   browser, nothing is sent to a server) or reads a `.txt` file directly
-2. Detects which **line of business** the document is — personal/commercial
-   auto, homeowners, renters, commercial general liability, workers'
-   compensation, or trucking/motor carrier — based on keyword signals
-3. Applies a rule set specific to that line of business to identify
-   coverages present, coverages missing (`NEEDED INFORMATION`), and common
-   gaps worth a second look
-4. Feeds the result into the Coverage Score, Gap Report, Professional
+   browser) or reads a `.txt` file directly
+2. Sends that text to whichever of two engines is available:
+   - **Real AI analysis** (`src/lib/analyzeWithLLM.js`) — sends the text to
+     the Worker in `/worker`, which uses the Claude API to actually read the
+     document and determine what's present, what's missing, and what limits
+     are stated. Requires deploying the Worker and setting
+     `VITE_ANALYSIS_API_URL` — see `worker/README.md`. **Not deployed by
+     default** — until you do this, every upload uses the fallback below.
+   - **Local pattern-matching fallback** (`src/lib/policyAnalysis.js`) —
+     runs automatically whenever the AI path isn't configured or a request
+     to it fails. Detects the **line of business** (personal/commercial
+     auto, homeowners, renters, commercial general liability, workers'
+     compensation, or trucking) from keyword signals and applies a rule set
+     specific to that line of business. Entirely client-side, nothing
+     leaves the browser.
+3. Either way, the result feeds the Coverage Score, Gap Report, Professional
    Report, and Dashboard — all live off the same shared analysis, not
-   independent static copies
+   independent static copies. Both engines compute the coverageScore and
+   category breakdown identically (`src/lib/policyDomainKnowledge.js`), so
+   the score means the same thing regardless of which one answered. A
+   review's `analysisSource` field ('llm' or 'fallback') drives
+   `FallbackAnalysisBanner`, shown whenever a person is looking at a
+   fallback-engine review so they're not left guessing which kind they got.
 
 **Try it**: six sample `.txt` policies are in `sample-policies/` — one each
 for auto, homeowners, renters, general liability, workers' comp, and
 trucking. Upload each one and watch the coverages, gaps, and score change to
 match.
 
-**Be clear-eyed about what this is**: it's keyword matching, not real AI
-document understanding. It'll miss nuance, get fooled by unfamiliar phrasing,
-and shouldn't be mistaken for production-grade extraction. It's a
-meaningfully more realistic prototype than a static mock, not a finished
-product.
+**Be clear-eyed about the fallback engine**: it's keyword matching, not real
+document understanding. It'll miss nuance, get fooled by unfamiliar
+phrasing, and shouldn't be mistaken for production-grade extraction — that's
+exactly why the AI path is worth deploying.
 
 All copy is pulled verbatim from the approved copy deck — headlines, CTAs,
 and disclaimers were not paraphrased.
 
 ## Testing (Vitest)
 
-`npm test` runs 1,247 automated tests across seven files (most of that count
+`npm test` runs 1,261 automated tests across nine files (most of that count
 is generated fuzz-test cases, see below — there are roughly 90 hand-written
 test cases). It also runs in this repo's GitHub Actions deploy workflow
 before every deploy, so a regression can't ship to the live preview.
@@ -220,11 +235,20 @@ history.
 ## Before this goes anywhere near real users
 
 - [ ] Swap placeholder testimonials for real, permissioned quotes
-- [ ] Replace mock AI review/scoring with actual document extraction logic
-      (keep the `NEEDED INFORMATION` / "never guarantee" rules from the
-      Master Project instructions)
+- [x] Replace mock AI review/scoring with actual document extraction logic
+      (the `NEEDED INFORMATION` / "never guarantee" framing carried through
+      to the AI path's prompt and output mapping) — done, but **not live
+      until the Worker is deployed and `VITE_ANALYSIS_API_URL` is set**, see
+      `worker/README.md`. Also still needed before this is production-ready:
+      rate limiting/abuse protection on the Worker endpoint (currently none
+      — anyone who finds the URL can spend your Anthropic API budget) and
+      monitoring/alerting on Worker errors and spend
 - [ ] Add real authentication and encrypted document storage
-- [ ] Privacy, security, legal, and insurance-compliance review
+- [ ] Privacy, security, legal, and insurance-compliance review — the
+      Privacy Policy and Terms pages now accurately describe the AI-analysis
+      data flow, but that copy hasn't been reviewed by anyone with legal or
+      compliance authority, and licensed-insurance-professional review of
+      the analysis engine's actual output accuracy hasn't happened either
 - [ ] Run a formal accessibility audit with real assistive-tech testing and
       automated contrast tooling. Meaningful a11y work has gone into this
       prototype already — focus management and focus trapping on the

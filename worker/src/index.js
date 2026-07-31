@@ -17,7 +17,7 @@ import { mapClaudeResultToAnalysis } from './mapAnalysis.js'
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'
 const ANTHROPIC_VERSION = '2023-06-01'
-const MODEL = 'claude-sonnet-4-5-20250929'
+const MODEL = 'claude-sonnet-5'
 // A real policy document rarely exceeds a few thousand words even
 // uncompressed; this is generous headroom while still bounding the token
 // (and therefore dollar) cost of a single request someone could otherwise
