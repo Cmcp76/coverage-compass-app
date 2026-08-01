@@ -6,14 +6,17 @@
 // in mapAnalysis.js/buildPrompt.js, which have no Workers-specific code and
 // are unit tested without needing a deployed Worker or a real API key.
 //
-// See worker/README.md for deployment steps. This alone does not make the
-// endpoint production-hardened - there's no rate limiting or request
-// auth here yet, both called out as follow-ups in that README, since
-// anyone who finds this URL can spend your Anthropic API budget.
+// See worker/README.md for deployment steps. Per-IP rate limiting (see
+// rateLimit.js) bounds worst-case API spend from someone hitting this URL
+// directly, but there's still no request auth - CORS only stops browsers,
+// not a direct curl/script call, so this remains a "reasonable speed bump,"
+// not a hard security boundary. Still no monitoring/alerting either, both
+// called out as further follow-ups in the README.
 
 import { ANALYSIS_TOOL } from './schema.js'
 import { buildSystemPrompt } from './buildPrompt.js'
 import { mapClaudeResultToAnalysis } from './mapAnalysis.js'
+import { checkRateLimit, getClientKey } from './rateLimit.js'
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'
 const ANTHROPIC_VERSION = '2023-06-01'
@@ -23,6 +26,12 @@ const MODEL = 'claude-sonnet-5'
 // (and therefore dollar) cost of a single request someone could otherwise
 // inflate arbitrarily by POSTing directly to this endpoint.
 const MAX_TEXT_LENGTH = 60000
+// Generous enough for genuine personal use (reviewing a handful of real
+// policies) while meaningfully capping how much of your Anthropic budget
+// one IP can spend. Override via RATE_LIMIT_MAX / RATE_LIMIT_WINDOW_SECONDS
+// in wrangler.toml [vars] if you want a different tradeoff.
+const DEFAULT_RATE_LIMIT_MAX = 10
+const DEFAULT_RATE_LIMIT_WINDOW_SECONDS = 3600
 
 function corsHeaders(request, env) {
   const origin = request.headers.get('Origin') || ''
@@ -47,6 +56,19 @@ function json(data, status, headers) {
 }
 
 async function handleAnalyze(request, env, headers) {
+  const limit = Number(env.RATE_LIMIT_MAX) || DEFAULT_RATE_LIMIT_MAX
+  const windowSeconds = Number(env.RATE_LIMIT_WINDOW_SECONDS) || DEFAULT_RATE_LIMIT_WINDOW_SECONDS
+  const clientKey = getClientKey(request)
+  const rate = await checkRateLimit(env, clientKey, { limit, windowSeconds })
+  if (!rate.allowed) {
+    const retryAfterSeconds = Math.max(1, Math.ceil((rate.resetAt - Date.now()) / 1000))
+    return json(
+      { error: `Too many requests. Try again in about ${Math.ceil(retryAfterSeconds / 60)} minute(s).` },
+      429,
+      { ...headers, 'Retry-After': String(retryAfterSeconds) },
+    )
+  }
+
   if (!env.ANTHROPIC_API_KEY) {
     // A missing secret is a deploy-configuration mistake, not a client
     // error - 500, not 400, and a message that points at the fix.

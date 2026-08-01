@@ -7,3 +7,19 @@ compatibility_date = "2024-11-01"
 # file. See worker/README.md.
 [vars]
 ALLOWED_ORIGINS = "http://localhost:5173,https://cmcp76.github.io"
+# Max requests allowed per IP per window before returning 429. See
+# src/rateLimit.js. Tune these to taste - there's nothing special about
+# these numbers.
+RATE_LIMIT_MAX = "10"
+RATE_LIMIT_WINDOW_SECONDS = "3600"
+
+# KV namespace used to track per-IP request counts for rate limiting.
+# Commented out by default so this file keeps deploying as-is with no
+# extra steps required - without it, rate limiting fails OPEN (every
+# request allowed), matching today's behavior. To actually turn rate
+# limiting on: run `npx wrangler kv namespace create RATE_LIMIT_KV`,
+# uncomment the two lines below, and paste in the id it prints. See
+# worker/README.md.
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT_KV"
+# id = "paste-your-namespace-id-here"

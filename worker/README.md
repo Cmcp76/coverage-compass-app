@@ -43,6 +43,24 @@ to match — this is a CORS allow-list, so a mismatch here means the browser
 will block the frontend's requests to this Worker even though the Worker
 itself is running fine.
 
+## Turning on rate limiting (recommended before real traffic)
+
+Anyone who finds this Worker's URL can call it directly — not just through
+the app's UI — so without rate limiting, one person could spend your entire
+Anthropic budget. `wrangler.toml` ships with the KV binding for this
+commented out, so deploying as-is works with no extra steps but also with
+no rate limiting (same as before this existed). To turn it on:
+
+```bash
+npx wrangler kv namespace create RATE_LIMIT_KV
+```
+
+This prints an `id`. Open `wrangler.toml`, uncomment the `[[kv_namespaces]]`
+block near the bottom, and paste that id in. `RATE_LIMIT_MAX` /
+`RATE_LIMIT_WINDOW_SECONDS` in `[vars]` control the threshold (default: 10
+requests per IP per hour) — change those numbers to taste, no code changes
+needed. Redeploy (`npx wrangler deploy`) for it to take effect.
+
 ## Deploy
 
 ```bash
@@ -104,17 +122,23 @@ convention — Vite auto-loads `.env.local` and it should never be committed).
 
 ## Verifying it actually works
 
-Nothing in this repo has been tested against the real Anthropic API — the
-environment this Worker was built in didn't have API credentials. Once
-you've deployed and configured a key, upload one of the sample policies in
-`sample-policies/` and confirm:
+Confirmed working end-to-end against the real Anthropic API on a live
+deployment: a real uploaded policy produced a review citing specifics that
+only exist in that document (a named driver, a specific vehicle, discount
+line items) — not something the keyword-matching fallback could ever
+produce. To verify your own deployment, upload a real policy (or one of the
+samples in `sample-policies/`) and confirm:
 
 1. The review completes and `FallbackAnalysisBanner` does **not** appear
    (if it does, something failed and the app silently used the fallback —
    check `wrangler tail` for the actual error)
-2. The coverages/gaps/score look sane for that sample policy
+2. The coverages/gaps/score look sane, and the strengths/questions
+   reference specifics that are actually in the document you uploaded
 3. `npx wrangler tail` while testing shows the request landing and
    succeeding
+4. If you turned on rate limiting: make more than `RATE_LIMIT_MAX` requests
+   in a row and confirm the extra ones get a 429 with a `Retry-After`
+   header instead of reaching Anthropic
 
 ## Cost
 
@@ -127,16 +151,15 @@ upload volume before this is live for real traffic.
 
 ## Known gaps before this is production-hardened
 
-- **No rate limiting or request auth.** Anyone who finds this Worker's URL
-  can call it directly (not just through the app's UI) and spend your
-  Anthropic API budget. For real traffic, add rate limiting (Cloudflare
-  has built-in options — see
-  [Rate Limiting rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)
-  — or a lighter-weight per-IP check via a Durable Object/KV) and/or
-  require a request to come from your own frontend somehow (this is
-  genuinely hard to do robustly for a public SPA with no user login; don't
-  treat CORS as a security boundary, it only stops browsers, not direct
-  API calls).
+- **Rate limiting exists but is opt-in, and it's a speed bump, not a
+  security boundary.** See "Turning on rate limiting" above — until you
+  enable it, there's no cap on requests at all. Even enabled, it's a
+  per-IP counter in KV (eventually consistent, not perfectly precise under
+  concurrent load) meant to bound worst-case spend from casual abuse, not
+  a hard guarantee. There's still no request *auth* — CORS only stops
+  browsers, not a direct curl/script call bypassing the app's UI entirely.
+  Requiring real auth is genuinely hard to do robustly for a public SPA
+  with no user login system; this Worker doesn't attempt it.
 - **No monitoring/alerting.** `wrangler tail` works for live debugging but
   isn't a substitute for actual error-rate/spend alerting in production.
 - **No retry logic.** A single Anthropic API hiccup fails the request
