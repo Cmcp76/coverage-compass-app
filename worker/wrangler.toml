@@ -12,6 +12,10 @@ ALLOWED_ORIGINS = "http://localhost:5173,https://cmcp76.github.io"
 # these numbers.
 RATE_LIMIT_MAX = "10"
 RATE_LIMIT_WINDOW_SECONDS = "3600"
+# Separate, stricter limit for /auth/signup and /auth/login specifically -
+# a brute-force/spam-account target in a way "analyze my policy" isn't.
+AUTH_RATE_LIMIT_MAX = "10"
+AUTH_RATE_LIMIT_WINDOW_SECONDS = "900"
 
 # KV namespace used to track per-IP request counts for rate limiting.
 # Commented out by default so this file keeps deploying as-is with no
@@ -23,3 +27,17 @@ RATE_LIMIT_WINDOW_SECONDS = "3600"
 # [[kv_namespaces]]
 # binding = "RATE_LIMIT_KV"
 # id = "paste-your-namespace-id-here"
+
+# D1 database for real accounts and server-side saved reviews (see
+# schema.sql). Commented out by default, same reasoning as the KV
+# namespace above: without it, /auth/* and /analyses* routes return a
+# clear "not configured" error rather than crashing, and /analyze keeps
+# working exactly as before - accounts are an opt-in feature, not a
+# requirement to deploy this Worker at all. To turn it on: run
+# `npx wrangler d1 create coverage-compass-db`, uncomment the two lines
+# below with the id it prints, then apply schema.sql (see
+# worker/README.md).
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "coverage-compass-db"
+# database_id = "paste-your-database-id-here"
