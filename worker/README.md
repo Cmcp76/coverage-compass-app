@@ -61,6 +61,57 @@ block near the bottom, and paste that id in. `RATE_LIMIT_MAX` /
 requests per IP per hour) — change those numbers to taste, no code changes
 needed. Redeploy (`npx wrangler deploy`) for it to take effect.
 
+## Turning on real accounts (optional)
+
+Without this, sign-up/login stay fully simulated (the original demo
+behavior — no account, email, or password is ever created or stored) and
+every review lives only in the visitor's browser local storage. Turning
+this on gives people real accounts (email + password, hashed server-side —
+see `src/auth.js`) and saves their reviews server-side so they follow them
+across devices. Like rate limiting, `wrangler.toml` ships with the D1
+binding commented out, so deploying as-is works with no extra steps and no
+accounts feature at all.
+
+To turn it on:
+
+```bash
+npx wrangler d1 create coverage-compass-db
+```
+
+This prints a block like:
+
+```
+[[d1_databases]]
+binding = "DB"
+database_name = "coverage-compass-db"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+```
+
+Open `wrangler.toml`, uncomment the `[[d1_databases]]` block near the
+bottom, and replace `database_id` with the id it just printed (leave
+`binding` and `database_name` as-is — they already match). Then create the
+tables (`schema.sql` is idempotent — safe to re-run):
+
+```bash
+npx wrangler d1 execute coverage-compass-db --remote --file=schema.sql
+```
+
+`--remote` runs it against the actual hosted D1 database, not a local
+simulation — leaving it off applies the schema to a throwaway local copy
+that the deployed Worker never sees, which looks like it worked but leaves
+sign-up failing with a "not configured" or table-not-found error against
+the real thing. Redeploy (`npx wrangler deploy`) for the binding to take
+effect.
+
+Once this is live, every account-related route (`/auth/signup`,
+`/auth/login`, `/auth/logout`, `/me`, and `/analyses*`) starts working for
+real. `/analyze` (the actual policy analysis) doesn't depend on this at
+all and behaves identically either way. See "Verifying it actually works"
+below for how to confirm accounts are really live, and update the
+frontend's Privacy page copy if you've customized it — it already
+describes both the "accounts on" and "accounts off" states honestly, but
+only if this section's setup is actually followed.
+
 ## Deploy
 
 ```bash
@@ -139,6 +190,12 @@ samples in `sample-policies/`) and confirm:
 4. If you turned on rate limiting: make more than `RATE_LIMIT_MAX` requests
    in a row and confirm the extra ones get a 429 with a `Retry-After`
    header instead of reaching Anthropic
+5. If you turned on real accounts: sign up for a real account in the app,
+   confirm it lands you on the dashboard with your real name shown (not
+   the "Maria Alvarez" demo persona), upload a policy while signed in,
+   reload the page, and confirm it still shows up under Reports — that
+   round-trip only works if it was actually saved server-side, not to
+   local storage
 
 ## Cost
 
@@ -166,3 +223,16 @@ upload volume before this is live for real traffic.
   immediately (the frontend then falls back to the local engine, so the
   user experience degrades gracefully, but a transient failure that a retry
   would have fixed instead silently downgrades their review quality).
+- **Password reset isn't real yet.** The "Forgot Password?" page in the
+  app is still fully simulated — there's no `/auth/reset-password` route
+  on this Worker, no reset email is ever sent, and a real account's
+  password can't currently be changed at all if forgotten. Don't advertise
+  password reset as working if you turn real accounts on.
+- **No self-service account deletion.** Someone who signs up has no way to
+  delete their account or data from within the app; that would need to be
+  handled manually (a direct `wrangler d1 execute` delete, or a support
+  contact) until this is built.
+- **No email verification.** The "verify your email" step in the sign-up
+  flow is, and remains, simulated — a real account is created and usable
+  immediately on signup regardless of whether the email address is real or
+  reachable.
