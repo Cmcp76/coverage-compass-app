@@ -34,17 +34,30 @@ export default function Privacy() {
         that case nothing you upload is transmitted anywhere.
       </p>
       <p className="mt-3 text-sm leading-relaxed text-compass-slate">
-        Either way, the resulting summary and your review history are saved to
-        your browser's local storage so they're available the next time you visit
-        this device, and clearing your browser data removes them.
+        If you're not signed in, the resulting summary and your review history
+        are saved to your browser's local storage so they're available the next
+        time you visit this device, and clearing your browser data removes them.
+        If you are signed into an account, your reviews are instead saved on our
+        server and tied to your account, so they follow you across devices - see
+        "Account details" below.
       </p>
       <h2 className="mt-8 font-display text-lg font-semibold text-compass-heading">
         Account details
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-compass-slate">
-        Sign-up and login in this prototype are simulated for demonstration
-        purposes. No account, email address, or password is created, verified, or
-        stored anywhere.
+        Where account creation is available, signing up stores your email address
+        and a securely hashed password (never the password itself) on our server,
+        and issues you a session so you can stay signed in. While you're signed
+        in, your policy reviews are saved on our server as well, tied to your
+        account. This prototype doesn't yet offer self-service account deletion -
+        contact us if you'd like your account and its data removed.
+      </p>
+      <p className="mt-3 text-sm leading-relaxed text-compass-slate">
+        If account creation isn't available in a given deployment of this
+        prototype, sign-up and login fall back to a simulated flow for
+        demonstration purposes - no account, email address, or password is
+        created, verified, or stored anywhere, and your reviews stay in that
+        browser's local storage only.
       </p>
       <h2 className="mt-8 font-display text-lg font-semibold text-compass-heading">
         Cookies and analytics

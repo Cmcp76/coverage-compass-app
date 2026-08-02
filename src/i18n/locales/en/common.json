@@ -55,7 +55,7 @@
   },
   "trust": {
     "landingLine": "Free educational review. Your documents are never sold or shared. Not affiliated with any single carrier.",
-    "accountLine": "This prototype doesn't send your information to a server or create a real account. Coverage Compass is an independent educational platform, not an insurance company.",
+    "accountLine": "Where account creation is available, this stores your email and a securely hashed password on our server so your reviews are available on any device; otherwise it's simulated for demonstration only. Coverage Compass is an independent educational platform, not an insurance company.",
     "uploadLine": "Never sold or shared. Read entirely in your browser, not encrypted."
   },
   "score": {

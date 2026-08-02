@@ -55,7 +55,7 @@
   },
   "trust": {
     "landingLine": "Revisión educativa gratuita. Tus documentos nunca se venden ni se comparten. No estamos afiliados a ninguna aseguradora en particular.",
-    "accountLine": "Este prototipo no envía tu información a un servidor ni crea una cuenta real. Coverage Compass es una plataforma educativa independiente, no una compañía de seguros.",
+    "accountLine": "Donde la creación de cuentas está disponible, esto guarda tu correo y una contraseña cifrada de forma segura en nuestro servidor para que tus revisiones estén disponibles en cualquier dispositivo; de lo contrario, es simulado solo con fines de demostración. Coverage Compass es una plataforma educativa independiente, no una compañía de seguros.",
     "uploadLine": "Nunca se vende ni se comparte. Se lee completamente en tu navegador, no está encriptado."
   },
   "score": {
