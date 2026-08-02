@@ -26,8 +26,12 @@ export default function Reports() {
   const chartColors = getChartColors(theme)
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
-  function openReport(id, path) {
-    loadFromHistory(id)
+  async function openReport(id, path) {
+    // Awaited: for a signed-in account, this entry may only have metadata
+    // until now (see PolicyContext.jsx) and needs a fetch for the full
+    // review - navigating before that resolves would briefly show the
+    // destination page for whatever was active before.
+    await loadFromHistory(id)
     navigate(localePath(lang, path))
   }
 

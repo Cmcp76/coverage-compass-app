@@ -1,15 +1,38 @@
+import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
+import { useAuth, AuthNotConfiguredError } from '../context/AuthContext.jsx'
 
 export default function Login() {
   const { t } = useTranslation('common')
   const navigate = useNavigate()
   const { lang } = useParams()
+  const { logIn } = useAuth()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    navigate(localePath(lang, '/dashboard'))
+    setError('')
+    setSubmitting(true)
+    try {
+      await logIn({ email, password })
+      navigate(localePath(lang, '/dashboard'))
+    } catch (err) {
+      if (err instanceof AuthNotConfiguredError) {
+        // No accounts backend deployed - fall back to the prototype's
+        // original simulated flow rather than blocking someone from ever
+        // reaching the dashboard just because real accounts aren't set up.
+        navigate(localePath(lang, '/dashboard'))
+        return
+      }
+      setError(err.message || 'Something went wrong logging in.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -31,6 +54,8 @@ export default function Login() {
             placeholder="maria@email.com"
             required
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
           />
         </label>
@@ -43,9 +68,17 @@ export default function Login() {
             placeholder="••••••••"
             required
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-lg border border-compass-line px-3 py-2 text-sm focus:border-compass-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-compass-blue"
           />
         </label>
+
+        {error && (
+          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+            {error}
+          </p>
+        )}
 
         <div className="flex items-center justify-between text-sm">
           <label className="flex items-center gap-2 text-compass-slate">
@@ -56,8 +89,8 @@ export default function Login() {
           </Link>
         </div>
 
-        <button type="submit" className="btn-primary w-full">
-          {t('buttons.logIn')}
+        <button type="submit" disabled={submitting} className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60">
+          {submitting ? 'Logging In…' : t('buttons.logIn')}
         </button>
 
         <p className="text-center text-sm text-compass-slate">

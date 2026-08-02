@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { recentActivity } from '../data/mockData.js'
 import { usePolicy } from '../context/PolicyContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 import { lowercaseExceptAcronyms } from '../lib/policyAnalysis.js'
 import ScoreGauge from '../components/ScoreGauge.jsx'
 import OlderReportBanner from '../components/OlderReportBanner.jsx'
@@ -11,9 +12,13 @@ import { useLocaleFormat } from '../hooks/useLocaleFormat.js'
 export default function Dashboard() {
   const { t } = useTranslation('common')
   const { analysis, history, loadFromHistory } = usePolicy()
+  const { user } = useAuth()
   const navigate = useNavigate()
   const { lang } = useParams()
   const { formatShortDate } = useLocaleFormat()
+  // Falls back to the sample persona's first name in guest/demo mode,
+  // matching Layout.jsx's account menu.
+  const firstName = user?.fullName?.trim().split(/\s+/)[0] || 'Maria'
 
   // Checking history[0] alone isn't enough: reset() (used by Log Out) only
   // clears the active analysis back to demo data, it doesn't wipe history -
@@ -26,8 +31,12 @@ export default function Dashboard() {
     ? {
         title: `${history[0].detectedPolicyType} reviewed`,
         date: formatShortDate(history[0].analyzedAt),
-        onView: () => {
-          loadFromHistory(history[0].id)
+        onView: async () => {
+          // Awaited: for a signed-in account, this entry may only have
+          // metadata until now (see PolicyContext.jsx) and needs a fetch
+          // for the full review - navigating before that resolves would
+          // briefly show the gap report for whatever was active before.
+          await loadFromHistory(history[0].id)
           navigate(localePath(lang, '/gap-report'))
         },
       }
@@ -46,7 +55,7 @@ export default function Dashboard() {
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold text-compass-heading">
-            Hi, Maria
+            Hi, {firstName}
           </h1>
           <p className="mt-1 text-sm text-compass-slate">
             Here's where things stand today.

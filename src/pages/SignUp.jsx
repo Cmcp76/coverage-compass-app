@@ -2,26 +2,48 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Trans, useTranslation } from 'react-i18next'
 import { localePath } from '../utils/localeRouting.js'
+import { useAuth, AuthNotConfiguredError } from '../context/AuthContext.jsx'
 
 export default function SignUp() {
   const { t } = useTranslation('common')
   const navigate = useNavigate()
   const { lang } = useParams()
+  const { signUp } = useAuth()
   const [agreed, setAgreed] = useState(false)
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [mismatchError, setMismatchError] = useState(false)
+  const [formError, setFormError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
+    setFormError('')
     if (password !== confirmPassword) {
       setMismatchError(true)
       return
     }
     setMismatchError(false)
-    navigate(localePath(lang, '/verify-email'), { state: { email } })
+    setSubmitting(true)
+    try {
+      await signUp({ email, password, fullName })
+      // Still routes through the same "verify your email" step as before -
+      // the account itself is now real, but this prototype still has no
+      // real email delivery, so that part of the flow stays simulated.
+      navigate(localePath(lang, '/verify-email'), { state: { email } })
+    } catch (err) {
+      if (err instanceof AuthNotConfiguredError) {
+        // No accounts backend deployed - fall back to the prototype's
+        // original simulated flow rather than blocking signup entirely.
+        navigate(localePath(lang, '/verify-email'), { state: { email } })
+        return
+      }
+      setFormError(err.message || 'Something went wrong creating your account.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -92,8 +114,14 @@ export default function SignUp() {
           </span>
         </label>
 
-        <button type="submit" className="btn-primary w-full">
-          {t('buttons.createMyAccount')}
+        {formError && (
+          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+            {formError}
+          </p>
+        )}
+
+        <button type="submit" disabled={submitting} className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60">
+          {submitting ? 'Creating Account…' : t('buttons.createMyAccount')}
         </button>
 
         <p className="text-center text-sm text-compass-slate">

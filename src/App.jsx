@@ -6,6 +6,7 @@ import ErrorBoundary from './components/ErrorBoundary.jsx'
 import LocaleLayout from './components/LocaleLayout.jsx'
 import { PolicyProvider } from './context/PolicyContext.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
 import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/languages.js'
 
 const Landing = lazy(() => import('./pages/Landing.jsx'))
@@ -53,48 +54,50 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <PolicyProvider>
-        <Layout>
-          {/* Keyed by pathname so navigating away from a page that crashed
-              (or hitting "Go to Dashboard" from the fallback itself) remounts
-              the boundary with a clean slate instead of staying stuck. */}
-          <ErrorBoundary key={location.pathname}>
-            <Suspense fallback={<RouteFallback />}>
-              <Routes>
-                {/* Bare root has no language segment yet — send it to the
-                    resolved language (saved preference, else browser
-                    language, else the default). LocaleLayout below is what
-                    actually persists the language for every real route. */}
-                <Route path="/" element={<Navigate to={`/${resolvedLang}`} replace />} />
-                <Route path="/:lang" element={<LocaleLayout />}>
-                  <Route index element={<Landing />} />
-                  <Route path="signup" element={<SignUp />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="reset-password" element={<ResetPassword />} />
-                  <Route path="verify-email" element={<VerifyEmail />} />
-                  <Route path="welcome" element={<Welcome />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="upload" element={<Upload />} />
-                  <Route path="ai-review" element={<AIReview />} />
-                  <Route path="score" element={<CoverageScore />} />
-                  <Route path="gap-report" element={<GapReport />} />
-                  <Route path="report" element={<Report />} />
-                  <Route path="reports" element={<Reports />} />
-                  <Route path="notifications" element={<Notifications />} />
-                  <Route path="learning-center" element={<LearningCenter />} />
-                  <Route path="tools" element={<Tools />} />
-                  <Route path="challenge" element={<Challenge />} />
-                  <Route path="trucking-startup" element={<TruckingStartup />} />
-                  <Route path="about" element={<About />} />
-                  <Route path="privacy" element={<Privacy />} />
-                  <Route path="terms" element={<Terms />} />
-                  <Route path="*" element={<NotFound />} />
-                </Route>
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
-        </Layout>
-      </PolicyProvider>
+      <AuthProvider>
+        <PolicyProvider>
+          <Layout>
+            {/* Keyed by pathname so navigating away from a page that crashed
+                (or hitting "Go to Dashboard" from the fallback itself) remounts
+                the boundary with a clean slate instead of staying stuck. */}
+            <ErrorBoundary key={location.pathname}>
+              <Suspense fallback={<RouteFallback />}>
+                <Routes>
+                  {/* Bare root has no language segment yet — send it to the
+                      resolved language (saved preference, else browser
+                      language, else the default). LocaleLayout below is what
+                      actually persists the language for every real route. */}
+                  <Route path="/" element={<Navigate to={`/${resolvedLang}`} replace />} />
+                  <Route path="/:lang" element={<LocaleLayout />}>
+                    <Route index element={<Landing />} />
+                    <Route path="signup" element={<SignUp />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="reset-password" element={<ResetPassword />} />
+                    <Route path="verify-email" element={<VerifyEmail />} />
+                    <Route path="welcome" element={<Welcome />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="ai-review" element={<AIReview />} />
+                    <Route path="score" element={<CoverageScore />} />
+                    <Route path="gap-report" element={<GapReport />} />
+                    <Route path="report" element={<Report />} />
+                    <Route path="reports" element={<Reports />} />
+                    <Route path="notifications" element={<Notifications />} />
+                    <Route path="learning-center" element={<LearningCenter />} />
+                    <Route path="tools" element={<Tools />} />
+                    <Route path="challenge" element={<Challenge />} />
+                    <Route path="trucking-startup" element={<TruckingStartup />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="privacy" element={<Privacy />} />
+                    <Route path="terms" element={<Terms />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          </Layout>
+        </PolicyProvider>
+      </AuthProvider>
     </ThemeProvider>
   )
 }

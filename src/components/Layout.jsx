@@ -5,6 +5,7 @@ import { FooterDisclaimer } from './Disclaimer.jsx'
 import LanguageSelector from './LanguageSelector.jsx'
 import { usePolicy } from '../context/PolicyContext.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 import { SUPPORTED_LANGUAGE_CODES } from '../i18n/languages.js'
 import { localePath } from '../utils/localeRouting.js'
 
@@ -73,6 +74,7 @@ export default function Layout({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { reset } = usePolicy()
+  const { user, logOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const { t, i18n } = useTranslation('common')
   // Layout renders as an ancestor of <Routes>, not a descendant of the
@@ -182,10 +184,27 @@ export default function Layout({ children }) {
 
   function handleLogOut() {
     reset()
+    // Not awaited: logOut() clears local auth state synchronously before
+    // its network call to revoke the server-side session, so the person
+    // sees an instant logout regardless of how long (or whether) that
+    // request succeeds.
+    logOut()
     setMenuOpen(false)
     setAccountMenuOpen(false)
     navigate(localePath(lang, '/'))
   }
+
+  // Falls back to the sample "Maria Alvarez" persona when signed out,
+  // matching the rest of the app's demo-data-until-you-sign-up behavior
+  // rather than showing a blank/generic account state.
+  const displayName = user?.fullName || user?.email || 'Maria Alvarez'
+  const initials =
+    displayName
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() || '')
+      .join('') || 'MA'
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -245,9 +264,9 @@ export default function Layout({ children }) {
                     onClick={() => setAccountMenuOpen((v) => !v)}
                   >
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
-                      MA
+                      {initials}
                     </span>
-                    Maria Alvarez
+                    {displayName}
                     <ChevronIcon open={accountMenuOpen} />
                   </button>
                   {accountMenuOpen && (
@@ -311,9 +330,9 @@ export default function Layout({ children }) {
             <div className="mt-2 flex items-center justify-between border-t border-compass-line pt-3 sm:hidden">
               <span className="flex items-center gap-2 text-sm text-compass-slate">
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
-                  MA
+                  {initials}
                 </span>
-                Maria Alvarez
+                {displayName}
               </span>
               <button onClick={handleLogOut} className="text-sm font-medium text-compass-link">
                 {t('nav.logOut')}
