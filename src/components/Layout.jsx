@@ -235,10 +235,10 @@ export default function Layout({ children }) {
               ))}
             </nav>
           )}
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <div className="flex min-w-0 flex-wrap items-center justify-end gap-1 sm:gap-3">
             <LanguageSelector />
             <button
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-compass-line text-compass-slate transition hover:text-compass-ink"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-compass-line text-compass-slate transition hover:text-compass-ink sm:h-9 sm:w-9"
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               onClick={toggleTheme}
             >
@@ -246,10 +246,10 @@ export default function Layout({ children }) {
             </button>
             {isPreAuth ? (
               <>
-                <Link to={localePath(lang, '/login')} className="btn-secondary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
+                <Link to={localePath(lang, '/login')} className="btn-secondary shrink-0 whitespace-nowrap px-2.5 py-2 sm:px-5 sm:py-2.5">
                   {t('nav.logIn')}
                 </Link>
-                <Link to={localePath(lang, '/signup')} className="btn-primary shrink-0 whitespace-nowrap px-3 py-2 sm:px-5 sm:py-2.5">
+                <Link to={localePath(lang, '/signup')} className="btn-primary shrink-0 whitespace-nowrap px-2.5 py-2 sm:px-5 sm:py-2.5">
                   {t('nav.signUp')}
                 </Link>
               </>

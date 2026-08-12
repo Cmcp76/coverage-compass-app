@@ -48,9 +48,9 @@ export default function LanguageSelector({ className = '' }) {
         onChange={handleChange}
         aria-label={t('language.selectLanguage')}
         className="h-9 cursor-pointer appearance-none rounded-lg border border-compass-line
-                   bg-compass-surface py-1.5 ps-3 pe-8 text-sm font-medium text-compass-ink
+                   bg-compass-surface py-1.5 ps-2 pe-7 text-sm font-medium text-compass-ink
                    transition hover:text-compass-heading focus:outline-none
-                   focus-visible:ring-2 focus-visible:ring-compass-blue"
+                   focus-visible:ring-2 focus-visible:ring-compass-blue sm:ps-3 sm:pe-8"
       >
         {Object.values(LANGUAGES).map((lang) => (
           <option key={lang.code} value={lang.code}>
