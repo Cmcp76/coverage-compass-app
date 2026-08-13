@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { articles } from '../data/mockData.js'
 import { localePath } from '../utils/localeRouting.js'
+import Cece from '../components/Cece.jsx'
 
 export default function Landing() {
   const { t } = useTranslation('common')
@@ -31,6 +32,12 @@ export default function Landing() {
           <p className="animate-fade-up animate-fade-up-delay-3 mt-4 text-xs text-compass-slate">
             {t('trust.landingLine')}
           </p>
+          <div className="animate-fade-up animate-fade-up-delay-3 mt-8 flex justify-center">
+            <Cece
+              state="welcome"
+              message="Hi, I'm Cece — I'll walk you through your policy in plain language."
+            />
+          </div>
         </div>
       </section>
 
@@ -104,6 +111,29 @@ export default function Landing() {
               body="Auto, homeowners, renters, general liability, workers' compensation, and trucking policies, each reviewed against the details that actually matter for that line of business."
             />
           </div>
+        </div>
+      </section>
+
+      {/* Meet Cece */}
+      <section className="bg-compass-blue/5 py-16">
+        <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-6 text-center">
+          <Cece state="teaching" size="xl" showBubble={false} />
+          <h2 className="font-display text-2xl font-semibold text-compass-heading">
+            Meet Cece, your Coverage Compass guide
+          </h2>
+          <p className="max-w-2xl text-compass-slate">
+            Cece walks alongside you while you upload and review your policy, calling
+            out what each section means and flagging the details worth a second look.
+            She's an AI education guide, not a licensed insurance agent, broker, or
+            advisor, so think of her as a knowledgeable friend explaining the fine
+            print, not someone selling you a policy.
+          </p>
+          <Link
+            to={localePath(lang, '/upload')}
+            className="rounded-full bg-compass-blue px-6 py-3 font-semibold text-white shadow-card transition hover:bg-compass-blue/90"
+          >
+            Upload a policy and meet Cece
+          </Link>
         </div>
       </section>
 
