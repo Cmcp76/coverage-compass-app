@@ -213,18 +213,17 @@ export default function Cece({ state = 'idle', message, size = 'md', showBubble 
         .cece-bubble-in { animation: cece-bounce-in-kf 0.4s ease-out both; }
       `}</style>
 
-      <div className={`relative ${config.bodyClass}`} style={{ width: px, height: px }} aria-hidden="true">
+      <div className={`relative ${config.bodyClass}`} style={{ width: px }} aria-hidden="true">
         <img
           src={CECE_PHOTO_URL}
           alt=""
-          className={`h-full w-full rounded-full border-4 object-cover ${config.glow ? 'cece-glow-ring' : ''}`}
-          style={{ borderColor: COLORS.navy }}
+          className={`w-full rounded-2xl object-contain ${config.glow ? 'cece-glow-ring' : ''}`}
         />
         {/* Small state badge, bottom-right of the photo - carries the same
             per-state signal the tablet icon used to on the illustrated body. */}
         <span
-          className="absolute bottom-0 right-0 flex items-center justify-center rounded-full border-2 border-white"
-          style={{ width: px * 0.36, height: px * 0.36, background: COLORS.navy }}
+          className="absolute bottom-1 right-1 flex items-center justify-center rounded-full border-2 border-white"
+          style={{ width: px * 0.3, height: px * 0.3, background: COLORS.navy }}
         >
           <svg viewBox="-12 -12 24 24" width="72%" height="72%">
             <CeceIcon icon={config.icon} />

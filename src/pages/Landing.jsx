@@ -118,9 +118,7 @@ export default function Landing() {
       {/* Meet Cece */}
       <section className="bg-compass-blue/5 py-16">
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-6 text-center">
-          <div className="rounded-full bg-compass-blue/10 p-4">
-            <Cece state="teaching" size="2xl" showBubble={false} />
-          </div>
+          <Cece state="teaching" size="2xl" showBubble={false} />
           <h2 className="font-display text-2xl font-semibold text-compass-heading">
             Meet Cece, your Coverage Compass guide
           </h2>
