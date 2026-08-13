@@ -105,23 +105,50 @@ export default function Landing() {
         <h2 className="text-center font-display text-2xl font-semibold text-compass-heading">
           How it works
         </h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <p className="mx-auto mt-3 max-w-xl text-center text-sm text-compass-slate">
+          Six stops, from uploading your policy to actually understanding it.
+        </p>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <StepCard
             step="1"
             title={t('buttons.uploadYourPolicy')}
             body="Drop in your declarations page, ACORD form, or full policy, auto, homeowners, renters, general liability, workers' compensation, or trucking/motor carrier. PDF or text file works best."
+            to={localePath(lang, '/upload')}
             delay={0}
           />
           <StepCard
             step="2"
             title="Get a Plain-Language Review"
-            body="We read through the document and translate the jargon into a summary anyone can understand: what's covered, your limits, and where there might be gaps worth a second look."
+            body="We read through the document and translate the jargon into a summary anyone can understand: what's covered and what your limits are."
+            to={localePath(lang, '/ai-review')}
             delay={1}
           />
           <StepCard
             step="3"
-            title="Walk Into Your Next Conversation Prepared"
-            body="Download a clean report with your coverage summary and smart questions to ask a licensed insurance professional."
+            title="See Your Coverage Score"
+            body="Get an educational snapshot of how your policy compares across key protection areas, liability, property, deductibles, and more."
+            to={localePath(lang, '/score')}
+            delay={2}
+          />
+          <StepCard
+            step="4"
+            title="Explore Areas Worth a Second Look"
+            body="See coverage areas that commonly get missed, plus smart questions to bring to your next conversation."
+            to={localePath(lang, '/gap-report')}
+            delay={3}
+          />
+          <StepCard
+            step="5"
+            title="Download Your Report"
+            body="Walk into your next conversation prepared with a clean report of your coverage summary and questions to ask a licensed insurance professional."
+            to={localePath(lang, '/report')}
+            delay={1}
+          />
+          <StepCard
+            step="6"
+            title="Explore the Learning Center"
+            body="Keep learning about the insurance topics that matter to you, at your own pace, no pressure."
+            to={localePath(lang, '/learning-center')}
             delay={2}
           />
         </div>
@@ -465,9 +492,12 @@ function HeroBackdrop() {
   )
 }
 
-function StepCard({ step, title, body, delay = 0 }) {
-  return (
-    <div className={`card animate-fade-up ${delay ? `animate-fade-up-delay-${delay}` : ''}`}>
+function StepCard({ step, title, body, delay = 0, to }) {
+  const className = `card animate-fade-up block ${delay ? `animate-fade-up-delay-${delay}` : ''} ${
+    to ? 'transition hover:border-compass-blue' : ''
+  }`
+  const content = (
+    <>
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-compass-skyblue text-sm font-semibold text-compass-link">
         {step}
       </div>
@@ -475,8 +505,16 @@ function StepCard({ step, title, body, delay = 0 }) {
         {title}
       </h3>
       <p className="mt-2 text-sm leading-relaxed text-compass-slate">{body}</p>
-    </div>
+    </>
   )
+  if (to) {
+    return (
+      <Link to={to} className={className}>
+        {content}
+      </Link>
+    )
+  }
+  return <div className={className}>{content}</div>
 }
 
 function FeatureCard({ title, body }) {
