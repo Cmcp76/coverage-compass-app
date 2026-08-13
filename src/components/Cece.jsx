@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 // Hosted externally (not committed to this repo) - swap for a repo-hosted
 // asset (e.g. import from src/assets) if this needs to stop depending on a
 // third-party host staying up.
-const CECE_PHOTO_URL = 'https://i.postimg.cc/Z0262V80/IMG-3426.jpg'
+const CECE_PHOTO_URL = 'https://i.postimg.cc/d7Jq1cYv/1bb2fe62-19a2-41e8-a0dd-3f1ca1424610.png'
 
 // Cece — Coverage Compass mascot. Colors below reference the app's actual
 // --color-compass-* CSS variables (see index.css) rather than fixed hex, so
