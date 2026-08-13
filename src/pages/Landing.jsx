@@ -4,6 +4,64 @@ import { articles } from '../data/mockData.js'
 import { localePath } from '../utils/localeRouting.js'
 import Cece from '../components/Cece.jsx'
 
+// Hosted externally (not committed to this repo) - one photo per line of
+// business for the "Lines of Business" section below.
+const SERVICE_IMG_AUTO = 'https://i.postimg.cc/HjRbRBwY/Chat-GPT-Image-Aug-13-2026-11-25-21-AM.png'
+const SERVICE_IMG_HOMEOWNERS = 'https://i.postimg.cc/S26NdLpf/Chat-GPT-Image-Aug-13-2026-01-44-39-PM-(4).png'
+const SERVICE_IMG_RENTERS_CONDO = 'https://i.postimg.cc/WqspHD2K/Chat-GPT-Image-Aug-13-2026-01-44-39-PM-(5).png'
+const SERVICE_IMG_LANDLORD = 'https://i.postimg.cc/qhsMwcdX/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(10).png'
+const SERVICE_IMG_COMMERCIAL_GL = 'https://i.postimg.cc/2bQ8Gdfx/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(7).png'
+const SERVICE_IMG_WORKERS_COMP = 'https://i.postimg.cc/VrqLg9cR/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(8).png'
+const SERVICE_IMG_TRUCKING = 'https://i.postimg.cc/w1MMzshB/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(9).png'
+
+// Mapped to lines of business by upload order as a first pass - if any
+// image doesn't match its labeled coverage line, just swap the constant
+// it's assigned to here, nothing else needs to change.
+const services = [
+  {
+    key: 'auto',
+    title: 'Personal & Commercial Auto',
+    body: 'Liability, UM/UIM, comprehensive, collision, medpay, and rental reimbursement, explained in plain language.',
+    img: SERVICE_IMG_AUTO,
+  },
+  {
+    key: 'home',
+    title: 'Homeowners',
+    body: 'Dwelling, other structures, personal property, loss of use, and the ACV-vs-replacement-cost question that trips up most claims.',
+    img: SERVICE_IMG_HOMEOWNERS,
+  },
+  {
+    key: 'renters',
+    title: 'Renters & Condo',
+    body: "What your landlord's policy covers versus what's on you, personal property, liability, and additional living expenses.",
+    img: SERVICE_IMG_RENTERS_CONDO,
+  },
+  {
+    key: 'landlord',
+    title: 'Landlord',
+    body: 'Rental dwelling, loss of rents, and liability exposure specific to tenant-occupied property.',
+    img: SERVICE_IMG_LANDLORD,
+  },
+  {
+    key: 'commercial',
+    title: 'Commercial General Liability',
+    body: 'Premises, products, completed operations, additional insured language, and certificate-of-insurance requirements.',
+    img: SERVICE_IMG_COMMERCIAL_GL,
+  },
+  {
+    key: 'workerscomp',
+    title: "Workers' Compensation",
+    body: 'Payroll exposure, class codes, experience mod, and owner-vs-employee coverage questions.',
+    img: SERVICE_IMG_WORKERS_COMP,
+  },
+  {
+    key: 'trucking',
+    title: 'Trucking & Motor Carrier',
+    body: 'USDOT, MC authority, cargo, bobtail, non-trucking liability, and FMCSA compliance basics.',
+    img: SERVICE_IMG_TRUCKING,
+  },
+]
+
 export default function Landing() {
   const { t } = useTranslation('common')
   const { lang } = useParams()
@@ -115,6 +173,40 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Lines of Business */}
+      <section className="mx-auto max-w-6xl px-6 py-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="tag-neutral">What we help you understand</span>
+          <h2 className="mt-3 font-display text-2xl font-semibold text-compass-heading">
+            Every line of business, one plain-language review
+          </h2>
+          <p className="mt-3 text-sm text-compass-slate">
+            Coverage Compass reviews the policies real people and small businesses
+            actually carry, not just auto.
+          </p>
+        </div>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((s) => (
+            <ServiceCard key={s.key} title={s.title} body={s.body} img={s.img} />
+          ))}
+          <div className="flex flex-col items-start justify-center rounded-2xl bg-compass-navy p-6 text-white">
+            <h3 className="font-display text-lg font-semibold">
+              Don't see your policy type?
+            </h3>
+            <p className="mt-2 text-sm text-white/70">
+              Upload it anyway, Cece will tell you clearly if something's outside
+              what she can review yet.
+            </p>
+            <Link
+              to={localePath(lang, '/upload')}
+              className="mt-5 inline-flex items-center rounded-full bg-white/10 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/20"
+            >
+              Upload Your Policy
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Meet Cece */}
       <section className="bg-compass-blue/5 py-16">
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-6 text-center">
@@ -206,9 +298,33 @@ export default function Landing() {
             a="Your document is read entirely in your browser and never uploaded to a server, and nothing is sold or shared with third parties. This prototype does save your review in your browser's local storage (not encrypted) so you can return to it, so avoid uploading real sensitive documents on a shared or public computer."
           />
           <FaqItem
+            q="What types of policies can I upload?"
+            a="Auto (personal and commercial), homeowners, renters, general liability, workers' compensation, and trucking/motor carrier policies."
+          />
+          <FaqItem
             q="Does Coverage Compass guarantee my coverage is adequate?"
             a="No. Coverage Compass provides educational information only. Only a licensed insurance professional can advise on and bind actual coverage decisions."
           />
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="flex flex-col items-center justify-between gap-6 rounded-3xl bg-compass-navy px-8 py-12 text-center text-white sm:flex-row sm:text-left">
+          <div>
+            <h3 className="font-display text-2xl font-semibold">
+              Ready to see your own policy in plain language?
+            </h3>
+            <p className="mt-2 text-sm text-white/70">
+              Free educational review, Coverage Score, and questions to ask your agent.
+            </p>
+          </div>
+          <Link
+            to={localePath(lang, '/upload')}
+            className="shrink-0 rounded-full bg-compass-blue px-6 py-3 font-semibold text-white shadow-card transition hover:bg-compass-blue/90"
+          >
+            {t('buttons.uploadYourPolicy')}
+          </Link>
         </div>
       </section>
     </div>
@@ -368,6 +484,24 @@ function FeatureCard({ title, body }) {
     <div className="rounded-xl border border-compass-line bg-compass-paper p-6">
       <h3 className="font-medium text-compass-ink">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-compass-slate">{body}</p>
+    </div>
+  )
+}
+
+function ServiceCard({ title, body, img }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-compass-line bg-compass-surface shadow-card transition hover:border-compass-blue">
+      <div className="aspect-[4/3] w-full overflow-hidden bg-compass-paper">
+        <img
+          src={img}
+          alt={`${title} — Coverage Compass educational policy review`}
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div className="p-6">
+        <h3 className="font-display text-lg font-semibold text-compass-heading">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-compass-slate">{body}</p>
+      </div>
     </div>
   )
 }
