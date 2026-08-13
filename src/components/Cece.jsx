@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 
+// Hosted externally (not committed to this repo) - swap for a repo-hosted
+// asset (e.g. import from src/assets) if this needs to stop depending on a
+// third-party host staying up.
+const CECE_PHOTO_URL = 'https://i.postimg.cc/Z0262V80/IMG-3426.jpg'
+
 // Cece — Coverage Compass mascot. Colors below reference the app's actual
 // --color-compass-* CSS variables (see index.css) rather than fixed hex, so
 // she stays on-brand and (for the tokens that vary by theme) adapts to dark
@@ -162,7 +167,7 @@ function CeceIcon({ icon }) {
 }
 
 /**
- * Cece — the animated mascot. Renders the SVG body + optional speech bubble.
+ * Cece — the animated mascot. Renders her photo + optional speech bubble.
  *
  * Props:
  *   state    'idle' | 'welcome' | 'reading' | 'analyzing' | 'teaching' | 'complete'
@@ -200,75 +205,31 @@ export default function Cece({ state = 'idle', message, size = 'md', showBubble 
           60% { transform: scale(1.08); opacity: 1; }
           100% { transform: scale(1); }
         }
-        @keyframes cece-blink-kf {
-          0%, 92%, 100% { transform: scaleY(1); }
-          96% { transform: scaleY(0.1); }
-        }
         .cece-float { animation: cece-float-kf 2.6s ease-in-out infinite; }
         .cece-wave { animation: cece-wave-kf 1.4s ease-in-out infinite; transform-origin: 50% 90%; }
         .cece-pulse { animation: cece-float-kf 2.6s ease-in-out infinite, cece-pulse-kf 1.6s ease-in-out infinite; }
         .cece-bounce-in { animation: cece-bounce-in-kf 0.55s cubic-bezier(0.34,1.56,0.64,1) both; }
         .cece-glow-ring { animation: cece-glow-kf 1.8s ease-in-out infinite; }
-        .cece-eye { animation: cece-blink-kf 4.5s ease-in-out infinite; transform-origin: center; }
         .cece-bubble-in { animation: cece-bounce-in-kf 0.4s ease-out both; }
       `}</style>
 
-      <div className={config.bodyClass} style={{ width: px, height: px }} aria-hidden="true">
-        <svg viewBox="0 0 120 120" width={px} height={px}>
-          <defs>
-            <linearGradient id="cece-body-grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor={COLORS.blue} />
-              <stop offset="100%" stopColor={COLORS.navy} />
-            </linearGradient>
-          </defs>
-
-          {/* Shield/compass body */}
-          <path
-            d="M60 6
-               C88 6 106 20 106 20
-               L106 62
-               C106 92 82 108 60 116
-               C38 108 14 92 14 62
-               L14 20
-               C14 20 32 6 60 6 Z"
-            fill="url(#cece-body-grad)"
-            stroke={COLORS.navy}
-            strokeWidth="2"
-          />
-
-          {/* Inner compass ring, glows when analyzing/teaching */}
-          <circle cx="60" cy="58" r="30" fill="black" opacity="0.08" />
-          <circle
-            cx="60"
-            cy="58"
-            r="26"
-            fill="none"
-            stroke="white"
-            strokeOpacity="0.85"
-            strokeWidth="2"
-            className={config.glow ? 'cece-glow-ring' : ''}
-          />
-          {/* Compass needle */}
-          <path d="M60 40 L67 58 L60 76 L53 58 Z" fill="white" opacity="0.9" />
-          <path d="M60 40 L64 58 L60 58 Z" fill={COLORS.green} />
-
-          {/* Eyes */}
-          <g>
-            <ellipse className="cece-eye" cx="47" cy="30" rx="5.5" ry="6.5" fill="white" />
-            <ellipse className="cece-eye" cx="73" cy="30" rx="5.5" ry="6.5" fill="white" />
-            <circle cx="48" cy="31" r="2.6" fill={COLORS.navy} />
-            <circle cx="74" cy="31" r="2.6" fill={COLORS.navy} />
-          </g>
-
-          {/* Smile */}
-          <path d="M50 40 Q60 46 70 40" stroke="white" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-
-          {/* Little tablet held to the side */}
-          <g transform="translate(96, 66) rotate(-8)">
-            <rect x="-14" y="-16" width="28" height="34" rx="4" fill={COLORS.navy} stroke="white" strokeWidth="1.5" />
+      <div className={`relative ${config.bodyClass}`} style={{ width: px, height: px }} aria-hidden="true">
+        <img
+          src={CECE_PHOTO_URL}
+          alt=""
+          className={`h-full w-full rounded-full border-4 object-cover ${config.glow ? 'cece-glow-ring' : ''}`}
+          style={{ borderColor: COLORS.navy }}
+        />
+        {/* Small state badge, bottom-right of the photo - carries the same
+            per-state signal the tablet icon used to on the illustrated body. */}
+        <span
+          className="absolute bottom-0 right-0 flex items-center justify-center rounded-full border-2 border-white"
+          style={{ width: px * 0.36, height: px * 0.36, background: COLORS.navy }}
+        >
+          <svg viewBox="-12 -12 24 24" width="72%" height="72%">
             <CeceIcon icon={config.icon} />
-          </g>
-        </svg>
+          </svg>
+        </span>
       </div>
 
       {showBubble && (
