@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import Cece, { useCeceTips } from './Cece.jsx'
 
 // Coverage Compass — AI Policy Review Experience
 // -------------------------------------------------
@@ -58,6 +59,17 @@ const TIMING = {
   scoreCountUp: 1400,
   perReportItem: 220,
   settleBeforeComplete: 400,
+}
+
+// Maps this component's phase names to Cece's states - 'score' still reads
+// as "analyzing" from Cece's point of view, and 'report' is where she's
+// explaining what was found, hence 'teaching'.
+const PHASE_TO_CECE_STATE = {
+  reading: 'reading',
+  analyzing: 'analyzing',
+  score: 'analyzing',
+  report: 'teaching',
+  complete: 'complete',
 }
 
 export default function AIPolicyReviewExperience({
@@ -160,13 +172,8 @@ export default function AIPolicyReviewExperience({
 
   useEffect(() => () => clearTimers(), [])
 
-  const needleAngle = (() => {
-    if (visualPhase === 'reading') return -60
-    if (visualPhase === 'analyzing') return -20 + ((readIndex + 1) / READ_ITEMS.length) * 60
-    if (visualPhase === 'score') return 40 + (score ? (scoreValue / score) * 30 : 30)
-    if (visualPhase === 'report') return 70 + ((reportIndex + 1) / REPORT_ITEMS.length) * 20
-    return 90
-  })()
+  const ceceState = PHASE_TO_CECE_STATE[visualPhase] || 'reading'
+  const ceceTip = useCeceTips(ceceState)
 
   return (
     <div className="w-full max-w-xl mx-auto rounded-3xl border border-compass-line bg-compass-surface shadow-card overflow-hidden">
@@ -176,30 +183,10 @@ export default function AIPolicyReviewExperience({
           10% { opacity: 1; }
           100% { transform: translateY(220px) rotate(340deg); opacity: 0; }
         }
-        @keyframes cc-pulse-ring {
-          0% { box-shadow: 0 0 0 0 rgb(var(--color-compass-blue) / 0.25); }
-          100% { box-shadow: 0 0 0 14px rgb(var(--color-compass-blue) / 0); }
-        }
-        .cc-glow { animation: cc-pulse-ring 1.6s ease-out infinite; }
       `}</style>
 
-      <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-compass-line">
-        <div className="relative w-10 h-10 rounded-full bg-compass-navy flex items-center justify-center cc-glow">
-          <CompassIcon
-            className="w-5 h-5 text-white transition-transform duration-500 ease-out"
-            style={{ transform: `rotate(${needleAngle}deg)` }}
-          />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-compass-heading tracking-tight">Coverage Compass AI</p>
-          <p className="text-xs text-compass-slate">
-            {visualPhase === 'reading' && 'Reading your file…'}
-            {visualPhase === 'analyzing' && 'Reviewing your policy…'}
-            {visualPhase === 'score' && 'Calculating your Coverage Score…'}
-            {visualPhase === 'report' && 'Building your report…'}
-            {visualPhase === 'complete' && 'Your review is ready.'}
-          </p>
-        </div>
+      <div className="px-6 pt-6 pb-4 border-b border-compass-line">
+        <Cece state={ceceState} message={ceceTip} size="md" />
       </div>
 
       <div className="p-6">
@@ -401,15 +388,6 @@ function CompletePhase({ onViewReport, onDownloadPdf, downloadingPdf }) {
         </button>
       </div>
     </div>
-  )
-}
-
-function CompassIcon({ className, style }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} style={style} aria-hidden="true">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M15.5 8.5l-2 5-5 2 2-5 5-2z" fill="currentColor" />
-    </svg>
   )
 }
 
