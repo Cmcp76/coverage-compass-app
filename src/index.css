@@ -144,27 +144,10 @@ body {
   animation-delay: 0.3s;
 }
 
-@keyframes compass-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-compass-spin {
-  animation: compass-spin 50s linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up {
     animation: none;
     opacity: 1;
     transform: none;
-  }
-
-  .animate-compass-spin {
-    animation: none;
   }
 }
