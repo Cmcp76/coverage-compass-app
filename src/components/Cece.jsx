@@ -117,7 +117,7 @@ export function useCeceTips(phase, intervalMs = 3200) {
   return tips[index]
 }
 
-const SIZE_MAP = { sm: 64, md: 96, lg: 140, xl: 200 }
+const SIZE_MAP = { sm: 64, md: 96, lg: 140, xl: 200, '2xl': 260 }
 
 // The small icon Cece holds up on her tablet, swapped per state.
 function CeceIcon({ icon }) {
@@ -172,7 +172,7 @@ function CeceIcon({ icon }) {
  * Props:
  *   state    'idle' | 'welcome' | 'reading' | 'analyzing' | 'teaching' | 'complete'
  *   message  optional override for the speech bubble text (defaults to the state's copy)
- *   size     'sm' | 'md' | 'lg' | 'xl'  (default 'md')
+ *   size     'sm' | 'md' | 'lg' | 'xl' | '2xl'  (default 'md')
  *   showBubble  boolean, default true
  *   name     display name in the bubble tail, default 'Cece'
  */

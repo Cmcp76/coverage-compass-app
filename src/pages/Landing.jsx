@@ -35,6 +35,7 @@ export default function Landing() {
           <div className="animate-fade-up animate-fade-up-delay-3 mt-8 flex justify-center">
             <Cece
               state="welcome"
+              size="lg"
               message="Hi, I'm Cece — I'll walk you through your policy in plain language."
             />
           </div>
@@ -117,7 +118,9 @@ export default function Landing() {
       {/* Meet Cece */}
       <section className="bg-compass-blue/5 py-16">
         <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-6 text-center">
-          <Cece state="teaching" size="xl" showBubble={false} />
+          <div className="rounded-full bg-compass-blue/10 p-4">
+            <Cece state="teaching" size="2xl" showBubble={false} />
+          </div>
           <h2 className="font-display text-2xl font-semibold text-compass-heading">
             Meet Cece, your Coverage Compass guide
           </h2>
