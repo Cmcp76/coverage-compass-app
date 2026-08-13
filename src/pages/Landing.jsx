@@ -7,12 +7,12 @@ import Cece from '../components/Cece.jsx'
 // Hosted externally (not committed to this repo) - one photo per line of
 // business for the "Lines of Business" section below.
 const SERVICE_IMG_AUTO = 'https://i.postimg.cc/HjRbRBwY/Chat-GPT-Image-Aug-13-2026-11-25-21-AM.png'
-const SERVICE_IMG_HOMEOWNERS = 'https://i.postimg.cc/S26NdLpf/Chat-GPT-Image-Aug-13-2026-01-44-39-PM-(4).png'
-const SERVICE_IMG_RENTERS_CONDO = 'https://i.postimg.cc/WqspHD2K/Chat-GPT-Image-Aug-13-2026-01-44-39-PM-(5).png'
-const SERVICE_IMG_LANDLORD = 'https://i.postimg.cc/qhsMwcdX/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(10).png'
-const SERVICE_IMG_COMMERCIAL_GL = 'https://i.postimg.cc/2bQ8Gdfx/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(7).png'
-const SERVICE_IMG_WORKERS_COMP = 'https://i.postimg.cc/VrqLg9cR/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(8).png'
-const SERVICE_IMG_TRUCKING = 'https://i.postimg.cc/w1MMzshB/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(9).png'
+const SERVICE_IMG_HOMEOWNERS = 'https://i.postimg.cc/cJ9D7g45/Chat-GPT-Image-Aug-13-2026-01-44-39-PM-(4).png'
+const SERVICE_IMG_RENTERS_CONDO = 'https://i.postimg.cc/k51jN6XY/Chat-GPT-Image-Aug-13-2026-01-44-39-PM-(5).png'
+const SERVICE_IMG_LANDLORD = 'https://i.postimg.cc/7LsB1GZ8/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(10).png'
+const SERVICE_IMG_COMMERCIAL_GL = 'https://i.postimg.cc/k51jN6XZ/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(7).png'
+const SERVICE_IMG_WORKERS_COMP = 'https://i.postimg.cc/SKTZL2Nw/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(8).png'
+const SERVICE_IMG_TRUCKING = 'https://i.postimg.cc/mrXd3zgx/Chat-GPT-Image-Aug-13-2026-01-44-40-PM-(9).png'
 
 // Mapped to lines of business by upload order as a first pass - if any
 // image doesn't match its labeled coverage line, just swap the constant
