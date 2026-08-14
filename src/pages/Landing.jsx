@@ -4,6 +4,15 @@ import { articles } from '../data/mockData.js'
 import { localePath } from '../utils/localeRouting.js'
 import Cece from '../components/Cece.jsx'
 
+const POLICY_TYPE_TICKER = [
+  'AUTO',
+  'HOMEOWNERS',
+  'RENTERS',
+  'GENERAL LIABILITY',
+  "WORKERS' COMPENSATION",
+  'TRUCKING & MOTOR CARRIER',
+]
+
 // Hosted externally (not committed to this repo) - one photo per line of
 // business for the "Lines of Business" section below.
 const SERVICE_IMG_AUTO = 'https://i.postimg.cc/HjRbRBwY/Chat-GPT-Image-Aug-13-2026-11-25-21-AM.png'
@@ -71,6 +80,10 @@ export default function Landing() {
       <section className="relative overflow-hidden bg-compass-skyblue">
         <HeroBackdrop />
         <div className="relative mx-auto max-w-4xl px-6 py-20 text-center">
+          <span className="animate-fade-up mb-5 inline-flex items-center gap-2 rounded-full bg-compass-navy px-4 py-2 text-xs font-bold text-white">
+            <span className="animate-pulse-dot h-1.5 w-1.5 rounded-full bg-compass-green" aria-hidden="true" />
+            FREE EDUCATIONAL REVIEW &middot; NO SALES CALLS
+          </span>
           <h1 className="animate-fade-up font-display text-4xl font-semibold leading-tight text-compass-heading sm:text-5xl">
             Understand Your Coverage. Protect What Matters.
           </h1>
@@ -100,6 +113,17 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Policy type ticker */}
+      <div className="overflow-hidden whitespace-nowrap bg-compass-navy py-3.5" aria-hidden="true">
+        <div className="animate-marquee inline-flex gap-12 text-sm font-semibold text-white">
+          {[...POLICY_TYPE_TICKER, ...POLICY_TYPE_TICKER].map((label, i) => (
+            <span key={i} className="inline-flex items-center gap-2.5 opacity-85">
+              {label} <span className="text-compass-green">&#10022;</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* How it works */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <h2 className="text-center font-display text-2xl font-semibold text-compass-heading">
@@ -115,6 +139,7 @@ export default function Landing() {
             body="Drop in your declarations page, ACORD form, or full policy, auto, homeowners, renters, general liability, workers' compensation, or trucking/motor carrier. PDF or text file works best."
             to={localePath(lang, '/upload')}
             delay={0}
+            badgeClassName="bg-compass-blue text-white"
           />
           <StepCard
             step="2"
@@ -122,6 +147,7 @@ export default function Landing() {
             body="We read through the document and translate the jargon into a summary anyone can understand: what's covered and what your limits are."
             to={localePath(lang, '/ai-review')}
             delay={1}
+            badgeClassName="bg-compass-amberlight text-compass-amber"
           />
           <StepCard
             step="3"
@@ -129,6 +155,7 @@ export default function Landing() {
             body="Get an educational snapshot of how your policy compares across key protection areas, liability, property, deductibles, and more."
             to={localePath(lang, '/score')}
             delay={2}
+            badgeClassName="bg-compass-mint text-compass-green"
           />
           <StepCard
             step="4"
@@ -136,6 +163,7 @@ export default function Landing() {
             body="See coverage areas that commonly get missed, plus smart questions to bring to your next conversation."
             to={localePath(lang, '/gap-report')}
             delay={3}
+            badgeClassName="bg-compass-navy text-white"
           />
           <StepCard
             step="5"
@@ -143,6 +171,7 @@ export default function Landing() {
             body="Walk into your next conversation prepared with a clean report of your coverage summary and questions to ask a licensed insurance professional."
             to={localePath(lang, '/report')}
             delay={1}
+            badgeClassName="border-2 border-compass-navy bg-compass-surface text-compass-navy"
           />
           <StepCard
             step="6"
@@ -150,6 +179,7 @@ export default function Landing() {
             body="Keep learning about the insurance topics that matter to you, at your own pace, no pressure."
             to={localePath(lang, '/learning-center')}
             delay={2}
+            badgeClassName="bg-gradient-to-br from-compass-blue to-compass-green text-white"
           />
         </div>
       </section>
@@ -492,13 +522,13 @@ function HeroBackdrop() {
   )
 }
 
-function StepCard({ step, title, body, delay = 0, to }) {
+function StepCard({ step, title, body, delay = 0, to, badgeClassName = 'bg-compass-skyblue text-compass-link' }) {
   const className = `card animate-fade-up block ${delay ? `animate-fade-up-delay-${delay}` : ''} ${
     to ? 'transition hover:border-compass-blue' : ''
   }`
   const content = (
     <>
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-compass-skyblue text-sm font-semibold text-compass-link">
+      <div className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold ${badgeClassName}`}>
         {step}
       </div>
       <h3 className="mt-4 font-display text-lg font-semibold text-compass-heading">
