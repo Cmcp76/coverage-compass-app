@@ -10,18 +10,25 @@ import { SUPPORTED_LANGUAGE_CODES } from '../i18n/languages.js'
 import { localePath } from '../utils/localeRouting.js'
 
 const navLinks = [
-  { to: '/dashboard', labelKey: 'nav.dashboard' },
-  { to: '/upload', labelKey: 'nav.uploadPolicy' },
-  { to: '/reports', labelKey: 'nav.reports' },
-  { to: '/learning-center', labelKey: 'nav.learningCenter' },
+  { to: '/', labelKey: 'nav.home' },
+  { to: '/upload', labelKey: 'nav.reviewMyCoverage' },
   { to: '/tools', labelKey: 'nav.tools' },
-  { to: '/notifications', labelKey: 'nav.notifications' },
+  { to: '/learning-center', labelKey: 'nav.learningCenter' },
+  { to: '/business', labelKey: 'nav.business' },
+  { to: '/trucking-startup', labelKey: 'nav.truckingFmcsa' },
+  { to: '/claims-help', labelKey: 'nav.claimsHelp' },
+  { to: '/about', labelKey: 'nav.about' },
 ]
 
 const preAuthPaths = ['/', '/login', '/signup', '/reset-password', '/verify-email']
+// Auth-flow pages only (no '/') - these hide the main nav for a focused,
+// distraction-free layout. The landing page keeps the nav (isPreAuth below
+// still keeps its Log In/Sign Up buttons instead of the account menu,
+// since a landing-page visitor hasn't signed in either way).
+const hideNavPaths = ['/login', '/signup', '/reset-password', '/verify-email']
 
 const pageTitles = {
-  '/': 'Coverage Compass — Understand Your Coverage',
+  '/': 'Coverage Compass — Understand Your Insurance, Find Better Options',
   '/signup': 'Sign Up — Coverage Compass',
   '/login': 'Log In — Coverage Compass',
   '/reset-password': 'Reset Password — Coverage Compass',
@@ -39,6 +46,8 @@ const pageTitles = {
   '/tools': 'Insurance Tools — Coverage Compass',
   '/challenge': 'The Coverage Compass Challenge',
   '/trucking-startup': 'Start My Trucking Company — Coverage Compass',
+  '/business': 'Business Insurance — Coverage Compass',
+  '/claims-help': 'Claims Help — Coverage Compass',
   '/about': 'About — Coverage Compass',
   '/privacy': 'Privacy Policy — Coverage Compass',
   '/terms': 'Terms of Service — Coverage Compass',
@@ -64,6 +73,8 @@ const pageDescriptions = {
   '/learning-center': "Plain-language articles on auto, home, renters, and business insurance, so you understand your coverage before you ever need to file a claim.",
   '/tools': 'Free interactive insurance tools: a deductible calculator, coverage comparison tool, home inventory tracker, and annual policy checkup.',
   '/about': 'Learn about Coverage Compass, an independent insurance education platform that helps you understand your policy in plain language.',
+  '/business': 'Upload your general liability or workers’ compensation policy for a plain-language review of what your business coverage actually includes.',
+  '/claims-help': 'General, plain-language guidance for what to do when you need to file an insurance claim, from documenting damage to following up on a stalled claim.',
   '/privacy': "Coverage Compass's privacy policy: what this prototype collects, how it's used, and what stays only in your browser.",
   '/terms': "Coverage Compass's terms of service for using this educational insurance prototype.",
 }
@@ -90,6 +101,9 @@ export default function Layout({ children }) {
     : location.pathname
   const isPreAuth =
     preAuthPaths.includes(logicalPath) ||
+    (logicalPath === '/challenge' && !location.state?.fromApp)
+  const hideNav =
+    hideNavPaths.includes(logicalPath) ||
     (logicalPath === '/challenge' && !location.state?.fromApp)
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
@@ -218,13 +232,13 @@ export default function Layout({ children }) {
               {t('brand.name')}
             </span>
           </Link>
-          {!isPreAuth && (
-            <nav className="hidden items-center gap-6 lg:flex">
+          {!hideNav && (
+            <nav className="hidden items-center gap-3.5 xl:gap-5 lg:flex">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={localePath(lang, link.to)}
-                  className={`text-sm font-medium transition ${
+                  className={`whitespace-nowrap text-[13px] font-medium transition xl:text-sm ${
                     logicalPath === link.to
                       ? 'text-compass-link'
                       : 'text-compass-slate hover:text-compass-ink'
@@ -250,65 +264,65 @@ export default function Layout({ children }) {
                   {t('nav.logIn')}
                 </Link>
                 <Link to={localePath(lang, '/signup')} className="btn-primary shrink-0 whitespace-nowrap px-2.5 py-2 sm:px-5 sm:py-2.5">
-                  {t('nav.signUp')}
+                  {t('nav.startFreeReview')}
                 </Link>
               </>
             ) : (
-              <>
-                <div className="relative hidden sm:block">
-                  <button
-                    ref={accountButtonRef}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-compass-slate transition hover:bg-compass-paper"
-                    aria-haspopup="menu"
-                    aria-expanded={accountMenuOpen}
-                    onClick={() => setAccountMenuOpen((v) => !v)}
-                  >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
-                      {initials}
-                    </span>
-                    {displayName}
-                    <ChevronIcon open={accountMenuOpen} />
-                  </button>
-                  {accountMenuOpen && (
-                    <div
-                      ref={accountMenuRef}
-                      role="menu"
-                      onKeyDown={(e) => trapTabKey(e, accountMenuRef)}
-                      className="absolute end-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-compass-surface py-1 shadow-card"
-                    >
-                      <Link
-                        to={localePath(lang, '/dashboard')}
-                        role="menuitem"
-                        onClick={() => setAccountMenuOpen(false)}
-                        className="block px-4 py-2 text-sm text-compass-ink hover:bg-compass-paper"
-                      >
-                        {t('nav.dashboard')}
-                      </Link>
-                      <button
-                        role="menuitem"
-                        onClick={handleLogOut}
-                        className="block w-full px-4 py-2 text-start text-sm text-compass-ink hover:bg-compass-paper"
-                      >
-                        {t('nav.logOut')}
-                      </button>
-                    </div>
-                  )}
-                </div>
+              <div className="relative hidden sm:block">
                 <button
-                  ref={menuButtonRef}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line lg:hidden"
-                  aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-                  aria-expanded={menuOpen}
-                  onClick={() => setMenuOpen((v) => !v)}
+                  ref={accountButtonRef}
+                  className="flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-compass-slate transition hover:bg-compass-paper"
+                  aria-haspopup="menu"
+                  aria-expanded={accountMenuOpen}
+                  onClick={() => setAccountMenuOpen((v) => !v)}
                 >
-                  <MenuIcon open={menuOpen} />
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
+                    {initials}
+                  </span>
+                  {displayName}
+                  <ChevronIcon open={accountMenuOpen} />
                 </button>
-              </>
+                {accountMenuOpen && (
+                  <div
+                    ref={accountMenuRef}
+                    role="menu"
+                    onKeyDown={(e) => trapTabKey(e, accountMenuRef)}
+                    className="absolute end-0 top-full mt-2 w-44 rounded-lg border border-compass-line bg-compass-surface py-1 shadow-card"
+                  >
+                    <Link
+                      to={localePath(lang, '/dashboard')}
+                      role="menuitem"
+                      onClick={() => setAccountMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-compass-ink hover:bg-compass-paper"
+                    >
+                      {t('nav.dashboard')}
+                    </Link>
+                    <button
+                      role="menuitem"
+                      onClick={handleLogOut}
+                      className="block w-full px-4 py-2 text-start text-sm text-compass-ink hover:bg-compass-paper"
+                    >
+                      {t('nav.logOut')}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+            {!hideNav && (
+              <button
+                ref={menuButtonRef}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-compass-line lg:hidden"
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((v) => !v)}
+              >
+                <MenuIcon open={menuOpen} />
+              </button>
             )}
           </div>
         </div>
 
-        {!isPreAuth && menuOpen && (
+        {!hideNav && menuOpen && (
           <nav
             ref={mobileNavRef}
             className="flex flex-col border-t border-compass-line bg-compass-surface px-6 py-3 lg:hidden"
@@ -327,17 +341,19 @@ export default function Layout({ children }) {
                 {t(link.labelKey)}
               </Link>
             ))}
-            <div className="mt-2 flex items-center justify-between border-t border-compass-line pt-3 sm:hidden">
-              <span className="flex items-center gap-2 text-sm text-compass-slate">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
-                  {initials}
+            {!isPreAuth && (
+              <div className="mt-2 flex items-center justify-between border-t border-compass-line pt-3 sm:hidden">
+                <span className="flex items-center gap-2 text-sm text-compass-slate">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">
+                    {initials}
+                  </span>
+                  {displayName}
                 </span>
-                {displayName}
-              </span>
-              <button onClick={handleLogOut} className="text-sm font-medium text-compass-link">
-                {t('nav.logOut')}
-              </button>
-            </div>
+                <button onClick={handleLogOut} className="text-sm font-medium text-compass-link">
+                  {t('nav.logOut')}
+                </button>
+              </div>
+            )}
           </nav>
         )}
       </header>

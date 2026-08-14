@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import Cece, { useCeceTips } from './Cece.jsx'
 
 // Coverage Compass — AI Policy Review Experience
 // -------------------------------------------------
@@ -61,15 +60,102 @@ const TIMING = {
   settleBeforeComplete: 400,
 }
 
-// Maps this component's phase names to Cece's states - 'score' still reads
-// as "analyzing" from Cece's point of view, and 'report' is where she's
-// explaining what was found, hence 'teaching'.
-const PHASE_TO_CECE_STATE = {
-  reading: 'reading',
-  analyzing: 'analyzing',
-  score: 'analyzing',
-  report: 'teaching',
-  complete: 'complete',
+// Colorful icon badge + rotating tip line shown above each phase, in place
+// of a character illustration. 'score' reuses the 'analyzing' tips/icon
+// since it's the same underlying wait, just a later beat of it.
+const PHASE_CONFIG = {
+  reading: { label: 'Reading your policy', icon: 'page', badge: 'bg-compass-skyblue text-compass-link' },
+  analyzing: { label: 'Analyzing your coverage', icon: 'search', badge: 'bg-compass-purpletint text-compass-purple' },
+  score: { label: 'Analyzing your coverage', icon: 'search', badge: 'bg-compass-purpletint text-compass-purple' },
+  report: { label: 'Preparing your report', icon: 'bulb', badge: 'bg-compass-goldtint text-compass-gold' },
+  complete: { label: 'All done', icon: 'check', badge: 'bg-compass-mint text-compass-green' },
+}
+
+const PHASE_TIP_SETS = {
+  reading: [
+    'Reading your policy...',
+    'Finding your coverage limits...',
+    'Reviewing your deductibles...',
+  ],
+  analyzing: [
+    'Looking for areas you may want to review...',
+    'Comparing this to common coverage patterns...',
+    'Weighing your liability and property protection...',
+  ],
+  score: [
+    'Looking for areas you may want to review...',
+    'Comparing this to common coverage patterns...',
+    'Weighing your liability and property protection...',
+  ],
+  report: [
+    'Endorsements are just changes made to your base policy.',
+    'Actual cash value and replacement cost pay out differently after a claim.',
+    'A higher deductible usually means a lower premium — but more out of pocket if you file.',
+  ],
+  complete: [
+    'Preparing your Coverage Compass report...',
+    'Your report is ready to download below.',
+  ],
+}
+
+// Rotates through PHASE_TIP_SETS[phase] every intervalMs, resetting to the
+// first tip whenever phase changes.
+function useRotatingTips(phase, intervalMs = 3200) {
+  const tips = PHASE_TIP_SETS[phase] || PHASE_TIP_SETS.reading
+  const [index, setIndex] = useState(0)
+  const phaseRef = useRef(phase)
+
+  useEffect(() => {
+    if (phaseRef.current !== phase) {
+      phaseRef.current = phase
+      setIndex(0)
+    }
+  }, [phase])
+
+  useEffect(() => {
+    if (tips.length <= 1) return
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % tips.length)
+    }, intervalMs)
+    return () => clearInterval(id)
+  }, [tips, intervalMs])
+
+  return tips[index]
+}
+
+function PhaseIcon({ icon }) {
+  const common = { viewBox: '0 0 24 24', width: 20, height: 20, fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round' }
+  switch (icon) {
+    case 'page':
+      return (
+        <svg {...common}>
+          <path d="M6 3h9l3 3v15H6z" />
+          <path d="M9 11h6M9 15h6M9 7h3" />
+        </svg>
+      )
+    case 'search':
+      return (
+        <svg {...common}>
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="M20 20l-4.8-4.8" />
+        </svg>
+      )
+    case 'bulb':
+      return (
+        <svg {...common}>
+          <path d="M9 18h6M10 21h4" />
+          <path d="M12 3a6 6 0 0 0-3.4 10.9c.5.4.9 1 .9 1.6V16h5v-.5c0-.6.4-1.2.9-1.6A6 6 0 0 0 12 3z" />
+        </svg>
+      )
+    case 'check':
+    default:
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M8 12.5l2.5 2.5L16 9.5" />
+        </svg>
+      )
+  }
 }
 
 export default function AIPolicyReviewExperience({
@@ -172,8 +258,8 @@ export default function AIPolicyReviewExperience({
 
   useEffect(() => () => clearTimers(), [])
 
-  const ceceState = PHASE_TO_CECE_STATE[visualPhase] || 'reading'
-  const ceceTip = useCeceTips(ceceState)
+  const phase = PHASE_CONFIG[visualPhase] || PHASE_CONFIG.reading
+  const tip = useRotatingTips(visualPhase)
 
   return (
     <div className="w-full max-w-xl mx-auto rounded-3xl border border-compass-line bg-compass-surface shadow-card overflow-hidden">
@@ -185,8 +271,14 @@ export default function AIPolicyReviewExperience({
         }
       `}</style>
 
-      <div className="px-6 pt-6 pb-4 border-b border-compass-line">
-        <Cece state={ceceState} message={ceceTip} size="md" />
+      <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-compass-line">
+        <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${phase.badge}`} aria-hidden="true">
+          <PhaseIcon icon={phase.icon} />
+        </span>
+        <div>
+          <p className="text-sm font-semibold text-compass-heading">{phase.label}</p>
+          <p key={tip} className="text-xs text-compass-slate">{tip}</p>
+        </div>
       </div>
 
       <div className="p-6">

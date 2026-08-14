@@ -13,36 +13,52 @@
    track light/dark like everything else. */
 :root {
   color-scheme: light;
-  --color-compass-navy: 12 35 64;
-  --color-compass-blue: 29 95 166;
-  --color-compass-heading: 12 35 64;
-  --color-compass-link: 29 95 166;
-  --color-compass-skyblue: 230 241 251;
-  --color-compass-green: 23 124 91;
-  --color-compass-mint: 225 245 238;
-  --color-compass-amber: 150 94 19;
-  --color-compass-amberlight: 250 238 218;
-  --color-compass-ink: 26 36 51;
-  --color-compass-slate: 91 102 117;
-  --color-compass-line: 227 232 239;
-  --color-compass-paper: 248 250 252;
+  --color-compass-navy: 15 23 55;
+  --color-compass-blue: 37 99 235;
+  --color-compass-heading: 15 23 55;
+  --color-compass-link: 37 99 235;
+  --color-compass-skyblue: 219 234 254;
+  --color-compass-green: 22 163 74;
+  --color-compass-mint: 220 252 231;
+  --color-compass-amber: 180 83 9;
+  --color-compass-amberlight: 254 243 199;
+  --color-compass-ink: 24 33 56;
+  --color-compass-slate: 90 101 126;
+  --color-compass-line: 225 230 240;
+  --color-compass-paper: 248 250 255;
   --color-compass-surface: 255 255 255;
+  /* Purely decorative accent hues - used for card icons, gradients, and
+     illustrative UI on marketing/tool pages, never for status meaning
+     (good/review already own green/amber above), so they stay fixed
+     across themes like navy/blue do. */
+  --color-compass-teal: 13 148 136;
+  --color-compass-tealtint: 204 251 241;
+  --color-compass-purple: 124 58 237;
+  --color-compass-purpletint: 237 233 254;
+  --color-compass-coral: 249 94 82;
+  --color-compass-coraltint: 255 228 224;
+  --color-compass-gold: 217 119 6;
+  --color-compass-goldtint: 254 243 199;
 }
 
 .dark {
   color-scheme: dark;
-  --color-compass-heading: 234 242 251;
-  --color-compass-link: 91 155 219;
-  --color-compass-skyblue: 21 38 63;
-  --color-compass-green: 76 194 154;
-  --color-compass-mint: 17 54 38;
-  --color-compass-amber: 224 168 87;
-  --color-compass-amberlight: 58 42 18;
-  --color-compass-ink: 231 237 245;
-  --color-compass-slate: 152 166 186;
-  --color-compass-line: 58 77 104;
-  --color-compass-paper: 11 21 36;
-  --color-compass-surface: 26 45 72;
+  --color-compass-heading: 236 242 255;
+  --color-compass-link: 96 165 250;
+  --color-compass-skyblue: 24 39 78;
+  --color-compass-green: 74 222 128;
+  --color-compass-mint: 16 51 34;
+  --color-compass-amber: 251 191 90;
+  --color-compass-amberlight: 56 40 12;
+  --color-compass-ink: 230 236 248;
+  --color-compass-slate: 154 167 191;
+  --color-compass-line: 55 71 102;
+  --color-compass-paper: 10 16 32;
+  --color-compass-surface: 22 32 58;
+  --color-compass-tealtint: 9 46 43;
+  --color-compass-purpletint: 47 32 82;
+  --color-compass-coraltint: 66 27 24;
+  --color-compass-goldtint: 56 40 12;
 }
 
 /* The printable Report page (window.print()) should always print light,
@@ -52,18 +68,22 @@
   :root,
   .dark {
     color-scheme: light;
-    --color-compass-heading: 12 35 64;
-    --color-compass-link: 29 95 166;
-    --color-compass-skyblue: 230 241 251;
-    --color-compass-green: 23 124 91;
-    --color-compass-mint: 225 245 238;
-    --color-compass-amber: 150 94 19;
-    --color-compass-amberlight: 250 238 218;
-    --color-compass-ink: 26 36 51;
-    --color-compass-slate: 91 102 117;
-    --color-compass-line: 227 232 239;
-    --color-compass-paper: 248 250 252;
+    --color-compass-heading: 15 23 55;
+    --color-compass-link: 37 99 235;
+    --color-compass-skyblue: 219 234 254;
+    --color-compass-green: 22 163 74;
+    --color-compass-mint: 220 252 231;
+    --color-compass-amber: 180 83 9;
+    --color-compass-amberlight: 254 243 199;
+    --color-compass-ink: 24 33 56;
+    --color-compass-slate: 90 101 126;
+    --color-compass-line: 225 230 240;
+    --color-compass-paper: 248 250 255;
     --color-compass-surface: 255 255 255;
+    --color-compass-tealtint: 204 251 241;
+    --color-compass-purpletint: 237 233 254;
+    --color-compass-coraltint: 255 228 224;
+    --color-compass-goldtint: 254 243 199;
   }
 }
 
