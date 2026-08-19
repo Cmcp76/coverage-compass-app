@@ -16,7 +16,7 @@ const HELP_CATEGORIES = [
   { id: 'renters', icon: 'key', accent: 'purple', to: '/upload' },
   { id: 'business', icon: 'briefcase', accent: 'gold', to: '/business' },
   { id: 'trucking', icon: 'truck', accent: 'coral', to: '/trucking-startup' },
-  { id: 'life', icon: 'heart', accent: 'blue', to: '/learning-center' },
+  { id: 'life', icon: 'heart', accent: 'blue', to: '/learning-center', state: { category: 'Life Insurance' } },
   { id: 'claims', icon: 'lifebuoy', accent: 'teal', to: '/claims-help' },
   { id: 'policyReview', icon: 'search', accent: 'purple', to: '/upload' },
 ]
@@ -289,10 +289,11 @@ const ACCENT_CLASSES = {
   coral: 'bg-compass-coraltint text-compass-coral',
 }
 
-function HelpCard({ id, icon, accent, to, lang, t }) {
+function HelpCard({ id, icon, accent, to, state, lang, t }) {
   return (
     <Link
       to={localePath(lang, to)}
+      state={state}
       className="card group flex flex-col transition hover:-translate-y-1 hover:shadow-lift"
     >
       <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${ACCENT_CLASSES[accent]}`}>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { articles, categories } from '../data/mockData.js'
 import { localePath } from '../utils/localeRouting.js'
@@ -11,8 +11,12 @@ const GLOSSARY_PREVIEW_KEYS = ['declarationsPage', 'subrogation', 'endorsement']
 
 export default function LearningCenter() {
   const { t } = useTranslation('common')
+  const location = useLocation()
+  const requestedCategory = location.state?.category
   const [search, setSearch] = useState('')
-  const [activeCategory, setActiveCategory] = useState('All')
+  const [activeCategory, setActiveCategory] = useState(
+    categories.includes(requestedCategory) ? requestedCategory : 'All'
+  )
   const { lang } = useParams()
 
   const filtered = articles.filter((a) => {
