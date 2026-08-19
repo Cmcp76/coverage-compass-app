@@ -24,6 +24,7 @@ const Report = lazy(() => import('./pages/Report.jsx'))
 const Reports = lazy(() => import('./pages/Reports.jsx'))
 const Notifications = lazy(() => import('./pages/Notifications.jsx'))
 const LearningCenter = lazy(() => import('./pages/LearningCenter.jsx'))
+const ArticleDetail = lazy(() => import('./pages/ArticleDetail.jsx'))
 const Tools = lazy(() => import('./pages/Tools.jsx'))
 const Challenge = lazy(() => import('./pages/Challenge.jsx'))
 const TruckingStartup = lazy(() => import('./pages/TruckingStartup.jsx'))
@@ -86,6 +87,7 @@ export default function App() {
                     <Route path="reports" element={<Reports />} />
                     <Route path="notifications" element={<Notifications />} />
                     <Route path="learning-center" element={<LearningCenter />} />
+                    <Route path="learning-center/:slug" element={<ArticleDetail />} />
                     <Route path="tools" element={<Tools />} />
                     <Route path="challenge" element={<Challenge />} />
                     <Route path="trucking-startup" element={<TruckingStartup />} />

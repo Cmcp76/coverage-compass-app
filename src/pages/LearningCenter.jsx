@@ -65,29 +65,19 @@ export default function LearningCenter() {
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((a) => (
-          <details key={a.title} className="card group [&_summary::-webkit-details-marker]:hidden">
-            <summary className="cursor-pointer list-none">
-              <span className="tag-neutral">{a.category}</span>
-              <p className="mt-3 text-sm font-medium leading-snug text-compass-ink">
-                {a.title}
-              </p>
-              <p className="mt-2 text-xs text-compass-slate">{a.summary}</p>
-              <div className="mt-3 flex items-center justify-between">
-                <span className="text-xs text-compass-slate">{a.readTime}</span>
-                <span className="text-xs font-medium text-compass-link group-open:hidden">
-                  {t('buttons.readArticle')} →
-                </span>
-                <span className="hidden text-xs font-medium text-compass-link group-open:inline">
-                  Close ↑
-                </span>
-              </div>
-            </summary>
-            <p className="mt-3 border-t border-compass-line pt-3 text-xs text-compass-slate">
-              Full article reading isn't part of this prototype yet, the summary above
-              covers the key points. For the underlying terms, check the glossary
-              below or try the related tool in the Tools section.
-            </p>
-          </details>
+          <Link
+            key={a.slug}
+            to={localePath(lang, `/learning-center/${a.slug}`)}
+            className="card group flex flex-col transition hover:-translate-y-1 hover:shadow-lift"
+          >
+            <span className="tag-neutral">{a.category}</span>
+            <p className="mt-3 text-sm font-medium leading-snug text-compass-ink">{a.title}</p>
+            <p className="mt-2 flex-1 text-xs text-compass-slate">{a.summary}</p>
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-xs text-compass-slate">{a.readTime}</span>
+              <span className="text-xs font-medium text-compass-link">{t('buttons.readArticle')} →</span>
+            </div>
+          </Link>
         ))}
         {filtered.length === 0 && (
           <p className="text-sm text-compass-slate">No articles match your search.</p>

@@ -120,6 +120,9 @@ export default function Layout({ children }) {
   }, [location.pathname])
 
   useEffect(() => {
+    // Individual learning-center articles set their own title/description
+    // (there's one per slug, not a fixed pageTitles entry) - don't stomp it.
+    if (logicalPath.startsWith('/learning-center/')) return
     document.title = pageTitles[logicalPath] || notFoundTitle
     const meta = document.querySelector('meta[name="description"]')
     if (meta) meta.setAttribute('content', pageDescriptions[logicalPath] || defaultDescription)

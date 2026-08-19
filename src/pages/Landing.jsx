@@ -217,8 +217,8 @@ export default function Landing() {
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {articles.slice(0, 4).map((a) => (
               <Link
-                key={a.title}
-                to={localePath(lang, '/learning-center')}
+                key={a.slug}
+                to={localePath(lang, `/learning-center/${a.slug}`)}
                 className="card block transition hover:border-compass-blue"
               >
                 <span className="tag-neutral">{a.category}</span>
