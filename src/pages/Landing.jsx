@@ -3,14 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { articles } from '../data/mockData.js'
 import { localePath } from '../utils/localeRouting.js'
 
-const POLICY_TYPE_TICKER = [
-  'AUTO',
-  'HOMEOWNERS',
-  'RENTERS',
-  'GENERAL LIABILITY',
-  "WORKERS' COMPENSATION",
-  'TRUCKING & MOTOR CARRIER',
-]
+const POLICY_TYPE_TICKER = ['auto', 'homeowners', 'renters', 'generalLiability', 'workersComp', 'trucking']
 
 // "What can we help you with?" - each maps to a real destination. Life
 // Insurance isn't a policy type the analysis engine supports (see
@@ -18,35 +11,46 @@ const POLICY_TYPE_TICKER = [
 // Life Insurance articles instead of implying an AI review that doesn't
 // exist for that line yet.
 const HELP_CATEGORIES = [
-  { icon: 'car', accent: 'blue', title: 'Auto Insurance', body: 'Liability, collision, comprehensive, and the coverage gaps drivers miss most.', cta: 'Review my auto policy', to: '/upload' },
-  { icon: 'home', accent: 'teal', title: 'Home Insurance', body: 'Dwelling, personal property, and the actual-cash-value question that trips up claims.', cta: 'Review my home policy', to: '/upload' },
-  { icon: 'key', accent: 'purple', title: 'Renters Insurance', body: "What your landlord's policy covers versus what's actually on you.", cta: 'Review my renters policy', to: '/upload' },
-  { icon: 'briefcase', accent: 'gold', title: 'Business Insurance', body: 'General liability and workers’ comp, reviewed against what your business actually needs.', cta: 'Review my business policy', to: '/business' },
-  { icon: 'truck', accent: 'coral', title: 'Trucking & FMCSA', body: 'A step-by-step checklist for authority, compliance, and motor carrier coverage.', cta: 'Start my trucking checklist', to: '/trucking-startup' },
-  { icon: 'heart', accent: 'blue', title: 'Life Insurance', body: 'Term vs. whole life, and the basics everyone should know before they buy.', cta: 'Learn about life insurance', to: '/learning-center' },
-  { icon: 'lifebuoy', accent: 'teal', title: 'Claims Help', body: 'A plain-language walkthrough of what to do the moment something happens.', cta: 'Get claims guidance', to: '/claims-help' },
-  { icon: 'search', accent: 'purple', title: 'Policy Review', body: "Already have a policy? Upload it for a full plain-language breakdown.", cta: 'Upload for review', to: '/upload' },
+  { id: 'auto', icon: 'car', accent: 'blue', to: '/upload' },
+  { id: 'home', icon: 'home', accent: 'teal', to: '/upload' },
+  { id: 'renters', icon: 'key', accent: 'purple', to: '/upload' },
+  { id: 'business', icon: 'briefcase', accent: 'gold', to: '/business' },
+  { id: 'trucking', icon: 'truck', accent: 'coral', to: '/trucking-startup' },
+  { id: 'life', icon: 'heart', accent: 'blue', to: '/learning-center' },
+  { id: 'claims', icon: 'lifebuoy', accent: 'teal', to: '/claims-help' },
+  { id: 'policyReview', icon: 'search', accent: 'purple', to: '/upload' },
 ]
 
 const HOW_IT_WORKS = [
-  { n: '1', title: 'Choose what you need help with', body: 'Pick a line of coverage or a tool, no account required to start.' },
-  { n: '2', title: 'Answer a few simple questions', body: 'Or upload a policy directly, whichever is faster for you.' },
-  { n: '3', title: 'Review personalized guidance', body: 'Get a plain-language breakdown, a Coverage Score, and gaps worth a second look.' },
-  { n: '4', title: 'Take the next step with confidence', body: 'Download a report and walk into your next conversation prepared.' },
+  { n: '1', id: 'step1' },
+  { n: '2', id: 'step2' },
+  { n: '3', id: 'step3' },
+  { n: '4', id: 'step4' },
 ]
 
 const FEATURED_TOOLS = [
-  { icon: 'sparkles', accent: 'blue', title: 'AI Policy Review', body: 'Upload a policy and get a plain-language breakdown of what it actually covers.', to: '/upload' },
-  { icon: 'columns', accent: 'teal', title: 'Coverage Comparison Tool', body: 'Compare two policies side by side to see what actually differs.', to: '/tools' },
-  { icon: 'calculator', accent: 'purple', title: 'Insurance Calculators', body: 'See how different deductible levels affect your out-of-pocket costs.', to: '/tools' },
-  { icon: 'truck', accent: 'coral', title: 'FMCSA Compliance Checker', body: 'A step-by-step checklist for motor carrier authority and compliance.', to: '/trucking-startup' },
-  { icon: 'lifebuoy', accent: 'gold', title: 'Claims Assistant', body: 'Plain-language guidance for what to do when you need to file a claim.', to: '/claims-help' },
-  { icon: 'clipboard', accent: 'blue', title: 'Business Insurance Checklist', body: 'Upload your GL or workers’ comp policy for a plain-language review.', to: '/business' },
-  { icon: 'book', accent: 'teal', title: 'Insurance Learning Center', body: 'Plain-language guides and a glossary, no policy upload required.', to: '/learning-center' },
+  { id: 'aiReview', icon: 'sparkles', accent: 'blue', to: '/upload' },
+  { id: 'comparison', icon: 'columns', accent: 'teal', to: '/tools' },
+  { id: 'calculators', icon: 'calculator', accent: 'purple', to: '/tools' },
+  { id: 'fmcsa', icon: 'truck', accent: 'coral', to: '/trucking-startup' },
+  { id: 'claims', icon: 'lifebuoy', accent: 'gold', to: '/claims-help' },
+  { id: 'businessChecklist', icon: 'clipboard', accent: 'blue', to: '/business' },
+  { id: 'learningCenter', icon: 'book', accent: 'teal', to: '/learning-center' },
 ]
 
+const DASHBOARD_CARDS = [
+  { id: 'score', icon: 'target' },
+  { id: 'gaps', icon: 'search' },
+  { id: 'savings', icon: 'gold' },
+  { id: 'nextSteps', icon: 'bulb' },
+  { id: 'renewal', icon: 'calendar' },
+]
+
+const FAQ_IDS = ['q1', 'q2', 'q3', 'q4', 'q5']
+
 export default function Landing() {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation('marketing')
+  const { t: tc } = useTranslation('common')
   const { lang } = useParams()
 
   return (
@@ -57,30 +61,29 @@ export default function Landing() {
           <div>
             <span className="animate-fade-up mb-5 inline-flex items-center gap-2 rounded-full bg-compass-navy px-4 py-2 text-xs font-bold text-white">
               <span className="animate-pulse-dot h-1.5 w-1.5 rounded-full bg-compass-green" aria-hidden="true" />
-              FREE EDUCATIONAL REVIEW &middot; NO SALES CALLS
+              {t('hero.eyebrow')}
             </span>
             <h1 className="animate-fade-up font-display text-4xl font-bold leading-[1.05] text-compass-heading sm:text-5xl">
-              Understand Your Insurance. Find Better Options. Protect What Matters.
+              {t('hero.headline')}
             </h1>
             <p className="animate-fade-up animate-fade-up-delay-1 mt-5 max-w-xl text-lg text-compass-slate">
-              Coverage Compass gives you simple tools, personalized guidance, and clear
-              explanations to help you make smarter insurance decisions.
+              {t('hero.subhead')}
             </p>
             <div className="animate-fade-up animate-fade-up-delay-2 mt-8 flex flex-wrap items-center gap-4">
               <Link to={localePath(lang, '/upload')} className="btn-primary px-6 py-3 text-base">
-                Review My Coverage
+                {t('hero.reviewMyCoverage')}
               </Link>
               <Link to={localePath(lang, '/tools')} className="btn-secondary px-6 py-3 text-base">
-                Explore Insurance Tools
+                {t('hero.exploreTools')}
               </Link>
             </div>
             <p className="animate-fade-up animate-fade-up-delay-3 mt-4 text-xs text-compass-slate">
-              {t('trust.landingLine')}
+              {tc('trust.landingLine')}
             </p>
           </div>
 
           <div className="animate-fade-up animate-fade-up-delay-2 relative mx-auto w-full max-w-sm">
-            <ScorePreviewCard />
+            <ScorePreviewCard t={t} />
           </div>
         </div>
       </section>
@@ -88,9 +91,9 @@ export default function Landing() {
       {/* Policy type ticker */}
       <div className="overflow-hidden whitespace-nowrap bg-compass-navy py-3.5" aria-hidden="true">
         <div className="animate-marquee inline-flex gap-12 text-sm font-semibold text-white">
-          {[...POLICY_TYPE_TICKER, ...POLICY_TYPE_TICKER].map((label, i) => (
+          {[...POLICY_TYPE_TICKER, ...POLICY_TYPE_TICKER].map((key, i) => (
             <span key={i} className="inline-flex items-center gap-2.5 opacity-85">
-              {label} <span className="text-compass-gold">&#10022;</span>
+              {t(`ticker.${key}`)} <span className="text-compass-gold">&#10022;</span>
             </span>
           ))}
         </div>
@@ -99,17 +102,15 @@ export default function Landing() {
       {/* What can we help you with */}
       <section className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <span className="tag-neutral">Get Started</span>
+          <span className="tag-neutral">{t('categories.eyebrow')}</span>
           <h2 className="mt-3 font-display text-3xl font-bold text-compass-heading">
-            What can we help you with?
+            {t('categories.heading')}
           </h2>
-          <p className="mt-3 text-compass-slate">
-            Pick a line of coverage, and we'll guide you from there.
-          </p>
+          <p className="mt-3 text-compass-slate">{t('categories.subhead')}</p>
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {HELP_CATEGORIES.map((c) => (
-            <HelpCard key={c.title} {...c} lang={lang} />
+            <HelpCard key={c.id} {...c} lang={lang} t={t} />
           ))}
         </div>
       </section>
@@ -118,9 +119,9 @@ export default function Landing() {
       <section className="bg-compass-surface py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="tag-neutral">How Coverage Compass Works</span>
+            <span className="tag-neutral">{t('howItWorks.eyebrow')}</span>
             <h2 className="mt-3 font-display text-3xl font-bold text-compass-heading">
-              Four steps to actually understanding your coverage
+              {t('howItWorks.heading')}
             </h2>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -130,20 +131,22 @@ export default function Landing() {
                   {step.n}
                 </div>
                 <h3 className="mt-4 font-display text-lg font-semibold text-compass-heading">
-                  {step.title}
+                  {t(`howItWorks.${step.id}.title`)}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-compass-slate">{step.body}</p>
+                <p className="mt-2 text-sm leading-relaxed text-compass-slate">
+                  {t(`howItWorks.${step.id}.body`)}
+                </p>
               </div>
             ))}
           </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-compass-line bg-compass-paper px-6 py-4 text-center">
-            <span className="tag-review">5-minute path</span>
+            <span className="tag-review">{t('howItWorks.challengeBadge')}</span>
             <p className="text-sm text-compass-ink">
-              Not ready to upload a policy?{' '}
+              {t('howItWorks.challengePrefix')}{' '}
               <Link to={localePath(lang, '/challenge')} state={{ fromApp: true }} className="font-medium text-compass-link hover:underline">
-                Take the Coverage Compass Challenge
+                {t('howItWorks.challengeLink')}
               </Link>{' '}
-              instead, 10 quick questions, no upload required.
+              {t('howItWorks.challengeSuffix')}
             </p>
           </div>
         </div>
@@ -152,14 +155,14 @@ export default function Landing() {
       {/* Featured tools */}
       <section className="mx-auto max-w-6xl px-6 py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <span className="tag-neutral">Featured Tools</span>
+          <span className="tag-neutral">{t('tools.eyebrow')}</span>
           <h2 className="mt-3 font-display text-3xl font-bold text-compass-heading">
-            Every tool you need, in one place
+            {t('tools.heading')}
           </h2>
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURED_TOOLS.map((tool) => (
-            <ToolCard key={tool.title} {...tool} lang={lang} />
+            <ToolCard key={tool.id} {...tool} lang={lang} t={t} />
           ))}
         </div>
       </section>
@@ -169,34 +172,31 @@ export default function Landing() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-compass-gold">
-              Demonstration
+              {t('dashboard.badge')}
             </span>
-            <h2 className="mt-3 font-display text-3xl font-bold">
-              Your Coverage Compass Dashboard
-            </h2>
-            <p className="mt-3 text-white/70">
-              Once you upload a policy, everything lives in one place. The cards below use
-              sample data to show you what that looks like.
-            </p>
+            <h2 className="mt-3 font-display text-3xl font-bold">{t('dashboard.heading')}</h2>
+            <p className="mt-3 text-white/70">{t('dashboard.subhead')}</p>
           </div>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <DashboardPreviewCard label="Coverage Score" value="82/100" detail="Sample score across five protection areas." icon="target" />
-            <DashboardPreviewCard label="Potential Coverage Gaps" value="3 found" detail="Umbrella, roadside assistance, and identity theft." icon="search" />
-            <DashboardPreviewCard label="Savings Opportunities" value="2 to explore" detail="Bundling and a higher deductible option." icon="gold" />
-            <DashboardPreviewCard label="Recommended Next Steps" value="Ask about limits" detail="Your liability limits are worth a second look." icon="bulb" />
-            <DashboardPreviewCard label="Upcoming Policy Dates" value="Renews in 45 days" detail="A good time to shop and compare." icon="calendar" />
+            {DASHBOARD_CARDS.map((card) => (
+              <DashboardPreviewCard
+                key={card.id}
+                icon={card.icon}
+                label={t(`dashboard.${card.id}.label`)}
+                value={t(`dashboard.${card.id}.value`)}
+                detail={t(`dashboard.${card.id}.detail`)}
+              />
+            ))}
             <Link
               to={localePath(lang, '/dashboard')}
               className="flex flex-col items-start justify-center rounded-2xl border border-white/15 bg-white/5 p-6 transition hover:bg-white/10"
             >
               <span className="font-display text-lg font-semibold text-white">
-                See your real dashboard
+                {t('dashboard.seeReal')}
               </span>
-              <span className="mt-2 text-sm text-white/70">
-                Upload a policy to replace this sample with your own.
-              </span>
+              <span className="mt-2 text-sm text-white/70">{t('dashboard.seeRealDetail')}</span>
               <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-compass-gold">
-                Go to Dashboard <ArrowIcon />
+                {t('dashboard.goToDashboard')} <ArrowIcon />
               </span>
             </Link>
           </div>
@@ -208,10 +208,10 @@ export default function Landing() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h2 className="font-display text-3xl font-bold text-compass-heading">
-              From the Learning Center
+              {t('resources.heading')}
             </h2>
             <Link to={localePath(lang, '/learning-center')} className="text-sm font-semibold text-compass-link hover:underline">
-              Browse all articles &rarr;
+              {t('resources.browseAll')}
             </Link>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -235,35 +235,17 @@ export default function Landing() {
       {/* Trust and privacy */}
       <section className="mx-auto max-w-4xl px-6 py-20">
         <div className="rounded-3xl border border-compass-line bg-compass-paper p-8 sm:p-10">
-          <span className="tag-neutral">Trust &amp; Compliance</span>
+          <span className="tag-neutral">{t('trust.eyebrow')}</span>
           <h2 className="mt-3 font-display text-2xl font-semibold text-compass-heading">
-            What Coverage Compass is, and isn't
+            {t('trust.heading')}
           </h2>
           <ul className="mt-6 space-y-3 text-sm leading-relaxed text-compass-ink">
-            <li className="flex gap-3">
-              <CheckIcon />
-              Coverage Compass is an independent insurance education and comparison
-              platform, not an insurance company, agency, or broker.
-            </li>
-            <li className="flex gap-3">
-              <CheckIcon />
-              We provide educational information and guidance. Insurance availability and
-              pricing vary by state, carrier, applicant, and risk.
-            </li>
-            <li className="flex gap-3">
-              <CheckIcon />
-              Coverage Compass does not bind, cancel, or modify insurance policies.
-            </li>
-            <li className="flex gap-3">
-              <CheckIcon />
-              Always verify final coverage details with a licensed insurance professional
-              or insurance carrier.
-            </li>
-            <li className="flex gap-3">
-              <CheckIcon />
-              Your document is read entirely in your browser and never uploaded to a
-              server. Nothing is sold or shared with third parties.
-            </li>
+            {['point1', 'point2', 'point3', 'point4', 'point5'].map((key) => (
+              <li key={key} className="flex gap-3">
+                <CheckIcon />
+                {t(`trust.${key}`)}
+              </li>
+            ))}
           </ul>
         </div>
       </section>
@@ -271,29 +253,12 @@ export default function Landing() {
       {/* FAQ */}
       <section className="mx-auto max-w-3xl px-6 py-20">
         <h2 className="text-center font-display text-2xl font-semibold text-compass-heading">
-          Frequently asked questions
+          {t('faq.heading')}
         </h2>
         <div className="mt-8 space-y-4">
-          <FaqItem
-            q="Is Coverage Compass an insurance company?"
-            a="No. Coverage Compass is an independent educational platform. We don't sell insurance, bind coverage, or represent any single carrier."
-          />
-          <FaqItem
-            q="Can Coverage Compass replace my insurance agent?"
-            a="No. Coverage Compass helps you understand your policy so your conversations with a licensed insurance professional are more productive, it's a starting point, not a substitute for licensed advice."
-          />
-          <FaqItem
-            q="Is my policy information secure?"
-            a="Your document is read entirely in your browser and never uploaded to a server, and nothing is sold or shared with third parties. This prototype does save your review in your browser's local storage (not encrypted) so you can return to it, so avoid uploading real sensitive documents on a shared or public computer."
-          />
-          <FaqItem
-            q="What types of policies can I upload?"
-            a="Auto (personal and commercial), homeowners, renters, general liability, workers' compensation, and trucking/motor carrier policies."
-          />
-          <FaqItem
-            q="Does Coverage Compass guarantee my coverage is adequate?"
-            a="No. Coverage Compass provides educational information only. Only a licensed insurance professional can advise on and bind actual coverage decisions."
-          />
+          {FAQ_IDS.map((id) => (
+            <FaqItem key={id} q={t(`faq.${id}.q`)} a={t(`faq.${id}.a`)} />
+          ))}
         </div>
       </section>
 
@@ -301,18 +266,14 @@ export default function Landing() {
       <section className="mx-auto max-w-6xl px-6 pb-20">
         <div className="flex flex-col items-center justify-between gap-6 rounded-3xl bg-gradient-to-r from-compass-blue to-compass-purple px-8 py-12 text-center text-white sm:flex-row sm:text-left">
           <div>
-            <h3 className="font-display text-2xl font-bold">
-              Ready to actually understand what you're paying for?
-            </h3>
-            <p className="mt-2 text-sm text-white/80">
-              Free educational review, Coverage Score, and questions to ask your agent.
-            </p>
+            <h3 className="font-display text-2xl font-bold">{t('finalCta.heading')}</h3>
+            <p className="mt-2 text-sm text-white/80">{t('finalCta.subhead')}</p>
           </div>
           <Link
             to={localePath(lang, '/upload')}
             className="shrink-0 rounded-full bg-white px-6 py-3 font-semibold text-compass-navy shadow-lift transition hover:bg-compass-paper"
           >
-            Review My Coverage
+            {t('finalCta.button')}
           </Link>
         </div>
       </section>
@@ -328,7 +289,7 @@ const ACCENT_CLASSES = {
   coral: 'bg-compass-coraltint text-compass-coral',
 }
 
-function HelpCard({ icon, accent, title, body, cta, to, lang }) {
+function HelpCard({ id, icon, accent, to, lang, t }) {
   return (
     <Link
       to={localePath(lang, to)}
@@ -337,16 +298,20 @@ function HelpCard({ icon, accent, title, body, cta, to, lang }) {
       <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${ACCENT_CLASSES[accent]}`}>
         <Icon name={icon} />
       </span>
-      <h3 className="mt-4 font-display text-lg font-semibold text-compass-heading">{title}</h3>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-compass-slate">{body}</p>
+      <h3 className="mt-4 font-display text-lg font-semibold text-compass-heading">
+        {t(`categories.${id}.title`)}
+      </h3>
+      <p className="mt-2 flex-1 text-sm leading-relaxed text-compass-slate">
+        {t(`categories.${id}.body`)}
+      </p>
       <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-compass-link">
-        {cta} <ArrowIcon />
+        {t(`categories.${id}.cta`)} <ArrowIcon />
       </span>
     </Link>
   )
 }
 
-function ToolCard({ icon, accent, title, body, to, lang }) {
+function ToolCard({ id, icon, accent, to, lang, t }) {
   return (
     <Link
       to={localePath(lang, to)}
@@ -356,8 +321,12 @@ function ToolCard({ icon, accent, title, body, to, lang }) {
         <Icon name={icon} />
       </span>
       <div>
-        <h3 className="font-display text-base font-semibold text-compass-heading">{title}</h3>
-        <p className="mt-1 text-sm leading-relaxed text-compass-slate">{body}</p>
+        <h3 className="font-display text-base font-semibold text-compass-heading">
+          {t(`tools.${id}.title`)}
+        </h3>
+        <p className="mt-1 text-sm leading-relaxed text-compass-slate">
+          {t(`tools.${id}.body`)}
+        </p>
       </div>
     </Link>
   )
@@ -376,15 +345,15 @@ function DashboardPreviewCard({ label, value, detail, icon }) {
   )
 }
 
-function ScorePreviewCard() {
+function ScorePreviewCard({ t }) {
   const score = 82
   const circumference = 2 * Math.PI * 54
   const offset = circumference * (1 - score / 100)
   return (
     <div className="card">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-compass-ink">Coverage Score preview</p>
-        <span className="tag-neutral">Sample</span>
+        <p className="text-sm font-medium text-compass-ink">{t('hero.scorePreview.title')}</p>
+        <span className="tag-neutral">{t('hero.scorePreview.sample')}</span>
       </div>
       <div className="relative mx-auto mt-4 flex h-36 w-36 items-center justify-center">
         <svg viewBox="0 0 120 120" className="h-36 w-36 -rotate-90">
@@ -403,13 +372,10 @@ function ScorePreviewCard() {
         </svg>
         <div className="absolute text-center">
           <p className="font-display text-3xl font-bold text-compass-heading">{score}</p>
-          <p className="text-xs text-compass-slate">out of 100</p>
+          <p className="text-xs text-compass-slate">{t('hero.scorePreview.outOf100')}</p>
         </div>
       </div>
-      <p className="mt-4 text-center text-xs text-compass-slate">
-        Upload your policy to see your real Coverage Score, an educational snapshot, not a
-        guarantee.
-      </p>
+      <p className="mt-4 text-center text-xs text-compass-slate">{t('hero.scorePreview.caption')}</p>
     </div>
   )
 }

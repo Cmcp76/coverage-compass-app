@@ -260,10 +260,13 @@ export default function Layout({ children }) {
             </button>
             {isPreAuth ? (
               <>
-                <Link to={localePath(lang, '/login')} className="btn-secondary shrink-0 whitespace-nowrap px-2.5 py-2 sm:px-5 sm:py-2.5">
+                <Link to={localePath(lang, '/login')} className="hidden shrink-0 whitespace-nowrap px-2.5 py-2 text-sm font-medium text-compass-slate transition hover:text-compass-ink sm:inline-flex sm:px-3">
                   {t('nav.logIn')}
                 </Link>
-                <Link to={localePath(lang, '/signup')} className="btn-primary shrink-0 whitespace-nowrap px-2.5 py-2 sm:px-5 sm:py-2.5">
+                <Link to={localePath(lang, '/signup')} className="btn-secondary hidden shrink-0 whitespace-nowrap px-2.5 py-2 sm:inline-flex sm:px-5 sm:py-2.5">
+                  {t('nav.signUp')}
+                </Link>
+                <Link to={localePath(lang, '/upload')} className="btn-primary shrink-0 whitespace-nowrap px-2.5 py-2 sm:px-5 sm:py-2.5">
                   {t('nav.startFreeReview')}
                 </Link>
               </>
@@ -341,7 +344,24 @@ export default function Layout({ children }) {
                 {t(link.labelKey)}
               </Link>
             ))}
-            {!isPreAuth && (
+            {isPreAuth ? (
+              <div className="mt-2 flex items-center gap-4 border-t border-compass-line pt-3 sm:hidden">
+                <Link
+                  to={localePath(lang, '/login')}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-sm font-medium text-compass-slate"
+                >
+                  {t('nav.logIn')}
+                </Link>
+                <Link
+                  to={localePath(lang, '/signup')}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-sm font-medium text-compass-link"
+                >
+                  {t('nav.signUp')}
+                </Link>
+              </div>
+            ) : (
               <div className="mt-2 flex items-center justify-between border-t border-compass-line pt-3 sm:hidden">
                 <span className="flex items-center gap-2 text-sm text-compass-slate">
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-compass-navy text-xs font-semibold text-white">

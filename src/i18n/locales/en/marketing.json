@@ -1,0 +1,132 @@
+{
+  "hero": {
+    "eyebrow": "Free Educational Review · No Sales Calls",
+    "headline": "Understand Your Insurance. Find Better Options. Protect What Matters.",
+    "subhead": "Coverage Compass gives you simple tools, personalized guidance, and clear explanations to help you make smarter insurance decisions.",
+    "reviewMyCoverage": "Review My Coverage",
+    "exploreTools": "Explore Insurance Tools",
+    "scorePreview": {
+      "title": "Coverage Score preview",
+      "sample": "Sample",
+      "outOf100": "out of 100",
+      "caption": "Upload your policy to see your real Coverage Score, an educational snapshot, not a guarantee."
+    }
+  },
+  "ticker": {
+    "auto": "Auto",
+    "homeowners": "Homeowners",
+    "renters": "Renters",
+    "generalLiability": "General Liability",
+    "workersComp": "Workers' Compensation",
+    "trucking": "Trucking & Motor Carrier"
+  },
+  "categories": {
+    "eyebrow": "Get Started",
+    "heading": "What can we help you with?",
+    "subhead": "Pick a line of coverage, and we'll guide you from there.",
+    "auto": { "title": "Auto Insurance", "body": "Liability, collision, comprehensive, and the coverage gaps drivers miss most.", "cta": "Review my auto policy" },
+    "home": { "title": "Home Insurance", "body": "Dwelling, personal property, and the actual-cash-value question that trips up claims.", "cta": "Review my home policy" },
+    "renters": { "title": "Renters Insurance", "body": "What your landlord's policy covers versus what's actually on you.", "cta": "Review my renters policy" },
+    "business": { "title": "Business Insurance", "body": "General liability and workers' comp, reviewed against what your business actually needs.", "cta": "Review my business policy" },
+    "trucking": { "title": "Trucking & FMCSA", "body": "A step-by-step checklist for authority, compliance, and motor carrier coverage.", "cta": "Start my trucking checklist" },
+    "life": { "title": "Life Insurance", "body": "Term vs. whole life, and the basics everyone should know before they buy.", "cta": "Learn about life insurance" },
+    "claims": { "title": "Claims Help", "body": "A plain-language walkthrough of what to do the moment something happens.", "cta": "Get claims guidance" },
+    "policyReview": { "title": "Policy Review", "body": "Already have a policy? Upload it for a full plain-language breakdown.", "cta": "Upload for review" }
+  },
+  "howItWorks": {
+    "eyebrow": "How Coverage Compass Works",
+    "heading": "Four steps to actually understanding your coverage",
+    "step1": { "title": "Choose what you need help with", "body": "Pick a line of coverage or a tool, no account required to start." },
+    "step2": { "title": "Answer a few simple questions", "body": "Or upload a policy directly, whichever is faster for you." },
+    "step3": { "title": "Review personalized guidance", "body": "Get a plain-language breakdown, a Coverage Score, and gaps worth a second look." },
+    "step4": { "title": "Take the next step with confidence", "body": "Download a report and walk into your next conversation prepared." },
+    "challengeBadge": "5-minute path",
+    "challengePrefix": "Not ready to upload a policy?",
+    "challengeLink": "Take the Coverage Compass Challenge",
+    "challengeSuffix": "instead, 10 quick questions, no upload required."
+  },
+  "tools": {
+    "eyebrow": "Featured Tools",
+    "heading": "Every tool you need, in one place",
+    "aiReview": { "title": "AI Policy Review", "body": "Upload a policy and get a plain-language breakdown of what it actually covers." },
+    "comparison": { "title": "Coverage Comparison Tool", "body": "Compare two policies side by side to see what actually differs." },
+    "calculators": { "title": "Insurance Calculators", "body": "See how different deductible levels affect your out-of-pocket costs." },
+    "fmcsa": { "title": "FMCSA Compliance Checker", "body": "A step-by-step checklist for motor carrier authority and compliance." },
+    "claims": { "title": "Claims Assistant", "body": "Plain-language guidance for what to do when you need to file a claim." },
+    "businessChecklist": { "title": "Business Insurance Checklist", "body": "Upload your GL or workers' comp policy for a plain-language review." },
+    "learningCenter": { "title": "Insurance Learning Center", "body": "Plain-language guides and a glossary, no policy upload required." }
+  },
+  "dashboard": {
+    "badge": "Demonstration",
+    "heading": "Your Coverage Compass Dashboard",
+    "subhead": "Once you upload a policy, everything lives in one place. The cards below use sample data to show you what that looks like.",
+    "score": { "label": "Coverage Score", "value": "82/100", "detail": "Sample score across five protection areas." },
+    "gaps": { "label": "Potential Coverage Gaps", "value": "3 found", "detail": "Umbrella, roadside assistance, and identity theft." },
+    "savings": { "label": "Savings Opportunities", "value": "2 to explore", "detail": "Bundling and a higher deductible option." },
+    "nextSteps": { "label": "Recommended Next Steps", "value": "Ask about limits", "detail": "Your liability limits are worth a second look." },
+    "renewal": { "label": "Upcoming Policy Dates", "value": "Renews in 45 days", "detail": "A good time to shop and compare." },
+    "seeReal": "See your real dashboard",
+    "seeRealDetail": "Upload a policy to replace this sample with your own.",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "resources": {
+    "heading": "From the Learning Center",
+    "browseAll": "Browse all articles →"
+  },
+  "trust": {
+    "eyebrow": "Trust & Compliance",
+    "heading": "What Coverage Compass is, and isn't",
+    "point1": "Coverage Compass is an independent insurance education and comparison platform, not an insurance company, agency, or broker.",
+    "point2": "We provide educational information and guidance. Insurance availability and pricing vary by state, carrier, applicant, and risk.",
+    "point3": "Coverage Compass does not bind, cancel, or modify insurance policies.",
+    "point4": "Always verify final coverage details with a licensed insurance professional or insurance carrier.",
+    "point5": "Your document is read entirely in your browser and never uploaded to a server. Nothing is sold or shared with third parties."
+  },
+  "faq": {
+    "heading": "Frequently asked questions",
+    "q1": { "q": "Is Coverage Compass an insurance company?", "a": "No. Coverage Compass is an independent educational platform. We don't sell insurance, bind coverage, or represent any single carrier." },
+    "q2": { "q": "Can Coverage Compass replace my insurance agent?", "a": "No. Coverage Compass helps you understand your policy so your conversations with a licensed insurance professional are more productive, it's a starting point, not a substitute for licensed advice." },
+    "q3": { "q": "Is my policy information secure?", "a": "Your document is read entirely in your browser and never uploaded to a server, and nothing is sold or shared with third parties. This prototype does save your review in your browser's local storage (not encrypted) so you can return to it, so avoid uploading real sensitive documents on a shared or public computer." },
+    "q4": { "q": "What types of policies can I upload?", "a": "Auto (personal and commercial), homeowners, renters, general liability, workers' compensation, and trucking/motor carrier policies." },
+    "q5": { "q": "Does Coverage Compass guarantee my coverage is adequate?", "a": "No. Coverage Compass provides educational information only. Only a licensed insurance professional can advise on and bind actual coverage decisions." }
+  },
+  "finalCta": {
+    "heading": "Ready to actually understand what you're paying for?",
+    "subhead": "Free educational review, Coverage Score, and questions to ask your agent.",
+    "button": "Review My Coverage"
+  },
+  "business": {
+    "eyebrow": "Business Insurance",
+    "heading": "Understand What Your Business Policy Actually Covers",
+    "subhead": "Upload your general liability or workers' compensation policy for a plain-language review, what's covered, what your limits are, and where there might be gaps worth a second look.",
+    "gl": { "title": "Commercial General Liability", "body": "Premises and products liability, completed operations, additional insured language, and certificate-of-insurance requirements landlords and contracts often ask for." },
+    "workersComp": { "title": "Workers' Compensation", "body": "Payroll exposure, class codes, experience mod, and the owner-vs-employee coverage questions that trip up small business owners." },
+    "truckingBadge": "Trucking",
+    "truckingTitle": "Running a trucking or motor carrier business?",
+    "truckingBody": "A step-by-step checklist for business formation, FMCSA authority, and the coverage that matches your operation.",
+    "truckingCta": "Start My Trucking Checklist",
+    "uploadCta": "Upload My Business Policy",
+    "disclaimer": "Coverage Compass currently reviews general liability and workers' compensation policies. It does not cover every commercial line, and it is not a substitute for advice from a licensed insurance professional about your specific business."
+  },
+  "claimsHelp": {
+    "eyebrow": "Claims Help",
+    "heading": "What to Do When You Need to File a Claim",
+    "subhead": "General, plain-language guidance for navigating a claim, whether it just happened or you're already in the middle of one.",
+    "step1": { "title": "Make sure everyone is safe first", "body": "Before anything else, get to a safe place and get medical attention if anyone is hurt. Documentation and paperwork can always wait." },
+    "step2": { "title": "Document everything you can", "body": "Photos and videos of the damage, the scene, and anything relevant, as soon as it's safe to take them. Write down what happened while it's fresh, dates, times, and who was involved." },
+    "step3": { "title": "Report it to your insurance company promptly", "body": "Most policies require \"prompt\" notice, and waiting too long can complicate a claim. Have your policy number and the basic facts ready when you call." },
+    "step4": { "title": "Know your deductible before you file", "body": "If the damage is close to or below your deductible, filing a claim may not make financial sense, ask your carrier what your out-of-pocket cost would actually be." },
+    "step5": { "title": "Keep a record of every conversation", "body": "Note the date, the name of who you spoke with, your claim number, and what was discussed. This matters if there's ever a disagreement about what was said." },
+    "step6": { "title": "Understand how your payout will be calculated", "body": "Ask whether your policy pays actual cash value (depreciated) or replacement cost, for the same damage, those numbers can be very different." },
+    "step7": { "title": "Get a second opinion on repair estimates", "body": "You're not required to use the first repair shop your insurer suggests. Getting an independent estimate can be worth the time on a larger claim." },
+    "step8": { "title": "Follow up if things stall", "body": "If your claim goes quiet, follow up in writing and ask for a status update. Most states have an insurance department that can help if a claim seems unreasonably delayed." },
+    "faqHeading": "Common questions",
+    "faq1": { "q": "Will filing a claim raise my premium?", "a": "It can, especially for an at-fault claim, but it depends on your carrier, your state, and your claims history. Ask your carrier directly before you decide whether to file." },
+    "faq2": { "q": "What if my claim gets denied?", "a": "Ask for the denial in writing with the specific policy language cited. You can request a re-review, involve your state insurance department, or consult an attorney for a significant claim." },
+    "faq3": { "q": "Do I need a public adjuster?", "a": "For a straightforward claim, usually not. For a large or contested claim (major fire or storm damage), some people hire an independent public adjuster to negotiate on their behalf, for a fee." },
+    "talkToProfessional": "Talk to a Licensed Professional",
+    "reviewBeforeFiling": "Review My Policy Before I File",
+    "exploreLearningCenter": "Explore More in the Learning Center",
+    "disclaimer": "This page provides general educational information about the claims process. It does not file, process, or track any actual insurance claim, and it is not a substitute for advice from your insurance carrier or a licensed insurance professional about your specific situation."
+  }
+}

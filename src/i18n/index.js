@@ -13,11 +13,13 @@ import enCommon from './locales/en/common.json'
 import enGlossary from './locales/en/glossary.json'
 import enErrors from './locales/en/errors.json'
 import enEmails from './locales/en/emails.json'
+import enMarketing from './locales/en/marketing.json'
 
 import esCommon from './locales/es/common.json'
 import esGlossary from './locales/es/glossary.json'
 import esErrors from './locales/es/errors.json'
 import esEmails from './locales/es/emails.json'
+import esMarketing from './locales/es/marketing.json'
 
 // ---- When you add French/Arabic/Vietnamese, import their JSON here too ----
 // import frCommon from './locales/fr/common.json';
@@ -30,12 +32,14 @@ const resources = {
     glossary: enGlossary,
     errors: enErrors,
     emails: enEmails,
+    marketing: enMarketing,
   },
   es: {
     common: esCommon,
     glossary: esGlossary,
     errors: esErrors,
     emails: esEmails,
+    marketing: esMarketing,
   },
   // fr: { common: frCommon, ... },
   // ar: { common: arCommon, ... },
@@ -55,7 +59,7 @@ i18n
     supportedLngs: SUPPORTED_LANGUAGE_CODES,
     fallbackLng: DEFAULT_LANGUAGE,
     defaultNS: 'common',
-    ns: ['common', 'glossary', 'errors', 'emails'],
+    ns: ['common', 'glossary', 'errors', 'emails', 'marketing'],
 
     detection: {
       // Order of detection when no /:lang URL segment is present yet

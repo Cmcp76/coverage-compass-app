@@ -1,0 +1,132 @@
+{
+  "hero": {
+    "eyebrow": "Revisión Educativa Gratis · Sin Llamadas de Venta",
+    "headline": "Entiende Tu Seguro. Encuentra Mejores Opciones. Protege Lo Que Importa.",
+    "subhead": "Coverage Compass te da herramientas simples, orientación personalizada y explicaciones claras para ayudarte a tomar mejores decisiones sobre tu seguro.",
+    "reviewMyCoverage": "Revisar Mi Cobertura",
+    "exploreTools": "Explorar Herramientas de Seguros",
+    "scorePreview": {
+      "title": "Vista previa de tu Puntaje de Cobertura",
+      "sample": "Ejemplo",
+      "outOf100": "de 100",
+      "caption": "Sube tu póliza para ver tu Puntaje de Cobertura real, un resumen educativo, no una garantía."
+    }
+  },
+  "ticker": {
+    "auto": "Auto",
+    "homeowners": "Casa",
+    "renters": "Inquilinos",
+    "generalLiability": "Responsabilidad General",
+    "workersComp": "Compensación Laboral",
+    "trucking": "Camiones y Transportistas"
+  },
+  "categories": {
+    "eyebrow": "Comienza Aquí",
+    "heading": "¿En qué podemos ayudarte?",
+    "subhead": "Elige un tipo de cobertura y te guiaremos desde ahí.",
+    "auto": { "title": "Seguro de Auto", "body": "Responsabilidad civil, colisión, cobertura amplia, y los vacíos de cobertura que más se les pasan a los conductores.", "cta": "Revisar mi póliza de auto" },
+    "home": { "title": "Seguro de Casa", "body": "Vivienda, propiedad personal, y la pregunta del valor real en efectivo que complica los reclamos.", "cta": "Revisar mi póliza de casa" },
+    "renters": { "title": "Seguro de Inquilinos", "body": "Lo que cubre la póliza de tu arrendador frente a lo que realmente depende de ti.", "cta": "Revisar mi póliza de inquilinos" },
+    "business": { "title": "Seguro de Negocios", "body": "Responsabilidad general y compensación laboral, revisadas contra lo que tu negocio realmente necesita.", "cta": "Revisar mi póliza de negocio" },
+    "trucking": { "title": "Camiones y FMCSA", "body": "Una lista de pasos para autoridad, cumplimiento, y la cobertura de transportistas.", "cta": "Comenzar mi lista de camiones" },
+    "life": { "title": "Seguro de Vida", "body": "Vida temporal vs. vida entera, y lo básico que todos deberían saber antes de comprar.", "cta": "Aprender sobre seguro de vida" },
+    "claims": { "title": "Ayuda con Reclamos", "body": "Una guía en lenguaje sencillo de qué hacer en el momento en que algo sucede.", "cta": "Obtener orientación sobre reclamos" },
+    "policyReview": { "title": "Revisión de Póliza", "body": "¿Ya tienes una póliza? Súbela para un análisis completo en lenguaje sencillo.", "cta": "Subir para revisión" }
+  },
+  "howItWorks": {
+    "eyebrow": "Cómo Funciona Coverage Compass",
+    "heading": "Cuatro pasos para realmente entender tu cobertura",
+    "step1": { "title": "Elige en qué necesitas ayuda", "body": "Elige un tipo de cobertura o una herramienta, no se necesita cuenta para comenzar." },
+    "step2": { "title": "Responde algunas preguntas simples", "body": "O sube una póliza directamente, lo que sea más rápido para ti." },
+    "step3": { "title": "Revisa tu orientación personalizada", "body": "Obtén un resumen en lenguaje sencillo, un Puntaje de Cobertura, y vacíos que vale la pena revisar." },
+    "step4": { "title": "Da el siguiente paso con confianza", "body": "Descarga un informe y prepárate para tu próxima conversación." },
+    "challengeBadge": "Camino de 5 minutos",
+    "challengePrefix": "¿No estás listo para subir una póliza?",
+    "challengeLink": "Toma el Desafío Coverage Compass",
+    "challengeSuffix": "en su lugar, 10 preguntas rápidas, sin necesidad de subir nada."
+  },
+  "tools": {
+    "eyebrow": "Herramientas Destacadas",
+    "heading": "Todas las herramientas que necesitas, en un solo lugar",
+    "aiReview": { "title": "Revisión de Póliza con IA", "body": "Sube una póliza y obtén un resumen en lenguaje sencillo de lo que realmente cubre." },
+    "comparison": { "title": "Herramienta de Comparación de Cobertura", "body": "Compara dos pólizas lado a lado para ver en qué realmente difieren." },
+    "calculators": { "title": "Calculadoras de Seguros", "body": "Mira cómo diferentes niveles de deducible afectan tus gastos de bolsillo." },
+    "fmcsa": { "title": "Verificador de Cumplimiento FMCSA", "body": "Una lista de pasos para la autoridad y el cumplimiento de transportistas." },
+    "claims": { "title": "Asistente de Reclamos", "body": "Orientación en lenguaje sencillo sobre qué hacer cuando necesitas presentar un reclamo." },
+    "businessChecklist": { "title": "Lista de Seguro de Negocios", "body": "Sube tu póliza de responsabilidad general o compensación laboral para una revisión en lenguaje sencillo." },
+    "learningCenter": { "title": "Centro de Aprendizaje de Seguros", "body": "Guías en lenguaje sencillo y un glosario, sin necesidad de subir una póliza." }
+  },
+  "dashboard": {
+    "badge": "Demostración",
+    "heading": "Tu Panel de Coverage Compass",
+    "subhead": "Una vez que subas una póliza, todo vive en un solo lugar. Las tarjetas de abajo usan datos de ejemplo para mostrarte cómo se ve eso.",
+    "score": { "label": "Puntaje de Cobertura", "value": "82/100", "detail": "Puntaje de ejemplo en cinco áreas de protección." },
+    "gaps": { "label": "Posibles Vacíos de Cobertura", "value": "3 encontrados", "detail": "Sombrilla, asistencia en carretera, y robo de identidad." },
+    "savings": { "label": "Oportunidades de Ahorro", "value": "2 por explorar", "detail": "Combinar pólizas y una opción de deducible más alto." },
+    "nextSteps": { "label": "Próximos Pasos Recomendados", "value": "Preguntar sobre límites", "detail": "Tus límites de responsabilidad valen la pena revisar." },
+    "renewal": { "label": "Próximas Fechas de Póliza", "value": "Renueva en 45 días", "detail": "Un buen momento para comparar opciones." },
+    "seeReal": "Ver tu panel real",
+    "seeRealDetail": "Sube una póliza para reemplazar este ejemplo con el tuyo.",
+    "goToDashboard": "Ir al Panel"
+  },
+  "resources": {
+    "heading": "Del Centro de Aprendizaje",
+    "browseAll": "Ver todos los artículos →"
+  },
+  "trust": {
+    "eyebrow": "Confianza y Cumplimiento",
+    "heading": "Lo que Coverage Compass es, y lo que no es",
+    "point1": "Coverage Compass es una plataforma independiente de educación y comparación de seguros, no una compañía de seguros, agencia, o corredor.",
+    "point2": "Proporcionamos información y orientación educativa. La disponibilidad y el precio de los seguros varían según el estado, la aseguradora, el solicitante, y el riesgo.",
+    "point3": "Coverage Compass no vincula, cancela, ni modifica pólizas de seguro.",
+    "point4": "Siempre verifica los detalles finales de tu cobertura con un profesional de seguros licenciado o con tu aseguradora.",
+    "point5": "Tu documento se lee completamente en tu navegador y nunca se sube a un servidor. Nada se vende ni se comparte con terceros."
+  },
+  "faq": {
+    "heading": "Preguntas frecuentes",
+    "q1": { "q": "¿Es Coverage Compass una compañía de seguros?", "a": "No. Coverage Compass es una plataforma educativa independiente. No vendemos seguros, ni vinculamos cobertura, ni representamos a ninguna aseguradora en particular." },
+    "q2": { "q": "¿Puede Coverage Compass reemplazar a mi agente de seguros?", "a": "No. Coverage Compass te ayuda a entender tu póliza para que tus conversaciones con un profesional de seguros licenciado sean más productivas, es un punto de partida, no un sustituto de asesoría licenciada." },
+    "q3": { "q": "¿Es segura la información de mi póliza?", "a": "Tu documento se lee completamente en tu navegador y nunca se sube a un servidor, y nada se vende ni se comparte con terceros. Este prototipo guarda tu revisión en el almacenamiento local de tu navegador (sin cifrar) para que puedas volver a ella, así que evita subir documentos sensibles reales en una computadora compartida o pública." },
+    "q4": { "q": "¿Qué tipos de pólizas puedo subir?", "a": "Auto (personal y comercial), casa, inquilinos, responsabilidad general, compensación laboral, y pólizas de camiones/transportistas." },
+    "q5": { "q": "¿Garantiza Coverage Compass que mi cobertura es adecuada?", "a": "No. Coverage Compass ofrece información educativa únicamente. Solo un profesional de seguros licenciado puede asesorar y vincular decisiones de cobertura reales." }
+  },
+  "finalCta": {
+    "heading": "¿Listo para realmente entender por qué estás pagando?",
+    "subhead": "Revisión educativa gratis, Puntaje de Cobertura, y preguntas para hacerle a tu agente.",
+    "button": "Revisar Mi Cobertura"
+  },
+  "business": {
+    "eyebrow": "Seguro de Negocios",
+    "heading": "Entiende Lo Que Tu Póliza de Negocio Realmente Cubre",
+    "subhead": "Sube tu póliza de responsabilidad general o compensación laboral para una revisión en lenguaje sencillo, qué está cubierto, cuáles son tus límites, y dónde podría haber vacíos que vale la pena revisar.",
+    "gl": { "title": "Responsabilidad General Comercial", "body": "Responsabilidad de local y de productos, operaciones completadas, lenguaje de asegurado adicional, y los requisitos de certificado de seguro que a menudo piden los arrendadores y contratos." },
+    "workersComp": { "title": "Compensación Laboral", "body": "Exposición de nómina, códigos de clase, modificador de experiencia, y las preguntas de cobertura de dueño vs. empleado que complican a los pequeños negocios." },
+    "truckingBadge": "Camiones",
+    "truckingTitle": "¿Manejas un negocio de camiones o transporte?",
+    "truckingBody": "Una lista de pasos para la formación del negocio, autoridad FMCSA, y la cobertura que corresponde a tu operación.",
+    "truckingCta": "Comenzar Mi Lista de Camiones",
+    "uploadCta": "Subir Mi Póliza de Negocio",
+    "disclaimer": "Coverage Compass actualmente revisa pólizas de responsabilidad general y compensación laboral. No cubre todas las líneas comerciales, y no sustituye la asesoría de un profesional de seguros licenciado sobre tu negocio específico."
+  },
+  "claimsHelp": {
+    "eyebrow": "Ayuda con Reclamos",
+    "heading": "Qué Hacer Cuando Necesitas Presentar un Reclamo",
+    "subhead": "Orientación general en lenguaje sencillo para navegar un reclamo, ya sea que acaba de suceder o que ya estás en medio de uno.",
+    "step1": { "title": "Primero asegúrate de que todos estén a salvo", "body": "Antes que nada, ve a un lugar seguro y busca atención médica si alguien está herido. La documentación y el papeleo siempre pueden esperar." },
+    "step2": { "title": "Documenta todo lo que puedas", "body": "Fotos y videos del daño, la escena, y cualquier cosa relevante, tan pronto como sea seguro tomarlas. Anota lo que pasó mientras esté fresco, fechas, horas, y quién estuvo involucrado." },
+    "step3": { "title": "Repórtalo a tu aseguradora sin demora", "body": "La mayoría de las pólizas requieren aviso \"pronto\", y esperar demasiado puede complicar un reclamo. Ten tu número de póliza y los datos básicos listos cuando llames." },
+    "step4": { "title": "Conoce tu deducible antes de presentar el reclamo", "body": "Si el daño está cerca o por debajo de tu deducible, presentar un reclamo podría no tener sentido financiero, pregúntale a tu aseguradora cuál sería tu costo real de bolsillo." },
+    "step5": { "title": "Lleva un registro de cada conversación", "body": "Anota la fecha, el nombre de con quién hablaste, tu número de reclamo, y lo que se discutió. Esto importa si alguna vez hay un desacuerdo sobre lo que se dijo." },
+    "step6": { "title": "Entiende cómo se calculará tu pago", "body": "Pregunta si tu póliza paga valor real en efectivo (depreciado) o costo de reemplazo, para el mismo daño, esos números pueden ser muy diferentes." },
+    "step7": { "title": "Obtén una segunda opinión sobre los estimados de reparación", "body": "No estás obligado a usar el primer taller que sugiera tu aseguradora. Obtener un estimado independiente puede valer la pena en un reclamo grande." },
+    "step8": { "title": "Da seguimiento si las cosas se estancan", "body": "Si tu reclamo se queda en silencio, da seguimiento por escrito y pide una actualización de estado. La mayoría de los estados tienen un departamento de seguros que puede ayudar si un reclamo parece demorarse injustificadamente." },
+    "faqHeading": "Preguntas comunes",
+    "faq1": { "q": "¿Presentar un reclamo aumentará mi prima?", "a": "Puede ser, especialmente en un reclamo donde tú tienes la culpa, pero depende de tu aseguradora, tu estado, y tu historial de reclamos. Pregúntale directamente a tu aseguradora antes de decidir si presentarlo." },
+    "faq2": { "q": "¿Qué pasa si me niegan el reclamo?", "a": "Pide la negación por escrito con el lenguaje específico de la póliza citado. Puedes solicitar una nueva revisión, involucrar al departamento de seguros de tu estado, o consultar a un abogado en un reclamo significativo." },
+    "faq3": { "q": "¿Necesito un ajustador público?", "a": "Para un reclamo sencillo, generalmente no. Para un reclamo grande o disputado (daño mayor por incendio o tormenta), algunas personas contratan a un ajustador público independiente para negociar en su nombre, por una tarifa." },
+    "talkToProfessional": "Habla con un Profesional Licenciado",
+    "reviewBeforeFiling": "Revisar Mi Póliza Antes de Presentar",
+    "exploreLearningCenter": "Explorar Más en el Centro de Aprendizaje",
+    "disclaimer": "Esta página proporciona información educativa general sobre el proceso de reclamos. No presenta, procesa, ni rastrea ningún reclamo de seguro real, y no sustituye la asesoría de tu aseguradora o de un profesional de seguros licenciado sobre tu situación específica."
+  }
+}
