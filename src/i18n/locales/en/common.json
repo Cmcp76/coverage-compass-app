@@ -74,6 +74,38 @@
       "deductibles": "Deductibles",
       "optional": "Optional Coverages",
       "risk": "Risk Areas"
+    },
+    "tierLabels": {
+      "good": "Strong",
+      "review": "Review",
+      "gap": "Potential Gap"
+    },
+    "worthConversation": "This is worth a conversation with your insurance professional.",
+    "tierReasons": {
+      "liability": {
+        "good": "Liability coverage was found with a clearly stated limit.",
+        "review": "Liability coverage was found, but the limit wasn't clearly stated.",
+        "gap": "No liability coverage was clearly identified in your document."
+      },
+      "property": {
+        "good": "Property or physical damage coverage was found with a clearly stated limit.",
+        "review": "Property coverage was found, but the limit wasn't clearly stated.",
+        "gap": "No property or physical damage coverage was clearly identified."
+      },
+      "deductibles": {
+        "good": "A deductible amount was clearly stated in your document.",
+        "review": "A deductible wasn't clearly stated in your document."
+      },
+      "optional": {
+        "good": "Most of the optional coverages we check for were found in your document.",
+        "review": "Some, but not most, of the optional coverages we check for were found.",
+        "gap": "None of the optional coverages we check for were found in your document."
+      },
+      "risk": {
+        "good": "Every coverage we checked for was clearly identified with a stated limit.",
+        "review": "Some coverages were found but without a clearly stated limit.",
+        "gap": "At least one coverage we checked for wasn't found in your document at all."
+      }
     }
   },
   "gapReport": {

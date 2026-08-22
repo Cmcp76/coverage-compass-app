@@ -119,6 +119,22 @@ function hasPropertyOrDeductibleComponent(type) {
   return type !== 'general_liability' && type !== 'workers_comp'
 }
 
+// Three-tier status for a category, derived from the confidence of the
+// coverages that matched it:
+//   'good'   (Strong)         - at least one matched coverage found with a
+//                                clearly stated limit (confidence 'high')
+//   'review' (Review)         - matched coverage(s) found, but no limit was
+//                                clearly stated (confidence 'medium' only)
+//   'gap'    (Potential Gap)  - none of the matched coverages were found at
+//                                all in the document
+// Never a fourth "bad"/"failing" state - the brand rule is "worth a
+// conversation," not "you're uninsured," even when nothing was found.
+function tierFromCoverages(matched) {
+  if (matched.length === 0 || matched.every((c) => c.confidence === 'missing')) return 'gap'
+  if (matched.some((c) => c.confidence === 'high')) return 'good'
+  return 'review'
+}
+
 // Same formula and category logic for both engines, so the coverageScore
 // means the same thing regardless of whether it came from the client-side
 // keyword fallback or the server-side LLM analysis - a person shouldn't see
@@ -127,31 +143,39 @@ export function computeScoreCategories({ type, coverages, gaps, deductibleStated
   const foundGapProtections = gaps.filter((g) => g.found).length
   const hasComponent = hasPropertyOrDeductibleComponent(type)
 
+  const liabilityCoverages = coverages.filter((c) => /liability/i.test(c.name))
+  const propertyCoverages = coverages.filter((c) => /(comprehensive|dwelling|physical damage|property)/i.test(c.name))
+
   return [
     {
       name: 'Liability Protection',
-      status: coverages.some((c) => /liability/i.test(c.name) && c.confidence !== 'missing') ? 'good' : 'review',
+      status: tierFromCoverages(liabilityCoverages),
     },
     ...(hasComponent
       ? [
           {
             name: 'Property Protection',
-            status: coverages.some(
-              (c) => /(comprehensive|dwelling|physical damage|property)/i.test(c.name) && c.confidence !== 'missing',
-            )
-              ? 'good'
-              : 'review',
+            status: tierFromCoverages(propertyCoverages),
           },
         ]
       : []),
+    // "Not clearly stated" reads as worth-confirming (review), not as a
+    // missing coverage (gap) - a deductible is a policy term whose
+    // disclosure is unclear, not something that is or isn't present the way
+    // a coverage line is, so this stays two-tier (good/review).
     ...(hasComponent ? [{ name: 'Deductibles', status: deductibleStated ? 'good' : 'review' }] : []),
     {
       name: 'Optional Coverages',
-      status: foundGapProtections >= gaps.length / 2 ? 'good' : 'review',
+      status:
+        foundGapProtections === 0 ? 'gap' : foundGapProtections >= gaps.length / 2 ? 'good' : 'review',
     },
     {
       name: 'Risk Areas',
-      status: coverages.every((c) => c.confidence !== 'missing') ? 'good' : 'review',
+      status: coverages.some((c) => c.confidence === 'missing')
+        ? 'gap'
+        : coverages.every((c) => c.confidence === 'high')
+          ? 'good'
+          : 'review',
     },
   ]
 }

@@ -8,26 +8,24 @@ import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
 import FallbackAnalysisBanner from '../components/FallbackAnalysisBanner.jsx'
 
-const categoryDetails = {
-  'Liability Protection':
-    'Looks at whether your liability limits fall within commonly recommended ranges for your situation.',
-  'Property Protection':
-    'Looks at whether the property or physical damage coverage typical for this kind of policy is present.',
-  Deductibles:
-    'Looks at whether your deductible levels are clearly stated and reasonable relative to your coverage.',
-  'Optional Coverages':
-    'Looks at whether commonly valuable optional coverages for this kind of policy are present.',
-  'Risk Areas':
-    'Flags missing information, unclear exclusions, or areas the document did not provide enough detail to evaluate.',
+// Maps analyzeText()'s literal English category names to the translated
+// label and the key its tier reasons live under (score.tierReasons.<key>).
+const CATEGORY_KEYS = {
+  'Liability Protection': { label: 'score.categories.liability', reasonKey: 'liability' },
+  'Property Protection': { label: 'score.categories.property', reasonKey: 'property' },
+  Deductibles: { label: 'score.categories.deductibles', reasonKey: 'deductibles' },
+  'Optional Coverages': { label: 'score.categories.optional', reasonKey: 'optional' },
+  'Risk Areas': { label: 'score.categories.risk', reasonKey: 'risk' },
 }
 
-// Maps analyzeText()'s literal English category names to the translated label.
-const CATEGORY_KEYS = {
-  'Liability Protection': 'score.categories.liability',
-  'Property Protection': 'score.categories.property',
-  Deductibles: 'score.categories.deductibles',
-  'Optional Coverages': 'score.categories.optional',
-  'Risk Areas': 'score.categories.risk',
+// 'good' (Strong) / 'review' (Review) / 'gap' (Potential Gap) - see
+// computeScoreCategories() in policyDomainKnowledge.js. Deliberately never a
+// fourth "bad"/"failing" state or the color red: even a Potential Gap is
+// framed as "worth reviewing," not "you're uninsured."
+const TIER_STYLES = {
+  good: { tag: 'tag-good', badge: 'bg-compass-mint text-compass-green', icon: '✓' },
+  review: { tag: 'tag-review', badge: 'bg-compass-amberlight text-compass-amber', icon: '?' },
+  gap: { tag: 'tag-gap', badge: 'bg-compass-coraltint text-compass-coral', icon: '⚑' },
 }
 
 export default function CoverageScore() {
@@ -61,35 +59,50 @@ export default function CoverageScore() {
         </p>
       </div>
 
+      <div className="mt-6 flex flex-wrap justify-center gap-2">
+        {['good', 'review', 'gap'].map((status) => {
+          const count = analysis.scoreCategories.filter((c) => c.status === status).length
+          if (count === 0) return null
+          return (
+            <span key={status} className={TIER_STYLES[status].tag}>
+              {count} {t(`score.tierLabels.${status}`)}
+            </span>
+          )
+        })}
+      </div>
+
       <p className="mt-8 text-sm font-medium text-compass-ink">How your score breaks down</p>
 
       <div className="mt-3 space-y-3">
-        {analysis.scoreCategories.map((cat) => (
-          <div
-            key={cat.name}
-            className="flex items-start gap-4 rounded-lg border border-compass-line bg-compass-surface p-4"
-          >
-            <span
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-base font-semibold ${
-                cat.status === 'good' ? 'bg-compass-mint text-compass-green' : 'bg-compass-amberlight text-compass-amber'
-              }`}
-              aria-hidden="true"
+        {analysis.scoreCategories.map((cat) => {
+          const meta = CATEGORY_KEYS[cat.name]
+          const style = TIER_STYLES[cat.status] || TIER_STYLES.review
+          const label = meta ? t(meta.label) : cat.name
+          const reason = meta ? t(`score.tierReasons.${meta.reasonKey}.${cat.status}`) : ''
+          return (
+            <div
+              key={cat.name}
+              className="flex items-start gap-4 rounded-lg border border-compass-line bg-compass-surface p-4"
             >
-              {cat.status === 'good' ? '✓' : '!'}
-            </span>
-            <div>
-              <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-compass-ink">
-                {CATEGORY_KEYS[cat.name] ? t(CATEGORY_KEYS[cat.name]) : cat.name}
-                <span className={cat.status === 'good' ? 'tag-good' : 'tag-review'}>
-                  {cat.status === 'good' ? 'Good' : 'Worth a look'}
-                </span>
-              </p>
-              <p className="mt-1 text-xs leading-relaxed text-compass-slate">
-                {categoryDetails[cat.name]}
-              </p>
+              <span
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-base font-semibold ${style.badge}`}
+                aria-hidden="true"
+              >
+                {style.icon}
+              </span>
+              <div>
+                <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-compass-ink">
+                  {label}
+                  <span className={style.tag}>{t(`score.tierLabels.${cat.status}`)}</span>
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-compass-slate">
+                  {reason}
+                  {cat.status !== 'good' && ` ${t('score.worthConversation')}`}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       <Link to={localePath(lang, '/gap-report')} className="btn-primary mt-8 flex w-full justify-center">

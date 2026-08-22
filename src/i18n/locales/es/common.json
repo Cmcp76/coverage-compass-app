@@ -74,6 +74,38 @@
       "deductibles": "Deducibles",
       "optional": "Coberturas Opcionales",
       "risk": "Áreas de Riesgo"
+    },
+    "tierLabels": {
+      "good": "Sólida",
+      "review": "Revisar",
+      "gap": "Posible Vacío"
+    },
+    "worthConversation": "Vale la pena hablar de esto con tu profesional de seguros.",
+    "tierReasons": {
+      "liability": {
+        "good": "Se encontró cobertura de responsabilidad civil con un límite claramente indicado.",
+        "review": "Se encontró cobertura de responsabilidad civil, pero el límite no estaba claramente indicado.",
+        "gap": "No se identificó claramente cobertura de responsabilidad civil en tu documento."
+      },
+      "property": {
+        "good": "Se encontró cobertura de propiedad o daño físico con un límite claramente indicado.",
+        "review": "Se encontró cobertura de propiedad, pero el límite no estaba claramente indicado.",
+        "gap": "No se identificó claramente cobertura de propiedad o daño físico."
+      },
+      "deductibles": {
+        "good": "Se indicó claramente un monto de deducible en tu documento.",
+        "review": "No se indicó claramente un monto de deducible en tu documento."
+      },
+      "optional": {
+        "good": "Se encontró la mayoría de las coberturas opcionales que revisamos en tu documento.",
+        "review": "Se encontraron algunas, pero no la mayoría, de las coberturas opcionales que revisamos.",
+        "gap": "No se encontró ninguna de las coberturas opcionales que revisamos en tu documento."
+      },
+      "risk": {
+        "good": "Cada cobertura que revisamos se identificó claramente con un límite indicado.",
+        "review": "Se encontraron algunas coberturas, pero sin un límite claramente indicado.",
+        "gap": "Al menos una cobertura que revisamos no se encontró en absoluto en tu documento."
+      }
     }
   },
   "gapReport": {

@@ -123,6 +123,10 @@ body {
   @apply inline-flex items-center rounded-md bg-compass-mint px-2.5 py-1 text-xs font-medium text-compass-green;
 }
 
+.tag-gap {
+  @apply inline-flex items-center rounded-md bg-compass-coraltint px-2.5 py-1 text-xs font-medium text-compass-coral;
+}
+
 @keyframes indeterminate-sweep {
   0% {
     left: -40%;

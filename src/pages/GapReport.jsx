@@ -91,11 +91,7 @@ export default function GapReport() {
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-compass-skyblue text-compass-link">
                 <GapIcon icon={gap.icon} />
               </span>
-              <span
-                className={
-                  gap.status === 'Worth Confirming' ? 'tag-review' : 'tag-neutral'
-                }
-              >
+              <span className={gap.status === 'Worth Confirming' ? 'tag-review' : 'tag-gap'}>
                 {STATUS_KEYS[gap.status] ? t(STATUS_KEYS[gap.status]) : gap.status}
               </span>
             </div>
