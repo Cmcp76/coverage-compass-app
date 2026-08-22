@@ -126,5 +126,23 @@
   "language": {
     "selectLanguage": "Seleccionar idioma",
     "currentLanguage": "Idioma: {{language}}"
+  },
+  "askMyPolicy": {
+    "title": "Pregúntale a Mi Póliza",
+    "subtitle": "Haz una pregunta sobre tu póliza — las respuestas provienen solo de tu documento subido.",
+    "placeholder": "ej. \"¿Tengo cobertura de auto de alquiler?\" o \"¿Cuál es mi deducible?\"",
+    "ask": "Preguntar",
+    "disclaimerLine": "Solo educativo — confirma con tu profesional de seguros.",
+    "answers": {
+      "coverageFound": "Sí — tu póliza incluye {{name}} ({{limit}}).",
+      "coverageMissing": "No veo {{name}} claramente indicado en tu póliza subida.",
+      "gapFound": "Tu documento menciona {{name}}, aunque vale la pena confirmar los detalles.",
+      "gapMissing": "No veo {{name}} mencionado en tu póliza subida.",
+      "namedInsured": "El asegurado nombrado en este documento es {{namedInsured}}.",
+      "policyType": "Esto parece ser una póliza de {{detectedPolicyType}}.",
+      "score": "Tu Puntaje de Cobertura es {{coverageScore}} de 100 — un resumen educativo, no una garantía.",
+      "outOfScope": "Esa es una excelente pregunta para un profesional de seguros licenciado — Coverage Compass puede ayudarte a entender lo que hay en este documento, pero no puede asesorarte en decisiones como esa.",
+      "unmatched": "No veo esa información en tu póliza subida. Esto puede significar que no está incluida, o que no se capturó durante la revisión — revisa tus documentos oficiales de póliza o pregúntale a tu profesional de seguros."
+    }
   }
 }

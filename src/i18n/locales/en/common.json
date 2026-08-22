@@ -126,5 +126,23 @@
   "language": {
     "selectLanguage": "Select language",
     "currentLanguage": "Language: {{language}}"
+  },
+  "askMyPolicy": {
+    "title": "Ask My Policy",
+    "subtitle": "Ask a question about your policy — answers come only from your uploaded document.",
+    "placeholder": "e.g. \"Do I have rental coverage?\" or \"What's my deductible?\"",
+    "ask": "Ask",
+    "disclaimerLine": "Educational only — confirm with your insurance professional.",
+    "answers": {
+      "coverageFound": "Yes — your policy includes {{name}} ({{limit}}).",
+      "coverageMissing": "I don't see {{name}} clearly stated in your uploaded policy.",
+      "gapFound": "Your document mentions {{name}}, though it's worth confirming the details.",
+      "gapMissing": "I don't see {{name}} mentioned in your uploaded policy.",
+      "namedInsured": "The named insured on this document is {{namedInsured}}.",
+      "policyType": "This looks like a {{detectedPolicyType}} policy.",
+      "score": "Your Coverage Score is {{coverageScore}} out of 100 — an educational snapshot, not a guarantee.",
+      "outOfScope": "That's a great question for a licensed insurance professional — Coverage Compass can help you understand what's in this document, but can't advise on decisions like that.",
+      "unmatched": "I don't see that information in your uploaded policy. This may mean it's not included, or it wasn't captured during the review — check your official policy documents or ask your insurance professional."
+    }
   }
 }

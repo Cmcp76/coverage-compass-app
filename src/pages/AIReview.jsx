@@ -6,6 +6,7 @@ import NoReadableTextBanner from '../components/NoReadableTextBanner.jsx'
 import TruncatedDocumentBanner from '../components/TruncatedDocumentBanner.jsx'
 import FallbackAnalysisBanner from '../components/FallbackAnalysisBanner.jsx'
 import ExplainMyCoverage from '../components/ExplainMyCoverage.jsx'
+import AskMyPolicy from '../components/AskMyPolicy.jsx'
 
 export default function AIReview() {
   const { analysis } = usePolicy()
@@ -87,6 +88,7 @@ export default function AIReview() {
       </div>
 
       <ExplainMyCoverage analysis={analysis} />
+      <AskMyPolicy analysis={analysis} />
 
       <Link to={localePath(lang, '/score')} className="btn-primary mt-8 flex w-full justify-center">
         See My Coverage Score
