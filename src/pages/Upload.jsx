@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { usePolicy } from '../context/PolicyContext.jsx'
-import { analyzeText } from '../lib/policyAnalysis.js'
+import { analyzeText, detectPolicyType } from '../lib/policyAnalysis.js'
 import { analyzeWithLLM, AnalysisNotConfiguredError } from '../lib/analyzeWithLLM.js'
 import { extractTextFromPdf } from '../lib/pdfText.js'
 import { localePath } from '../utils/localeRouting.js'
@@ -15,6 +15,11 @@ export default function Upload() {
   const { t } = useTranslation('common')
   const [state, setState] = useState('idle') // idle | reading | scanning | done | error
   const [errorMsg, setErrorMsg] = useState('')
+  // Detected the moment the file's text is available (before the async
+  // analysis call), purely so the loading animation's copy can match the
+  // actual document instead of defaulting to auto-flavored language for
+  // every policy type - the real analysis below detects it again itself.
+  const [detectedType, setDetectedType] = useState('auto')
   const [downloadingPdf, setDownloadingPdf] = useState(false)
   const inputRef = useRef(null)
   const navigate = useNavigate()
@@ -30,6 +35,7 @@ export default function Upload() {
     // PolicyContext state, with whichever resolves last silently winning.
     if (state === 'reading' || state === 'scanning') return
     setErrorMsg('')
+    setDetectedType('auto')
     setState('reading')
 
     if (file.size > MAX_FILE_SIZE_BYTES) {
@@ -66,6 +72,7 @@ export default function Upload() {
         return
       }
 
+      if (text.trim().length > 40) setDetectedType(detectPolicyType(text).type)
       setState('scanning')
 
       let result
@@ -193,6 +200,7 @@ export default function Upload() {
           <AIPolicyReviewExperience
             stage={state === 'scanning' ? 'analyzing' : state === 'done' ? 'done' : 'reading'}
             score={analysis.coverageScore}
+            policyType={detectedType}
             onViewReport={() => navigate(localePath(lang, '/ai-review'))}
             onDownloadPdf={downloadPdf}
             downloadingPdf={downloadingPdf}

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { gapRuleSets } from '../lib/policyDomainKnowledge.js'
 
 // Coverage Compass — AI Policy Review Experience
 // -------------------------------------------------
@@ -17,30 +18,115 @@ import { useEffect, useRef, useState } from 'react'
 // Everything after 'done' is a short, fixed-length cosmetic reveal, which is
 // fine since the real work is already finished by that point.
 
-const READ_ITEMS = [
-  { key: 'dec', label: 'Reading declarations page' },
-  { key: 'vehicles', label: 'Identifying vehicles & drivers' },
-  { key: 'liability', label: 'Reviewing liability limits' },
-  { key: 'deductibles', label: 'Checking deductibles' },
-  { key: 'endorsements', label: 'Looking for endorsements' },
-  { key: 'gaps', label: 'Scanning for possible gaps' },
-]
+// Segment-specific loading copy. Upload.jsx detects the policy type from
+// the document's extracted text the moment it's available (before the
+// async analysis call even starts) and passes it in as `policyType`, so
+// this animation reflects the actual document instead of always showing
+// auto-flavored language ("vehicles & drivers", "rental & roadside
+// coverage") to renters/homeowners/commercial/trucking uploads too.
+const READ_ITEMS_BY_TYPE = {
+  auto: [
+    { key: 'dec', label: 'Reading declarations page' },
+    { key: 'id2', label: 'Identifying vehicles & drivers' },
+    { key: 'liability', label: 'Reviewing liability limits' },
+    { key: 'ded', label: 'Checking deductibles' },
+    { key: 'endorsements', label: 'Looking for endorsements' },
+    { key: 'gaps', label: 'Scanning for possible gaps' },
+  ],
+  homeowners: [
+    { key: 'dec', label: 'Reading declarations page' },
+    { key: 'id2', label: 'Identifying your dwelling & property' },
+    { key: 'liability', label: 'Reviewing liability limits' },
+    { key: 'ded', label: 'Checking deductibles' },
+    { key: 'endorsements', label: 'Looking for endorsements' },
+    { key: 'gaps', label: 'Scanning for possible gaps' },
+  ],
+  renters: [
+    { key: 'dec', label: 'Reading declarations page' },
+    { key: 'id2', label: 'Identifying your belongings & unit' },
+    { key: 'liability', label: 'Reviewing liability limits' },
+    { key: 'ded', label: 'Checking your deductible' },
+    { key: 'endorsements', label: 'Looking for endorsements' },
+    { key: 'gaps', label: 'Scanning for possible gaps' },
+  ],
+  general_liability: [
+    { key: 'dec', label: 'Reading declarations page' },
+    { key: 'id2', label: 'Identifying your business operations' },
+    { key: 'liability', label: 'Reviewing liability limits' },
+    { key: 'ded', label: 'Checking additional insured status' },
+    { key: 'endorsements', label: 'Looking for endorsements' },
+    { key: 'gaps', label: 'Scanning for possible gaps' },
+  ],
+  workers_comp: [
+    { key: 'dec', label: 'Reading declarations page' },
+    { key: 'id2', label: 'Identifying class codes & payroll' },
+    { key: 'liability', label: 'Reviewing statutory limits' },
+    { key: 'ded', label: 'Checking experience modifier' },
+    { key: 'endorsements', label: 'Looking for endorsements' },
+    { key: 'gaps', label: 'Scanning for possible gaps' },
+  ],
+  trucking: [
+    { key: 'dec', label: 'Reading declarations page' },
+    { key: 'id2', label: 'Identifying vehicles & authority' },
+    { key: 'liability', label: 'Reviewing liability limits' },
+    { key: 'ded', label: 'Checking cargo & physical damage' },
+    { key: 'endorsements', label: 'Looking for endorsements' },
+    { key: 'gaps', label: 'Scanning for possible gaps' },
+  ],
+}
 
-const ASSISTANT_MESSAGES = [
-  'Reading your declarations page…',
-  'Checking your liability limits…',
-  'Looking for rental & roadside coverage…',
-  'Comparing this against common coverage areas…',
-  'Almost there — pulling it all together…',
-]
+const ASSISTANT_MESSAGES_BY_TYPE = {
+  auto: [
+    'Reading your declarations page…',
+    'Checking your liability limits…',
+    'Looking for rental & roadside coverage…',
+    'Comparing this against common coverage areas…',
+    'Almost there — pulling it all together…',
+  ],
+  homeowners: [
+    'Reading your declarations page…',
+    'Checking your liability limits…',
+    'Looking for flood & water backup coverage…',
+    'Comparing this against common coverage areas…',
+    'Almost there — pulling it all together…',
+  ],
+  renters: [
+    'Reading your declarations page…',
+    'Checking your liability limits…',
+    'Looking for replacement cost & identity theft coverage…',
+    'Comparing this against common coverage areas…',
+    'Almost there — pulling it all together…',
+  ],
+  general_liability: [
+    'Reading your declarations page…',
+    'Checking your liability limits…',
+    'Looking for additional insured & cyber liability coverage…',
+    'Comparing this against common coverage areas…',
+    'Almost there — pulling it all together…',
+  ],
+  workers_comp: [
+    'Reading your declarations page…',
+    'Checking your statutory limits…',
+    'Looking for owner/officer exclusion status…',
+    'Comparing this against common coverage areas…',
+    'Almost there — pulling it all together…',
+  ],
+  trucking: [
+    'Reading your declarations page…',
+    'Checking your liability limits…',
+    'Looking for cargo & non-trucking liability coverage…',
+    'Comparing this against common coverage areas…',
+    'Almost there — pulling it all together…',
+  ],
+}
 
-const TIPS = [
-  'Higher deductibles usually mean a lower premium — but more out-of-pocket cost if you file a claim.',
-  "Standard homeowners policies typically don't cover flood damage, even outside a flood zone.",
-  'An umbrella policy adds liability protection above your auto or home limits.',
-  'Actual cash value and replacement cost can mean very different payouts after a loss.',
-  'Certificates of insurance are often required by landlords and contracts — worth knowing what yours shows.',
-]
+// Derived from the same gap rule sets the real analysis uses (see
+// policyDomainKnowledge.js), rather than a hand-written, easy-to-go-stale
+// list of "insurance facts" - this stays accurate and in sync with what
+// the gap report actually checks for, for every line of business.
+const TIPS_BY_TYPE = Object.fromEntries(
+  Object.entries(gapRuleSets).map(([type, rules]) => [type, rules.map((r) => r.why)]),
+)
 
 const REPORT_ITEMS = [
   { key: 'summary', label: 'Policy summary' },
@@ -80,17 +166,17 @@ const PHASE_TIP_SETS = {
   analyzing: [
     'Looking for areas you may want to review...',
     'Comparing this to common coverage patterns...',
-    'Weighing your liability and property protection...',
+    'Weighing your coverage against typical gaps for this type of policy...',
   ],
   score: [
     'Looking for areas you may want to review...',
     'Comparing this to common coverage patterns...',
-    'Weighing your liability and property protection...',
+    'Weighing your coverage against typical gaps for this type of policy...',
   ],
   report: [
     'Endorsements are just changes made to your base policy.',
-    'Actual cash value and replacement cost pay out differently after a claim.',
-    'A higher deductible usually means a lower premium — but more out of pocket if you file.',
+    'A Coverage Score is an educational snapshot, not a guarantee.',
+    'Your questions to ask are tailored to what was actually found in your document.',
   ],
   complete: [
     'Preparing your Coverage Compass report...',
@@ -161,11 +247,16 @@ function PhaseIcon({ icon }) {
 export default function AIPolicyReviewExperience({
   stage,
   score = 0,
+  policyType = 'auto',
   onViewReport,
   onDownloadPdf,
   downloadingPdf,
   onComplete,
 }) {
+  const READ_ITEMS = READ_ITEMS_BY_TYPE[policyType] || READ_ITEMS_BY_TYPE.auto
+  const ASSISTANT_MESSAGES = ASSISTANT_MESSAGES_BY_TYPE[policyType] || ASSISTANT_MESSAGES_BY_TYPE.auto
+  const TIPS = TIPS_BY_TYPE[policyType] || TIPS_BY_TYPE.auto
+
   const [visualPhase, setVisualPhase] = useState('reading') // reading | analyzing | score | report | complete
   const [readIndex, setReadIndex] = useState(-1)
   const [assistantIdx, setAssistantIdx] = useState(0)
@@ -195,21 +286,21 @@ export default function AIPolicyReviewExperience({
     }, TIMING.perReadItem)
     timers.current.push(iv)
     return () => clearInterval(iv)
-  }, [visualPhase])
+  }, [visualPhase, READ_ITEMS])
 
   useEffect(() => {
     if (visualPhase !== 'analyzing') return
     const iv = setInterval(() => setAssistantIdx((i) => (i + 1) % ASSISTANT_MESSAGES.length), 1300)
     timers.current.push(iv)
     return () => clearInterval(iv)
-  }, [visualPhase])
+  }, [visualPhase, ASSISTANT_MESSAGES])
 
   useEffect(() => {
     if (visualPhase !== 'analyzing') return
     const iv = setInterval(() => setTipIdx((i) => (i + 1) % TIPS.length), 2100)
     timers.current.push(iv)
     return () => clearInterval(iv)
-  }, [visualPhase])
+  }, [visualPhase, TIPS])
 
   // Real work finished - fill the checklist and hand off to the cosmetic
   // score/report reveal.
@@ -287,6 +378,7 @@ export default function AIPolicyReviewExperience({
         {visualPhase === 'analyzing' && (
           <AnalyzingPhase
             activeIndex={readIndex}
+            readItems={READ_ITEMS}
             assistantMessage={ASSISTANT_MESSAGES[assistantIdx]}
             tip={TIPS[tipIdx]}
           />
@@ -319,11 +411,11 @@ function ReadingPhase() {
   )
 }
 
-function AnalyzingPhase({ activeIndex, assistantMessage, tip }) {
+function AnalyzingPhase({ activeIndex, readItems, assistantMessage, tip }) {
   return (
     <div className="space-y-5">
       <ul className="space-y-2">
-        {READ_ITEMS.map((item, i) => {
+        {readItems.map((item, i) => {
           const status = i < activeIndex ? 'done' : i === activeIndex ? 'active' : 'pending'
           return (
             <li
