@@ -30,6 +30,7 @@ Then, using ONLY the rule set for the line of business you identified:
 - Use the coverage/gap names EXACTLY as given above - do not paraphrase or invent new names.
 - Base every determination only on what the document text actually says. Do not guess or fabricate limits, dates, or named parties. If something is not in the document, mark it as not found rather than assuming a typical value.
 - Write 3-5 questionsToAsk and 2-4 strengths that are specific to what you actually found in THIS document, not generic insurance advice.
+- The strengths list must not contradict the gaps list: never describe a coverage or optional protection as present, included, or a strength if you also marked that same item as not found in the gaps list.
 
 Call the submit_policy_analysis tool with your findings.`
 }

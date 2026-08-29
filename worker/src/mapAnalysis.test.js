@@ -91,6 +91,42 @@ describe('mapClaudeResultToAnalysis', () => {
     expect(result.questionsToAsk.length).toBeGreaterThan(0)
   })
 
+  it('drops a strength that contradicts the model\'s own not-found gap determination', () => {
+    // Regression: a real production report claimed "Uninsured Motorist...
+    // coverage is included" and "Roadside Assistance... included for both
+    // vehicles" as strengths, while the same response's gaps list marked
+    // both of those exact items as NOT found - the two outputs disagreed
+    // with each other in the same report.
+    const claudeInput = {
+      policyType: 'auto',
+      coverages: coverageRuleSets.auto.map((r) => ({ name: r.name, found: true, limit: '$1', confidence: 'high' })),
+      gaps: [
+        { name: 'Umbrella Insurance', found: false },
+        { name: 'Gap Insurance (Loan/Lease Payoff)', found: false },
+        { name: 'Roadside Assistance', found: false },
+        { name: 'Uninsured/Underinsured Motorist', found: false },
+      ],
+      questionsToAsk: ['q'],
+      strengths: [
+        'Both vehicles carry full Comprehensive and Collision coverage in addition to liability, providing broader protection than a liability-only policy.',
+        'Uninsured Motorist Bodily Injury and Property Damage coverage is included on both vehicles, matching the liability limits.',
+        'Rental Reimbursement and Roadside Assistance are included for both vehicles, which can help with costs during repairs or breakdowns.',
+        'The policy includes multiple discounts that are actively reducing premium.',
+      ],
+    }
+
+    const result = mapClaudeResultToAnalysis(claudeInput, meta)
+
+    // The genuine, non-contradicting strengths survive.
+    expect(result.strengths).toContain(
+      'Both vehicles carry full Comprehensive and Collision coverage in addition to liability, providing broader protection than a liability-only policy.',
+    )
+    expect(result.strengths).toContain('The policy includes multiple discounts that are actively reducing premium.')
+    // The two that contradict the gaps list (both marked not found) are dropped.
+    expect(result.strengths.some((s) => /uninsured motorist/i.test(s))).toBe(false)
+    expect(result.strengths.some((s) => /roadside assistance/i.test(s))).toBe(false)
+  })
+
   it('caps questionsToAsk at 5 and strengths at 4', () => {
     const claudeInput = {
       policyType: 'auto',
