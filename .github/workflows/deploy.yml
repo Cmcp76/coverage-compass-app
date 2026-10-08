@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    # Georgia Weekend Finder is a separate site with its own hosting.
+    paths-ignore:
+      - 'georgia-weekend-finder/**'
+      - '.github/workflows/georgia-weekend-finder-*.yml'
   workflow_dispatch:
 
 permissions:

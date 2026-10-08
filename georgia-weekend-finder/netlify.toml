@@ -1,0 +1,23 @@
+# Netlify settings. Each push (including the daily data commit) rebuilds
+# every page from data/events.json in a few seconds.
+# If this folder lives inside a bigger repo, set
+# "Base directory" to georgia-weekend-finder in Netlify's site settings.
+[build]
+  publish = "dist"
+  command = "npm test && npm run build"
+
+[[headers]]
+  for = "/data/events.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

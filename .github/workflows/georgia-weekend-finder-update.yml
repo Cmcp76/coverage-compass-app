@@ -1,0 +1,64 @@
+name: Georgia Weekend Finder - daily event update
+
+# Runs every morning, pulls events from APPROVED sources in
+# georgia-weekend-finder/data/sources.json, merges manual-events.json, holds
+# questionable events for review, and commits data/events.json +
+# data/review-queue.json. Netlify (or Cloudflare Pages) sees the commit and
+# rebuilds every page automatically. A failed run emails the repo owner.
+
+on:
+  schedule:
+    # 10:17 UTC = 6:17 AM EDT / 5:17 AM EST (off the hour to avoid queue delays)
+    - cron: '17 10 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Publish even if the event count dropped sharply'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - 'georgia-weekend-finder/data/manual-events.json'
+      - 'georgia-weekend-finder/data/sources.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gwf-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: georgia-weekend-finder
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
+      - name: Fetch and review events
+        run: npm run update -- ${{ inputs.force && '--force' || '' }}
+        env:
+          TZ: America/New_York
+          # Optional: only needed once you approve and enable those sources.
+          TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
+      - name: Check the site builds
+        run: npm run build
+      - name: Commit updated events
+        run: |
+          if git diff --quiet -- data/events.json data/review-queue.json; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "gwf-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/events.json data/review-queue.json
+          git commit -m "Update Georgia Weekend Finder events ($(date -u +%Y-%m-%d))"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
