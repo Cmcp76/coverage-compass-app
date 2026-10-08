@@ -1,5 +1,6 @@
 {
-  "_readme": "Hand-curated events (approved submissions, partner events, your own research from official pages). Each entry needs title, start, city, category, price and url. 'suppress' hides feed events by id or url. See README.md > 'Adding events by hand'.",
+  "_readme": "Hand-curated events (approved submissions, partner events, your own research from official pages). Each entry needs title, start, city, category, price and url. 'suppress' hides feed events by id or url. 'approve' publishes HELD feed events by id (see review-queue.json). See README.",
   "events": [],
-  "suppress": []
+  "suppress": [],
+  "approve": []
 }

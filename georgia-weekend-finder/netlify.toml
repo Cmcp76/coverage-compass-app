@@ -1,8 +1,10 @@
-# Netlify settings. If this folder lives inside a bigger repo, set
+# Netlify settings. Each push (including the daily data commit) rebuilds
+# every page from data/events.json in a few seconds.
+# If this folder lives inside a bigger repo, set
 # "Base directory" to georgia-weekend-finder in Netlify's site settings.
 [build]
-  publish = "."
-  command = "npm test"
+  publish = "dist"
+  command = "npm test && npm run build"
 
 [[headers]]
   for = "/data/events.json"

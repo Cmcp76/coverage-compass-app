@@ -1,185 +1,172 @@
 # Georgia Weekend Finder
 
-A fast, mobile-friendly site listing **free and paid events around Atlanta and
-nearby Georgia cities**. Visitors filter by date, city, category and price,
-open event details, add to calendar, share, and submit their own events.
+A fast, mobile-friendly guide to **free and paid things to do around Atlanta and
+Georgia**. Every section, category, city and event has its own page, events update
+automatically every morning, and nothing is ever made up.
 
-**No events are made up.** Listings come only from:
+> **Start here:** [`PROJECT_STATUS.md`](PROJECT_STATUS.md) covers what's done, what's next,
+> costs, and your to-do list.
+
+Events come only from:
 
 1. **Approved automated sources**: official calendar feeds and APIs you have
    permission to republish (`data/sources.json`)
-2. **Manual curation**: events you add by hand, including approved
-   submissions (`data/manual-events.json`)
+2. **Manual curation**: events you add by hand, including approved submissions
+   (`data/manual-events.json`)
 
-The site starts empty and shows a "Fresh listings are on the way" message until
-you approve your first source or add your first event.
+Until one of those has events, the site shows a friendly "Fresh listings are on the way" message.
 
 ---
 
-## What's inside
+## How it fits together
+
+```
+ every morning (GitHub Actions, free)                 on every change (Netlify, free)
+┌───────────────────────────────────────┐            ┌──────────────────────────────────┐
+│ scripts/update-events.mjs             │  commits   │ scripts/build-site.mjs           │
+│  • fetch APPROVED sources only        │ ─────────▶ │  • one HTML page per section,    │
+│  • merge manual-events.json           │ events.json│    category, city and event      │
+│  • hold questionable events           │            │  • sitemap.xml, robots.txt       │
+│  • flag things to double-check        │            │  → publishes dist/               │
+│  • refuse to publish a broken run     │            └──────────────────────────────────┘
+└───────────────────────────────────────┘
+```
 
 ```
 georgia-weekend-finder/
-├── index.html              Main page: hero, filters, results, submission form, sources
-├── privacy.html            Privacy policy (needed for AdSense)
-├── thanks.html             Fallback page after a form submission
+├── PROJECT_STATUS.md       Status, decisions, costs, next steps
 ├── assets/
-│   ├── config.js           ← YOUR SETTINGS: domain, email, AdSense, form provider
-│   ├── app.js              Filtering, rendering, event dialog, calendar export, ads
-│   ├── taxonomy.js         Categories + cities (shared by site and updater)
+│   ├── config.js           ← YOUR SETTINGS: domain, email, AdSense, analytics, forms
+│   ├── taxonomy.js         ← Categories and cities (turn expansion cities on here)
+│   ├── sections.js         Every listing page: title, description, filters
+│   ├── render.js           Event cards/lists (shared by builder and browser)
+│   ├── app.js              Filters, calendar, quick view, forms, ads, analytics
 │   ├── time.js             Eastern-time date helpers
-│   └── styles.css          Design (light + dark mode)
+│   └── styles.css          Design (light + dark)
 ├── data/
-│   ├── events.json         GENERATED: what the site displays (don't hand-edit)
 │   ├── sources.json        ← Approved automated sources
-│   └── manual-events.json  ← Hand-curated events + suppress list
+│   ├── manual-events.json  ← Hand-added events + "approve" and "suppress" lists
+│   ├── local-ads.json      ← Directly sold local business ads
+│   ├── events.json         GENERATED: what the site shows
+│   └── review-queue.json   GENERATED: held + flagged events for you to check
 ├── scripts/
-│   ├── update-events.mjs   Daily updater (no dependencies)
+│   ├── update-events.mjs   Daily updater
+│   ├── build-site.mjs      Page builder → dist/
 │   ├── serve.mjs           Local preview server
-│   └── lib/                ICS / JSON-LD / JSON / Ticketmaster adapters
-├── tests/updater.mjs       Tests (dates, DST, recurring events, parsing, permission guard)
-├── netlify.toml            Hosting config
-├── robots.txt, sitemap.xml, ads.txt.example
+│   └── lib/                Feed adapters, normalizing, quality review, page templates
+└── tests/                  Automated tests (npm test)
 ```
-
-The daily automation lives at the repo root:
-`.github/workflows/georgia-weekend-finder-update.yml`.
-
-**Categories:** Live Music · Family & Kids · Food & Drink · Outdoor & Nature ·
-Arts & Theater · Festivals & Markets · Sports · Comedy & Nightlife · Community & Classes.
-Edit them in `assets/taxonomy.js`.
-
-**Cities:** Atlanta (including neighborhoods like Buckhead, Old Fourth Ward,
-Little Five Points), Decatur, Marietta, Alpharetta, Roswell, Sandy Springs,
-Smyrna, Kennesaw, Duluth, Lawrenceville, Peachtree City, Athens and about 20
-more. Anything else in Georgia shows as "Other Georgia."
 
 ---
 
-## 1. Preview it on your computer
+## 1. Preview on your computer
 
-You need [Node.js 20+](https://nodejs.org). There's nothing to install.
+You need [Node.js 20+](https://nodejs.org). There's nothing else to install.
 
 ```bash
 cd georgia-weekend-finder
-npm test           # runs the test suite
-npm start          # open http://localhost:8080
+npm test        # runs the tests
+npm start       # builds the site and opens it at http://localhost:8080
 ```
 
 ---
 
 ## 2. Launch it (about 20 minutes)
 
-### Option A: Netlify (recommended, since the submission form works with no setup)
+### Netlify (recommended: free, and the forms work with no extra setup)
 
-1. **Recommended:** put this folder in its own GitHub repo, e.g.
-   `georgia-weekend-finder`. (It can stay in this repo too. See the note below.)
-2. Go to [app.netlify.com](https://app.netlify.com) → **Add new site → Import an
-   existing project** → pick the repo.
-3. Build settings:
-   - **Base directory:** `georgia-weekend-finder` (or blank if it's its own repo)
-   - **Build command:** `npm test`
-   - **Publish directory:** `.` (Netlify shows this as `georgia-weekend-finder` when you set a base directory)
-4. Deploy. You'll get a `something.netlify.app` URL.
-5. **Forms:** In Netlify → *Forms*, turn on form detection, then redeploy. Submissions
-   show up under **Forms → event-submission**. Turn on email notifications
-   so you hear about each one.
-6. **Custom domain:** buy a domain (e.g. `georgiaweekendfinder.com`) and add it under
-   *Domain management*. HTTPS is automatic.
-7. Update your domain and email in `assets/config.js`, `index.html`
-   (canonical/og tags), `robots.txt`, `sitemap.xml`, and `privacy.html`.
+1. Buy a domain (e.g. from Cloudflare, Namecheap or Porkbun; about $10–20/year).
+2. Go to [app.netlify.com](https://app.netlify.com) → **Add new site → Import an existing
+   project** → connect GitHub → pick this repository.
+3. Build settings (`netlify.toml` fills most of these in):
+   - **Base directory:** `georgia-weekend-finder`
+   - **Build command:** `npm test && npm run build`
+   - **Publish directory:** `dist`
+4. Deploy. Then go to **Forms → Enable form detection** and redeploy once.
+   You'll receive both the **event-submission** and **advertise-inquiry** forms. Turn on email
+   notifications for each.
+5. **Domain management → Add your domain.** HTTPS is automatic.
+6. In `assets/config.js`, set `url` to your domain and `contactEmail` to your address. Commit.
 
-### Option B: Cloudflare Pages
+**Cloudflare Pages** works the same way (root directory `georgia-weekend-finder`, build
+command `npm run build`, output `dist`). Use Formspree for forms there: set
+`submissions.provider: 'formspree'` in `config.js`.
 
-Same steps: connect the repo, set the root directory to
-`georgia-weekend-finder`, leave the build command empty (or `npm test`), and set
-the output directory to `.`. Netlify Forms won't work there, so in
-`assets/config.js` set `submissions.provider` to `'formspree'` and add a free
-[Formspree](https://formspree.io) form ID.
+### One-time GitHub setup
 
-> **Keeping it inside this repo?** That works. The Coverage Compass deploy
-> workflow ignores this folder, and the daily updater workflow is already set
-> up for the `georgia-weekend-finder/` path.
+- Merge the pull request into `main` (scheduled jobs only run from `main`).
+- **Settings → Actions → General → Workflow permissions → Read and write.**
+- (When you enable Ticketmaster) **Settings → Secrets and variables → Actions →
+  New repository secret** → `TICKETMASTER_API_KEY`.
+
+### After launch
+
+- **Google Search Console:** add your domain and submit `https://YOURDOMAIN/sitemap.xml`.
+- **Analytics (free):** in `config.js` set `analytics: { provider: 'cloudflare', id: 'TOKEN' }`
+  (from Cloudflare → Web Analytics) or `{ provider: 'ga4', id: 'G-XXXXXXX' }`.
 
 ---
 
-## 3. Keep events updating automatically
+## 3. Daily automatic updates
 
-The GitHub Action `georgia-weekend-finder-update.yml` runs **every morning
-around 6 AM Eastern**. It also runs when you edit `manual-events.json` or
-`sources.json` on `main`, and you can start it from **Actions → Run workflow**.
+`.github/workflows/georgia-weekend-finder-update.yml` runs **every morning around 6 AM ET**,
+whenever you edit `manual-events.json` / `sources.json`, or on demand (**Actions → Run workflow**).
 
 Each run:
 
 1. Runs the tests
-2. Validates `manual-events.json` and **fails loudly** on a typo instead of
-   publishing bad data
-3. Fetches every source that is **enabled AND approved**
-4. Normalizes events (Eastern time, city, category, free/paid), drops past
-   events and anything outside Georgia, removes duplicates, and keeps 90 days ahead
-5. Commits `data/events.json` → your host redeploys automatically
+2. Validates `manual-events.json`. A typo fails the run instead of publishing bad data
+3. Fetches every **enabled + approved** source
+4. Cleans up events: Eastern time, city, category, free/paid. It removes past events,
+   events outside current coverage, and duplicates
+5. **Reviews quality.** Questionable events are held back, and minor issues are flagged
+6. Refuses to publish if the event count suddenly collapses (usually a broken feed)
+7. Builds the site to make sure nothing is broken, then commits the data. Netlify redeploys
 
-**Resilience:** if a source is down, the updater keeps that source's events from
-the last good run (up to 3 days) so the site doesn't suddenly empty out.
+If a source is temporarily down, its events from the last good run are kept for up to 3 days.
+**If a run fails, GitHub emails you.** The previous good data stays live.
 
-**One-time GitHub setup:**
+### Your weekly check (10–15 minutes)
 
-- Scheduled workflows run only on the **default branch** (`main`), so merge
-  this work into `main`.
-- **Settings → Actions → General → Workflow permissions** → choose
-  *Read and write permissions* so the bot can commit.
-- If you enable Ticketmaster: **Settings → Secrets and variables → Actions →
-  New repository secret** → `TICKETMASTER_API_KEY`.
-- GitHub pauses scheduled workflows after 60 days with no repo activity. The
-  daily commits count as activity, but check the Actions tab now and then.
+1. Open **GitHub → Actions → latest "daily event update" run**. The summary shows sources,
+   **held** events (not published) and **flagged** events (published, worth a glance).
+2. Held event that's actually fine? Add its `id` to `"approve"` in `data/manual-events.json`.
+3. Flagged event that's wrong or a duplicate? Add its `id` to `"suppress"`.
+4. Review new **form submissions** in Netlify. Verify the official link, then add approved
+   ones to `manual-events.json`.
 
-### Adding an approved source
+The same information is saved in `data/review-queue.json`.
 
-Open `data/sources.json`. A source is used **only** when both of these are true:
+---
+
+## 4. Adding sources
+
+A source in `data/sources.json` is used **only** when both are true:
 
 ```json
 "enabled": true,
 "permission": {
   "status": "approved",
-  "basis": "Why you're allowed to republish (terms link, partner email, etc.)",
+  "basis": "Why you're allowed to republish (terms link, email from the organizer, etc.)",
   "verifiedOn": "2026-10-08"
 }
 ```
 
-Supported source types:
-
-| type | Use it for | Notes |
+| type | Use for | Notes |
 |---|---|---|
-| `ics` | iCal "subscribe" links from city, county, library, parks, venue and organizer calendars | Handles time zones, all-day events and recurring events (weekly markets, "first Friday" art walks) |
-| `jsonld` | An events page that publishes schema.org `Event` data | Only with the owner's permission. The updater also obeys `robots.txt` |
-| `json` | Official open-data or partner JSON APIs | Map fields with `itemsPath` + `fields`. API keys go in `{env.NAME}` placeholders and GitHub secrets |
-| `ticketmaster` | Ticketmaster Discovery API (concerts, sports, theater) | Free key at developer.ticketmaster.com. Read their terms: attribution and links back are required, and the site already shows "via Ticketmaster" and links to the official page |
+| `ics` | iCal "subscribe" links from city, county, library, parks, venue and organizer calendars | Handles time zones, all-day and repeating events |
+| `jsonld` | Event pages that publish schema.org `Event` data | Only with the owner's OK. Obeys `robots.txt` |
+| `json` | Official open-data / partner JSON APIs | Map fields with `itemsPath` + `fields`. Keys go in GitHub secrets via `{env.NAME}` |
+| `ticketmaster` | Ticketmaster Discovery API (concerts, sports, theater) | Free key. Their terms require attribution and links back, which the site already provides |
 
-Optional per-source `defaults` fill gaps: `{"city": "Decatur", "category":
-"family", "price": "free"}`. For example, use `"price": "free"` for a library
-calendar where every event is free. `categoryMap` maps a feed's own category
-names to ours.
+Optional `defaults` fill gaps (`{"city": "Decatur", "category": "family", "price": "free"}`), and
+`categoryMap` maps a feed's own category names to ours. Test without publishing:
+`npm run update:dry`.
 
-**Good sources to ask about (verify each one's terms first):** city and county
-parks & rec calendars (Decatur, Marietta, Roswell, Alpharetta, Sandy Springs,
-DeKalb, Cobb, Gwinnett), county library systems, Atlanta BeltLine, farmers
-markets, museums, theaters, breweries and music venues that offer iCal feeds.
-Many venues will happily say yes to free promotion; save their reply as your
-`basis`.
+**Don't** scrape sites whose terms forbid it, anything behind a login, or Facebook, Instagram or
+Eventbrite pages.
 
-**Don't** scrape sites whose terms prohibit it, sites behind logins, or
-Facebook/Instagram/Eventbrite pages. Use their official APIs only where the terms
-allow it.
-
-Test a new source without publishing:
-
-```bash
-npm run update:dry
-```
-
-### Adding events by hand
-
-Add entries to `data/manual-events.json`:
+## 5. Adding events by hand
 
 ```json
 {
@@ -194,85 +181,64 @@ Add entries to `data/manual-events.json`:
       "category": "festivals-markets",
       "price": "free",
       "url": "https://official-event-page",
+      "ticketUrl": "https://tickets-or-registration (optional)",
       "description": "One or two sentences.",
       "featured": false,
       "sponsored": false
     }
   ],
-  "suppress": []
+  "suppress": [],
+  "approve": []
 }
 ```
 
-- `start` / `end`: `2026-10-17` (all day), `2026-10-17T10:00` (Eastern time), or a full ISO time
-- `category`: `live-music`, `family`, `food-drink`, `outdoor`, `arts-theater`,
-  `festivals-markets`, `sports`, `comedy-nightlife`, `community`
+- `start` / `end`: `2026-10-17` (all day), `2026-10-17T10:00` (Eastern), or a full ISO time
+- `category`: `live-music`, `family`, `food-drink`, `outdoor`, `arts-theater`, `festivals-markets`,
+  `sports`, `comedy-nightlife`, `community`
 - `price`: `"free"`, `"$15"`, `"$10-$25"`, or `"paid"`
-- `url` is required so visitors can verify details
-- `featured: true` highlights a listing. Use `sponsored: true` for **paid**
-  placements so they're labeled "Sponsored" (FTC disclosure)
-- `"hidden": true` keeps an entry in the file without publishing it
-- `suppress`: list event `id`s or URLs from automated feeds to hide
+- `featured: true` highlights an editor's pick. **`sponsored: true` is for paid placements** and
+  shows a "Sponsored" label (FTC disclosure)
+- `"hidden": true` keeps an entry without publishing it
 
-Past events drop off automatically. You don't need to delete them.
+## 6. Coverage: cities and expansion
 
-### Handling submissions (weekly routine, about 10 minutes)
+Cities live in `assets/taxonomy.js`. Launch cities: Atlanta, Decatur, Stone Mountain, Marietta,
+Sandy Springs, Tucker, Lithonia, Clarkston, Brookhaven, East Point, College Park, plus 24 more
+metro cities. Neighborhoods and landmarks (Buckhead, Little Five Points, Arabia Mountain, Stone
+Mountain Park, The Battery…) map to their city.
 
-1. Open Netlify → Forms (or Formspree) and review new submissions.
-2. Check the official link. Make sure it's real, public, in Georgia, and the details match.
-3. Copy approved ones into `manual-events.json` (GitHub's web editor works fine).
-4. Commit. The workflow validates the file and publishes within a couple of minutes.
+**To expand** (Savannah, Augusta, Macon, Columbus, Athens, Gainesville): change `active: false` to
+`true` for the city, then add sources that cover it. The Ticketmaster source searches 50 miles
+around Atlanta, so for Savannah add a second Ticketmaster source with Savannah's
+`latlong` (`32.0809,-81.0912`). City pages, filters and the sitemap update automatically.
 
----
+## 7. Making money (all optional, all labeled)
 
-## 4. Turn on Google AdSense later
+| Option | How |
+|---|---|
+| **Google AdSense** | After a few weeks of steady real listings, apply at adsense.google.com. Then in `config.js` set `adsense.enabled: true`, your `client` ID, and ad unit IDs for `top`, `inFeed` and `local`. Rename `ads.txt.example` → `ads.txt` with your publisher ID |
+| **Sponsored event listings** | Organizer pays → add/mark the event with `"sponsored": true`. Shown first within its day with a "Sponsored" label |
+| **Featured local business ads** | Add to `data/local-ads.json` (shown in a "Sponsored · Local business" box; the AdSense `local` unit fills the spot when none is active) |
+| **Organizer packages** | Sponsored listing + home page "Featured" spot for festivals or recurring events |
+| **Affiliate ticket links** | Possible later (e.g. ticketing affiliate programs). Must be disclosed |
 
-Ad placements are already built in and switched off:
+```json
+{ "ads": [
+  { "business": "Example Café", "text": "Brunch on the square, 10% off with this ad",
+    "url": "https://example.com", "image": "https://example.com/logo.png",
+    "start": "2026-11-01", "end": "2026-11-30", "cities": ["Decatur"] }
+] }
+```
 
-- a banner under the filters
-- in-feed ads between event cards (at most 3 per page, every N cards)
-- a sidebar ad next to the submission form
-
-When you're ready:
-
-1. Launch with real content first. AdSense rejects empty or thin sites, so wait
-   until you have a steady flow of events.
-2. Apply at [adsense.google.com](https://adsense.google.com) with your custom domain.
-3. In `assets/config.js`:
-   ```js
-   adsense: {
-     enabled: true,
-     client: 'ca-pub-1234567890123456',
-     slots: { top: '1111111111', inFeed: '2222222222', sidebar: '3333333333' },
-     inFeedEvery: 8,
-   }
-   ```
-   (Create the units in AdSense → Ads → By ad unit. Use "In-feed" for `inFeed`.
-   You can also leave the slots empty and just turn on **Auto ads**.)
-4. Rename `ads.txt.example` → `ads.txt` and put in your publisher ID.
-5. The privacy policy already includes Google's required cookie disclosure.
-   Have it reviewed, and for visitors from the EEA/UK enable a certified consent
-   message (AdSense → Privacy & messaging).
-
-Ads are clearly labeled "Advertisement", and nothing loads while `enabled` is `false`.
-
----
-
-## 5. Grow it
-
-- **SEO:** every page view includes schema.org `Event` data so events can show
-  up in Google's event results. Submit `sitemap.xml` in Google Search Console.
-- **Shareable filters:** filters live in the URL (e.g. `/?when=weekend&cat=family&price=free`),
-  so you can link "Free family events this weekend" from social posts and newsletters.
-- **Event deep links:** `/#event-<id>` opens a specific event.
-- **Revenue beyond ads:** "Featured" placements for venues (labeled Sponsored),
-  a weekly email digest, or local business partnerships.
+Inquiries arrive through the **Advertise** page form. Never promise results. The page already says so.
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
-| Site says "Fresh listings are on the way" | No approved sources or manual events yet, or they're all in the past |
-| Workflow failed on `manual-events.json` | The log names the entry and the missing field |
-| A source shows `error` in the run log | Feed URL changed or is down. Last-good events are kept for 3 days |
-| Wrong category on a feed event | Add a `categoryMap` or `defaults.category` to the source, or add keywords in `taxonomy.js` |
-| Form says it didn't go through | On Netlify, enable form detection and redeploy. Elsewhere, switch to Formspree |
+| "Fresh listings are on the way" | No approved sources or manual events yet, or all are in the past |
+| Daily run failed on `manual-events.json` | The log names the entry and the missing field |
+| Daily run failed with "Event count dropped" | A source broke. Check the source errors. If it's expected, rerun with **force** checked |
+| An event you expected is missing | Check the run summary's **Held** list and approve it |
+| Wrong category | Add `categoryMap` / `defaults.category` to the source, or keywords in `taxonomy.js` |
+| Forms say it didn't go through | On Netlify, enable form detection and redeploy. Elsewhere, use Formspree |

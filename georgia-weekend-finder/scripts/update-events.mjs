@@ -16,12 +16,15 @@ import { TIMEZONE } from '../assets/taxonomy.js'
 import { startOfLocalDay } from '../assets/time.js'
 import { ADAPTERS, redactKey } from './lib/adapters.mjs'
 import { normalizeEvent, validateManualEvent, manualToRaw, dedupeKey } from './lib/normalize.mjs'
+import { reviewEvent, findNearDuplicates, healthCheck } from './lib/review.mjs'
+import { appendFile } from 'node:fs/promises'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const DATA = path.join(ROOT, 'data')
 const args = new Set(process.argv.slice(2))
 const DRY_RUN = args.has('--dry-run')
 const OFFLINE = args.has('--offline')
+const FORCE = args.has('--force')
 
 const LOOKAHEAD_DAYS = 90
 const MAX_PER_SOURCE = 1500
@@ -113,7 +116,25 @@ async function main() {
     const key = dedupeKey(ev)
     if (!byKey.has(key)) byKey.set(key, ev)
   }
-  const events = [...byKey.values()].sort((a, b) => a.start.localeCompare(b.start) || a.title.localeCompare(b.title))
+  const all = [...byKey.values()].sort((a, b) => a.start.localeCompare(b.start) || a.title.localeCompare(b.title))
+
+  // 5. Human review: hold questionable feed events until approved, flag the rest.
+  //    Manual events were curated by you, so they are never held.
+  const approved = new Set((manual.approve || []).map(String))
+  const events = []
+  const held = []
+  const flagged = []
+  for (const ev of all) {
+    if (ev.source.id === 'manual') { events.push(ev); continue }
+    const r = reviewEvent(ev)
+    const item = { id: ev.id, title: ev.title, start: ev.start, city: ev.city, source: ev.source.name, url: ev.url }
+    if (r.hold.length && !approved.has(ev.id)) { held.push({ ...item, issues: r.hold }); continue }
+    events.push(ev)
+    if (r.flags.length) flagged.push({ ...item, issues: r.flags })
+  }
+  for (const [a, b] of findNearDuplicates(events)) {
+    flagged.push({ id: b.id, title: b.title, start: b.start, city: b.city, source: b.source.name, url: b.url, issues: [`Possible duplicate of "${a.title}" (${a.source.name}). Add one id to "suppress" if so.`] })
+  }
 
   const output = {
     generatedAt: now.toISOString(),
@@ -124,13 +145,47 @@ async function main() {
   }
 
   const free = events.filter((e) => e.price.isFree === true).length
-  console.log(`\n${events.length} events (${free} free) from ${report.filter((r) => r.count > 0).length} source(s).`)
+  console.log(`\n${events.length} events (${free} free) from ${report.filter((r) => r.count > 0).length} source(s). ${held.length} held for review, ${flagged.length} flagged.`)
+  await writeSummary({ events, free, report, held, flagged })
+
+  const problem = healthCheck((previous.events || []).length, events.length)
+  if (problem && !FORCE) {
+    console.error(problem)
+    process.exit(1)
+  }
   if (DRY_RUN) {
-    console.log('Dry run: data/events.json not written.')
+    console.log('Dry run: nothing written.')
+    for (const h of held) console.log(`  HOLD ${h.title} (${h.id}): ${h.issues.join('; ')}`)
     return
   }
   await writeFile(path.join(DATA, 'events.json'), JSON.stringify(output, null, 2) + '\n')
-  console.log('Wrote data/events.json')
+  await writeFile(path.join(DATA, 'review-queue.json'), JSON.stringify({
+    _readme: 'Generated daily. HELD events are not published: if one is fine, add its id to "approve" in manual-events.json. FLAGGED events are published; fix or hide them with "suppress" if needed.',
+    generatedAt: now.toISOString(), held, flagged,
+  }, null, 2) + '\n')
+  console.log('Wrote data/events.json and data/review-queue.json')
+}
+
+// A readable report on the GitHub Actions run page.
+async function writeSummary({ events, free, report, held, flagged }) {
+  const file = process.env.GITHUB_STEP_SUMMARY
+  if (!file) return
+  const row = (cells) => `| ${cells.map((c) => String(c ?? '').replace(/\|/g, '\\|')).join(' | ')} |`
+  const lines = [
+    '## Georgia Weekend Finder update',
+    `**${events.length} events published** (${free} free) · **${held.length} held for review** · ${flagged.length} flagged`,
+    '', '### Sources', row(['Source', 'Status', 'Events', 'Note']), row(['---', '---', '---', '---']),
+    ...report.map((r) => row([r.name, r.status, r.count, r.error || r.reason || ''])),
+  ]
+  if (held.length) {
+    lines.push('', '### Held (not published, needs your OK)', row(['Event', 'Date', 'Source', 'Why', 'id']), row(['---', '---', '---', '---', '---']),
+      ...held.map((h) => row([h.title, h.start.slice(0, 10), h.source, h.issues.join('; '), h.id])))
+  }
+  if (flagged.length) {
+    lines.push('', `### Flagged (published, worth a glance): ${flagged.length}`, row(['Event', 'Date', 'Why']), row(['---', '---', '---']),
+      ...flagged.slice(0, 50).map((f) => row([f.title, f.start.slice(0, 10), f.issues.join('; ')])))
+  }
+  await appendFile(file, lines.join('\n') + '\n')
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

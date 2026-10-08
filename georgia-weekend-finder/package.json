@@ -4,9 +4,12 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Free and paid events around Atlanta and nearby Georgia cities.",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "start": "node scripts/serve.mjs",
+    "start": "node scripts/build-site.mjs && node scripts/serve.mjs",
+    "build": "node scripts/build-site.mjs",
     "update": "node scripts/update-events.mjs",
     "update:dry": "node scripts/update-events.mjs --dry-run",
     "update:offline": "node scripts/update-events.mjs --offline",

@@ -1,7 +1,7 @@
 // Turns raw events from any adapter (or the manual file) into the single
 // shape the website reads from data/events.json.
 import { createHash } from 'node:crypto'
-import { TIMEZONE, CATEGORY_IDS, OTHER_CITY, matchCity, inferCategory } from '../../assets/taxonomy.js'
+import { TIMEZONE, CATEGORY_IDS, OTHER_CITY, matchCity, inferCategory, cityByName } from '../../assets/taxonomy.js'
 import { parseLooseDate } from '../../assets/time.js'
 
 export function stripHtml(s) {
@@ -107,6 +107,7 @@ export function normalizeEvent(raw, source) {
   const defaults = source.defaults || {}
   const venue = stripHtml(raw.venue || (location.split(',')[0] || '')).trim()
   const city = (raw.city && matchCity(raw.city)) || matchCity(location) || (raw.city ? String(raw.city).trim() : '') || defaults.city || OTHER_CITY
+  if (cityByName(city)?.active === false) return null // recognized, but outside current coverage
 
   let category = raw.category && CATEGORY_IDS.includes(raw.category) ? raw.category : null
   if (!category && source.categoryMap && raw.categories) {

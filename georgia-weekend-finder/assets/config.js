@@ -18,9 +18,17 @@ export const SITE = {
     slots: {
       top: '',      // banner under the filters
       inFeed: '',   // between event cards
-      sidebar: '',  // beside the submission form
+      local: '',    // optional AdSense unit for the spot that shows local-ads.json
     },
     inFeedEvery: 8, // show an in-feed ad after every N events
+  },
+
+  // ---- Analytics (both free) ---------------------------------------------
+  // 'cloudflare': Cloudflare Web Analytics token (no cookies, simplest)
+  // 'ga4'       : Google Analytics 4 measurement ID, e.g. 'G-ABC123XYZ'
+  analytics: {
+    provider: 'none',
+    id: '',
   },
 
   // ---- Event submission form --------------------------------------------
