@@ -1,0 +1,76 @@
+{
+  "_readme": "Automated event sources. A source is fetched ONLY when enabled is true AND permission.status is \"approved\" with a basis and verifiedOn date. See README.md > 'Adding an approved source'. Supported types: ics, jsonld, json, ticketmaster.",
+  "manualSourceName": "Georgia Weekend Finder",
+  "sources": [
+    {
+      "id": "ticketmaster",
+      "name": "Ticketmaster",
+      "type": "ticketmaster",
+      "website": "https://www.ticketmaster.com",
+      "enabled": false,
+      "options": { "latlong": "33.7490,-84.3880", "radiusMiles": 50, "maxPages": 4 },
+      "permission": {
+        "status": "pending",
+        "basis": "Official Discovery API under the Ticketmaster developer terms. Requires a free API key in the TICKETMASTER_API_KEY secret and Ticketmaster attribution/links on each listing (the site shows 'via Ticketmaster' and links to the official page).",
+        "verifiedOn": ""
+      }
+    },
+    {
+      "id": "example-city-calendar",
+      "name": "Example: City parks & recreation calendar (replace me)",
+      "type": "ics",
+      "url": "https://example.gov/calendar/events.ics",
+      "website": "https://example.gov/calendar",
+      "enabled": false,
+      "defaults": { "city": "Decatur", "category": "community" },
+      "permission": {
+        "status": "pending",
+        "basis": "Describe why you're allowed to republish, e.g. 'City publishes a public iCal subscribe link; site terms permit reuse with attribution' or 'Email from events@city on 2026-10-01 granting permission'.",
+        "verifiedOn": ""
+      }
+    },
+    {
+      "id": "example-venue-jsonld",
+      "name": "Example: Venue events page with schema.org data (replace me)",
+      "type": "jsonld",
+      "url": ["https://example.com/events"],
+      "website": "https://example.com",
+      "enabled": false,
+      "defaults": { "city": "Atlanta", "category": "live-music" },
+      "permission": {
+        "status": "pending",
+        "basis": "Only for venues/organizers that agreed to be listed (or whose terms allow it). The updater also obeys robots.txt for this type.",
+        "verifiedOn": ""
+      }
+    },
+    {
+      "id": "example-open-data-json",
+      "name": "Example: Open-data JSON events API (replace me)",
+      "type": "json",
+      "url": "https://example.org/api/events?apikey={env.EXAMPLE_API_KEY}",
+      "website": "https://example.org/events",
+      "enabled": false,
+      "itemsPath": "data",
+      "fields": {
+        "id": "id",
+        "title": "name",
+        "start": "start_time",
+        "end": "end_time",
+        "venue": "venue.name",
+        "address": "venue.address",
+        "city": "venue.city",
+        "url": "link",
+        "description": "summary",
+        "image": "image_url",
+        "price": "cost",
+        "categories": "tags"
+      },
+      "categoryMap": { "Music": "live-music", "Kids": "family" },
+      "permission": {
+        "status": "pending",
+        "basis": "Link to the API terms that permit display on third-party sites.",
+        "verifiedOn": ""
+      }
+    }
+  ]
+}

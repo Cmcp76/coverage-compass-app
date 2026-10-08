@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-10-08T00:22:24.633Z",
+  "timezone": "America/New_York",
+  "window": {
+    "start": "2026-10-07T04:00:00.000Z",
+    "end": "2027-01-05T05:00:00.000Z"
+  },
+  "sources": [
+    {
+      "id": "ticketmaster",
+      "name": "Ticketmaster",
+      "status": "skipped",
+      "reason": "disabled",
+      "count": 0
+    },
+    {
+      "id": "example-city-calendar",
+      "name": "Example: City parks & recreation calendar (replace me)",
+      "status": "skipped",
+      "reason": "disabled",
+      "count": 0
+    },
+    {
+      "id": "example-venue-jsonld",
+      "name": "Example: Venue events page with schema.org data (replace me)",
+      "status": "skipped",
+      "reason": "disabled",
+      "count": 0
+    },
+    {
+      "id": "example-open-data-json",
+      "name": "Example: Open-data JSON events API (replace me)",
+      "status": "skipped",
+      "reason": "disabled",
+      "count": 0
+    },
+    {
+      "id": "manual",
+      "name": "Georgia Weekend Finder",
+      "status": "ok",
+      "count": 0
+    }
+  ],
+  "events": []
+}

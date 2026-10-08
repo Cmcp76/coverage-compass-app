@@ -1,0 +1,5 @@
+{
+  "_readme": "Hand-curated events (approved submissions, partner events, your own research from official pages). Each entry needs title, start, city, category, price and url. 'suppress' hides feed events by id or url. See README.md > 'Adding events by hand'.",
+  "events": [],
+  "suppress": []
+}
