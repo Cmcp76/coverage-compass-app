@@ -1,6 +1,6 @@
 {
   "_readme": "Generated daily. HELD events are not published: if one is fine, add its id to \"approve\" in manual-events.json. FLAGGED events are published; fix or hide them with \"suppress\" if needed.",
-  "generatedAt": "2026-10-08T17:47:33.956Z",
+  "generatedAt": "2026-10-08T17:58:50.969Z",
   "held": [],
   "flagged": []
 }
