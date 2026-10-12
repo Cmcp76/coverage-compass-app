@@ -186,8 +186,17 @@ export function generateReportPdf(analysis) {
   divider()
 
   // 4. Potential Gaps
+  // Only the gap-rule items that were NOT found in the document belong
+  // under this heading - previously every gap rule rendered here
+  // unconditionally, so an item the analysis actually found present (and
+  // therefore also listed under Strengths) still showed up labeled a
+  // "Potential Gap" with no indication otherwise, reading as the report
+  // contradicting itself.
   heading('4. Potential Gaps')
-  bulletList(analysis.gaps, (g) => `${g.name}: ${g.why}`)
+  bulletList(
+    analysis.gaps.filter((g) => !g.found),
+    (g) => `${g.name}: ${g.why}`,
+  )
   y += 6
   divider()
 

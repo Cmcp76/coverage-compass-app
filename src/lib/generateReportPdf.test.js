@@ -60,6 +60,33 @@ describe('generateReportPdf', () => {
     expect(() => generateReportPdf(analysis)).not.toThrow()
   })
 
+  it('omits a found gap from the "Potential Gaps" section instead of listing it alongside the not-found ones', () => {
+    // Regression: a real production report listed "Cyber Liability Insurance"
+    // both as a Strength (correctly - the document had it) AND under
+    // "Potential Gaps" (incorrectly - that section used to list every gap
+    // rule unconditionally, with no distinction for ones actually found),
+    // so the downloaded PDF contradicted itself on the same item.
+    const analysis = {
+      ...baseAnalysis,
+      gaps: [
+        { name: 'Umbrella Insurance', why: 'Extra liability protection above your policy limits.', found: false },
+        { name: 'Cyber Liability Insurance', why: 'Most GL policies exclude cyber-related losses.', found: true },
+      ],
+      strengths: ['A Cyber Insurance Endorsement is included as part of the policy.'],
+    }
+    const doc = generateReportPdf(analysis)
+    // jsPDF doesn't compress its content streams by default, so the text
+    // operators (and the literal strings they draw) are present verbatim in
+    // the raw output bytes - decoding as latin1 (not utf-8, which would
+    // mangle the PDF's binary structure) makes them directly searchable.
+    const raw = Buffer.from(doc.output('arraybuffer')).toString('latin1')
+    expect(raw).toContain('Umbrella Insurance: Extra liability protection above your policy limits.')
+    expect(raw).not.toContain('Cyber Liability Insurance: Most GL policies exclude cyber-related losses.')
+    // The found item still appears in Strengths, just not duplicated (and
+    // contradicted) under Potential Gaps.
+    expect(raw).toContain('A Cyber Insurance Endorsement is included as part of the policy.')
+  })
+
   it('handles an analysis with no namedInsured (falsy) by omitting the "Prepared for" line rather than rendering "undefined"', () => {
     const analysis = { ...baseAnalysis, namedInsured: null }
     const doc = generateReportPdf(analysis)
